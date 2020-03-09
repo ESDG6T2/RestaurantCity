@@ -1,0 +1,66 @@
+<html>
+    <head>
+        <title>Login Page</title>
+        <!-- jquery google CDN -->
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    </head>
+    <body>
+        <form id='loginForm' action='login' method='POST'>
+            <table>
+                <tr>
+                    <td>UserID:</td><td><input id='userID' type='text' name='userID'></td><td id='userIdError'></td>
+                </tr>
+                <tr>
+                    <td>Password:</td><td><input id='password' type='password' name='pwd'></td><td id='pwdError'></td>
+                </tr>
+            </table>
+            <input type='submit' name='submitBtn'><div id='error'></div>
+        </form>
+    </body>
+    <script>
+
+        $("#loginForm").submit(async (event) => {
+            //Prevents screen from refreshing when submitting
+            
+            event.preventDefault();
+            var noErrorMsg= true;
+            if ($('#userID').val().length === 0){
+                $('#userIdError').text('Please enter User ID')
+                noErrorMsg=false;
+            }else{
+                var userID = $('#userID').val();
+            }
+            if ($('#password').val().length === 0){
+                $('#pwdError').text('Please enter Password')
+                noErrorMsg=false
+            }else{
+                var pwd = $('#password').val();
+            }
+            if (noErrorMsg){
+                var serviceURL = "http://127.0.0.1:5001/user";
+                try {
+                    const response =
+                    await fetch(
+                    serviceURL, { method: 'POST',headers: {
+                        'Content-Type': 'application/json'
+                        }, body:  JSON.stringify({userId :userID ,password:pwd}) 
+                    });
+                    const data = await response.json();
+                    if (!response.ok){
+                        $('#error').text(data.message);
+                    }else{
+                        $("#loginForm").unbind('submit').submit();
+                    }
+                    
+                } catch (error) {
+                        // Errors when calling the service; such as network error, 
+                        // service offline, etc
+                        // showError
+                        $('#error').text('Server Error, please try again later.<br />'+error);
+                    
+                } 
+            }
+
+        })
+    </script>
+</html>
