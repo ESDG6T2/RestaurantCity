@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder="img")
 CORS(app)
 
 @app.route('/login')
@@ -135,7 +135,7 @@ def mainPage():
                             eachRow =
                                 "<td>" + item.menuId + "</td>" +
                                 
-                                "<td><img src="+item.menuId+".jpg)}}' height='100' width='100'></td>" +
+                                "<td><img src='img/"+item.menuId+".jpg' height='100' width='100'></td>" +
                                 "<td>" + item.foodName + "</td>" +
                                 "<td>" + item.price + "</td>"+
                                 "<td> <select name="+item.menuId+">";
