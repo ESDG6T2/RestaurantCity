@@ -1,71 +1,141 @@
 <html>
-<head>
-    <!-- jquery google CDN -->
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
-</head>
-<body>
-    <h1>Restaurant City</h1>
-    <div id="main-container"">
-        <form action='orderProcessing.html'>
-            <table id='menuTable' border='1'>
-                <tr>
-                    <th>Menu ID</th><th>Food</th><th>Food Name</th><th>Price</th><th>Quantity</th>
-                </tr>
-            </table>
-            <input type='submit' name='submit'>
-        </form>
-    </div>
-</body>
+    <head>
+        <!-- jquery google CDN -->
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    </head>
+    <body>
+        <h1>Restaurant City</h1>
+        <div id="main-container"">
+            <form id='orderForm' action='Summary.html'>
+                <table id='OrderTable' border='1'>
+                    <tr>
+                        <th>Menu ID</th><th>Food</th><th>Food Name</th><th>Price</th><th>Quantity</th><th>Subtotal</th>
+                    </tr>
+                </table>
+                <table id='particulars'>
+                    <tr>
+                        <th>Billing Address</th><td><input id='billingAddress' type='text' name='billingAddress'></td><td id='billingAddressError'></td>
+                    </tr>
+                    <tr>
+                        <th>Postal Code</th><td><input id='postalCode' type='text' name='postalCode'></td><td id='postalCodeError'></td>
+                    </tr>
+                    <tr>
+                        <th>Contact of Person</th><td><input id='contactNo' type='text' name='contactNo'></td><td id='contactNoError'></td>
+                    </tr>
+                </table>
+                <input type='submit' name='submitBtn'>
+            </form>
+        </div>
+    </body>
 </html>
 <script>
+    var MenuList={F03: 5, F09: 19};
     function showError(message) {
         // Hide the table and button in the event of error
-        $('#menuTable').hide();
+        $('#OrderTable').hide();
 
         // Display an error under the main container
         $('#main-container')
             .append("<label>"+message+"</label>");
     }
     $(async() => {           
-            // Change serviceURL to your own
-            var serviceURL = "http://127.0.0.1:5001/menu";
-        
+        // Change serviceURL to your own
+        var serviceURL = "http://127.0.0.1:5001/menu";
+            
             try {
                 const response =
-                 await fetch(
-                   serviceURL, { method: 'GET' }
+                await fetch(
+                serviceURL, { method: 'GET' }
                 );
                 const data = await response.json();
                 var menu = data.Menu; //the arr is in data.menu of the JSON data
-                console.log(menu)
                 // array or array.length are falsy
                 if (!menu || !menu.length) {
                     showError('Menu list empty or undefined.')
                 } else {
                     // for loop to setup all table rows with obtained book data
                     var rows = "";
+                    var totalAmt=0.0;
+                    var l=0;
+                    
                     for (const item of menu) {
-                        eachRow =
-                            "<td>" + item.menuId + "</td>" +
-                            "<td><img src='img/"+item.menuId+".jpg' height='100' width='100'></td>" +
-                            "<td>" + item.foodName + "</td>" +
-                            "<td>" + item.price + "</td>"+
-                            "<td> <select name="+item.menuId+">";
-                            for (i=0;i<=20;i++){
-                                eachRow+='<option value='+i+'>'+i+'</option>';
-                            }
-                            eachRow+="</select></td>";
-                        rows += "<tr>" + eachRow + "</tr>";
+                        if (item.menuId in MenuList){
+                            eachRow =
+                                "<td>" + item.menuId + "</td>" +
+                                "<td><img src='img/"+item.menuId+".jpg' height='100' width='100'></td>" +
+                                "<td>" + item.foodName + "</td>" +
+                                "<td>" + item.price + "</td>"+
+                                "<td>"+MenuList[item.menuId]+"</td>"+
+                                "<td>"+MenuList[item.menuId]*item.price+"</td>";
+                            totalAmt+=MenuList[item.menuId]*item.price
+                            rows += "<tr>" + eachRow + "</tr>";
+                        };
+                        l++;
                     }
+                    if (rows==''){
+                        rows+="<tr><th colspan='6'>No item selected</th></tr>";
+                    }
+                    rows+="<tr><th colspan='5' align='right'>Total Amount</th><td>$"+totalAmt+"</td></tr>";
                     // add all the rows to the table
-                    $('#menuTable').append(rows);
+                    $('#OrderTable').append(rows);
                 }
             } catch (error) {
                 // Errors when calling the service; such as network error, 
                 // service offline, etc
                 showError
-                ('There is a problem retrieving books data, please try again later.<br />'+error);
-           
-        } // error
+                ('Server Error, please try again later.<br />'+error);
+        
+            } // error
     });
+    $("#orderForm").submit(async (event) => {
+            //Prevents screen from refreshing when submitting
+            
+            event.preventDefault();
+            var noErrorMsg= true;
+            if ($('#billingAddress').val().length === 0){
+                $('#billingAddressError').text('Please enter your billing address')
+                noErrorMsg=false;
+            }else{
+                $('#billingAddressError').text('')
+                var billingAddress = $('#billingAddress').val();
+            }
+            if ($('#postalCode').val().length === 0){
+                $('#postalCodeError').text('Please enter Postal Code')
+                noErrorMsg=false
+            }else{
+                $('#postalCodeError').text('')
+                var postalCode = $('#postalCode').val();
+            }
+            if ($('#contactNo').val().length === 0){
+                $('#contactNoError').text('Please enter Contact No')
+                noErrorMsg=false
+            }else{
+                $('#contactNoError').text('')
+                var contactNo = $('#contactNo').val();
+            }
+            if (noErrorMsg){
+                var serviceURL = "http://127.0.0.1:5001/order";
+                try {
+                    const response =
+                    await fetch(
+                    serviceURL, { method: 'POST',headers: {
+                        'Content-Type': 'application/json'
+                        }, body:  JSON.stringify({userId :userID ,menuItem:MenuList, billingAddress:billingAddress, postalCode:postalCode, contactNo:contactNo}) 
+                    });
+                    const data = await response.json();
+                    if (!response.ok){
+                        showError(data.message)
+                    }else{
+                        $("#orderForm").unbind('submit').submit();
+                    }
+                    
+                } catch (error) {
+                        // Errors when calling the service; such as network error, 
+                        // service offline, etc
+                        showError('Server Error, please try again later.<br />'+error);
+                    
+                } 
+            }
+
+        })
 </script>

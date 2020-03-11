@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 09, 2020 at 10:25 AM
+-- Generation Time: Mar 11, 2020 at 05:29 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.2.4
 
@@ -53,6 +53,36 @@ INSERT INTO `menu` (`menuID`, `foodName`, `price`) VALUES
 ('F08', 'Octopus', 10.00),
 ('F09', 'Packet Nasi Liwet Komplit', 10.00),
 ('F10', 'Papua-style Nasi', 5.00);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orderdetail`
+--
+
+DROP TABLE IF EXISTS `orderdetail`;
+CREATE TABLE IF NOT EXISTS `orderdetail` (
+  `orderId` int(11) NOT NULL,
+  `menuId` varchar(45) NOT NULL,
+  `Qty` int(11) NOT NULL,
+  PRIMARY KEY (`orderId`,`menuId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+DROP TABLE IF EXISTS `orders`;
+CREATE TABLE IF NOT EXISTS `orders` (
+  `orderId` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` varchar(45) NOT NULL,
+  `billingAddress` varchar(45) NOT NULL,
+  `postalCode` varchar(45) NOT NULL,
+  `contactNo` varchar(45) NOT NULL,
+  PRIMARY KEY (`orderId`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 

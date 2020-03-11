@@ -38,6 +38,39 @@ class Menu(db.Model):
     def json(self):
         return {"menuId": self.menuId, "foodName": self.foodName, "price": self.price}
 
+class OrderDetail(db.Model):
+    __tablename__ = 'orderdetail'
+
+    orderId = db.Column(db.String(45), primary_key=True)
+    menuId = db.Column(db.String(45), nullable=False)
+    Qty= db.Column(db.Integer, nullable=False)
+
+    def __init__(self, orderId, menuId, Qty):
+        self.orderId = orderId
+        self.menuId = menuId
+        self.Qty = Qty
+
+    def json(self):
+        return {"orderId": self.orderId, "menuId": self.menuId, "Qty": self.Qty}
+
+class Orders(db.Model):
+    __tablename__ = 'orders'
+
+    orderId = db.Column(db.Integer, primary_key=True)
+    userId = db.Column(db.String(45), nullable=False)
+    billingAddress= db.Column(db.String(45), nullable=False)
+    postalCode= db.Column(db.String(45), nullable=False)
+    contactNo= db.Column(db.String(45), nullable=False)
+
+    def __init__(self, userId, billingAddress, postalCode,contactNo):
+        self.userId = userId
+        self.billingAddress = billingAddress
+        self.postalCode = postalCode
+        self.contactNo = contactNo
+
+    def json(self):
+        return {"orderId": self.orderId, "userId": self.userId, "billingAddress": self.billingAddress, "postalCode": self.postalCode, "contactNo": self.contactNo}
+
 
 @app.route("/user", methods=['POST'])
 def authenicate():
@@ -55,6 +88,24 @@ def authenicate():
 def getAllMenu():
     return jsonify({"Menu": [menu.json() for menu in Menu.query.all()]})
 
+@app.route("/order", methods=['POST'])
+def add_Order():
+    data=request.get_json()
+    orders = Orders(data['userId'], data['billingAddress'], data['postalCode'],data['contactNo'])
+    try:
+        db.session.add(orders)
+        db.session.commit()
+    except:
+        return jsonify({"message": "An error occurred creating the order."}), 500
+    for key, item in data['menuItem'].items():
+        orderDetail= OrderDetail(orders.orderId,key,item)
+        try:
+            db.session.add(orderDetail)
+            db.session.commit()
+        except:
+            return jsonify({"message": "An error occurred creating the order."}), 500
+
+    return jsonify(orders.json()), 201
 
 if __name__ == '__main__':
     app.run(port=5001, debug=True)

@@ -28,12 +28,14 @@
                 $('#userIdError').text('Please enter User ID')
                 noErrorMsg=false;
             }else{
+                $('#userIdError').text('')
                 var userID = $('#userID').val();
             }
             if ($('#password').val().length === 0){
                 $('#pwdError').text('Please enter Password')
                 noErrorMsg=false
             }else{
+                $('#pwdError').text('')
                 var pwd = $('#password').val();
             }
             if (noErrorMsg){
