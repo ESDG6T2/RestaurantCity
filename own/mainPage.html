@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <title>Welcome to Restaurant City</title>
+    <style>
+        .zoom {
+            transition: transform .2s;
+            /* Animation */
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+        }
+
+        .zoom:hover {
+            transform: scale(1.5);
+            /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+        }
+    </style>
+</head>
+
+<body>
+    <div id='top-section'>
+        <h1>Welcome to Restaurant City</h1>
+        <hr>
+    </div>
+    <div id='main-section' width='100%'>
+        <div id='cart-form' style='width:40%;display:inline-table'>
+            <h2>Please place your order here</h2>
+            <form id='order-form'>
+                <table border='1' id='menu-table'>
+                    <thead>
+                        <tr align="center">
+                            <th style='display:None'>Item id</th>
+                            <th>Item name</th>
+                            <th>Item image</th>
+                            <th>Item price</th>
+                            <th>Item number</th>
+                        </tr>
+                    </thead>
+                </table>
+                <br>
+                <input type="submit" value="Check out your cart" id='submit_cart'>
+                <!-- TODO: save cart function -->
+                <input type="submit" value="Save your cart" id='save_cart'>
+            </form>
+        </div>
+        <div id='saved-cart' style='margin:0 0 0 20px;width:30%;display:inline-table'>
+            <h2>Your Saved Cart</h2>
+            <table id='saved-cart-table' border="1">
+                <thead>
+                    <tr>
+                        <th>Item name</th>
+                        <th>Item price</th>
+                        <th>Item number</th>
+                    </tr>
+                </thead>
+            </table>
+            <p id='cart-update-outcome'></p>
+            <br>
+            <button onclick='create_menu_table(true)'>Use saved cart</button>
+            <button onclick='delete_cart_data()' style='margin: 0 0 0 20px;'>Delete your cart</button>
+        </div>
+    </div>
+    <div id='hidden-section' width='100%'>
+        <div id='cart-info' style='width:40%;display:inline-table'>
+            <h2>Your ordered food items</h2>
+            <table border='1' id='added-cart-table'>
+                <thead>
+                    <tr align="center">
+                        <th style='display:None'>Item id</th>
+                        <th>Item name</th>
+                        <th>Item image</th>
+                        <th>Unit price</th>
+                        <th>Quantity ordered</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id='customer-info' style='margin:0 0 0 100px;width:50%;display:inline-table'>
+            <h2>Please key in your information</h2>
+            <form onsubmit="return false" method="POST">
+                <table style='padding:10px 0 0 0'>
+                    <tr>
+                        <td>Delivery Address</td>
+                        <td><input type="text" id='address'></td>
+                    </tr>
+                    <tr>
+                        <td>Postal Code</td>
+                        <td><input type="text" id='postal_code'></td>
+                    </tr>
+                    <tr>
+                        <td>Contact Person</td>
+                        <td><input type="text" id='contact_person'></td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td colspan="2"><input type="submit" value='Proceed to Payment' id='payment'></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</body>
+
+<script>
+    const userid = 'a';
+    // helper function 
+    String.prototype.format = function () {
+        var i = 0,
+            args = arguments;
+        return this.replace(/{}/g, function () {
+            return typeof args[i] != 'undefined' ? args[i++] : '';
+        });
+    };
+
+    // function create_table()
+    function create_menu_table(use_cart) {
+        $('#menu-table tbody').empty();
+        for (const item of window.menu_items) {
+            var qty = 0;
+            if ((window.cart_items != null) & (use_cart == true)) {
+                console.log('there is cart');
+                for (var cart_item of window.cart_items) {
+                    // console.log(cart_item.menuId, item.menuId);
+                    if (cart_item.menuId == item.menuId) {
+                        qty = cart_item.quantity;
+                    }
+                }
+                $('#cart-update-outcome').text('Saved cart is loaded into the order table')
+            }
+            // console.log(qty);
+            order_num_tag = item.menuId + '_qty'
+            eachRow = "<tbody><tr align='center'>" +
+                "<td style='display:none'> <input type='hidden' name='menuId' value='{}'> {}</td>".format(item.menuId, item.menuId) +
+                "<td> {} <input type='hidden' name='foodName' value='{}'> </td>".format(item.foodName, item.foodName) +
+                "<td> <img class='zoom' src='img/{}.jpg' height='100' width='100'></td>".format(item.menuId) +
+                "<td> ${} <input type='hidden' name='price' value={}></td>".format(item.price, item.price) +
+                "<td> <input type='number' min='0' max='10' name='quantity' id='{}' value={}></td>".format(order_num_tag, qty) +
+                "</tr></tbody>";
+            $('#menu-table').append(eachRow);
+            // console.log(eachRow);
+        }
+    }
+
+    // load menu
+    $(async () => {
+        $('#hidden-section').hide();
+        var serviceURL = "http://127.0.0.1:5001/menu";
+        console.log(serviceURL);
+        try {
+            const response =
+                await fetch(
+                    serviceURL, {
+                    method: 'GET',
+                }
+                );
+            const data = await response.json();
+            const menu_items = data.menu; //the arr is in data.items of the JSON data
+            window.menu_items = menu_items;
+
+            if (!menu_items || !menu_items.length) {
+                alert('Menu is empty or undefined.')
+            } else {
+                create_menu_table(false);
+            }
+        } catch (error) {
+            // Errors when calling the service; such as network error, 
+            // service offline, etc
+            alert
+                ('There is a problem retrieving books data, please try again later.<br />' + error);
+
+        } // error
+
+    });
+
+    // load saved cart
+    $(async () => {
+        var serviceURL = "http://127.0.0.1:5002/cart/{}".format(userid);
+
+        try {
+            const response =
+                await fetch(
+                    serviceURL, {
+                    method: 'GET'
+                }
+                );
+            const data = await response.json();
+            var cart_items = data.cart; //the arr is in data.items of the JSON data
+            window.cart_items = cart_items;
+            if (cart_items) {
+                var rows = "";
+                for (const item of cart_items) {
+                    var itemUrl = "http://127.0.0.1:5001/menu/{}".format(item.menuId);
+                    console.log(item);
+
+                    const response =
+                        await fetch(
+                            itemUrl, {
+                            method: 'GET'
+                        }
+                        );
+                    const item_data = await response.json();
+                    var item_name = item_data.foodName;
+                    var item_price = item_data.price;
+
+                    eachRow = "<tbody><tr align='center'>" +
+                        "<td style='display:none'><input type='hidden' name='menuId' value='{}'>{}</td>".format(item.menuId, item.menuId) +
+                        "<td>{}<input type='hidden' name='foodName' value='{}'></td>".format(item_name, item_name) +
+                        "<td>${}<input type='hidden' name='price' value='{}'></td>".format(item_price, item_price) +
+                        "<td>{}<input type='hidden' name='quantity' value='{}'></td>".format(item.quantity, item.quantity) +
+                        "</tr></tbody>";
+                    $('#saved-cart-table').append(eachRow);
+                }
+            }
+        } catch (error) {
+            // Errors when calling the service; such as network error, 
+            // service offline, etc
+            alert
+                ('There is a problem retrieving cart data, please try again later.<br />' + error);
+        } // error
+        console.log(window.menu_items);
+        console.log(window.cart_items);
+    });
+
+    async function delete_cart_data() {
+        if (confirm("Confirm delete saved cart?")) {
+            var serviceURL = "http://127.0.0.1:5002/delete-cart/{}".format(userid);
+            console.log(serviceURL);
+            try {
+                const response =
+                    await fetch(
+                        serviceURL, {
+                        method: 'GET'
+                    }
+                    );
+                if (response.status == 200) {
+                    $('#saved-cart-table tbody').empty();
+                    location.reload(true);
+                };
+            } catch (error) {
+                alert
+                    ('There is a problem deleting cart data, please try again later.<br />' + error);
+            }
+        }
+    }
+
+    $('#save_cart').click(async function (e) {
+        console.log(window.cart_items);
+        e.preventDefault();
+        var idx = 0, has_item = false,
+            data = $('form').serializeArray().reduce(function (obj, item) {
+                if (item.name == 'menuId') {
+                    sub_obj = {};
+                    sub_obj[item.name] = item.value;
+                }
+                if (item.name == 'quantity') {
+                    sub_obj[item.name] = parseInt(item.value);
+                    if (item.value > 0) {
+                        has_item = true;
+                        obj.push(sub_obj);
+                    }
+                }
+                return obj;
+            }, []);
+
+        // validate if select any item
+        if (has_item == false) {
+            alert('There is no item added to the cart.');
+            return
+        }
+
+        // validate if saved cart already contains items
+        var to_save = true;
+        if (window.cart_items.length > 0) {
+            to_save = confirm('There are items in the saved cart currently? Do you want to delete them and saved the current cart?');
+        }
+
+        console.log(to_save);
+
+        if (to_save) {
+
+            var body = {};
+            body["items"] = data;
+
+            var serviceURL = "http://127.0.0.1:5002/add-cart/{}".format(userid);
+            try {
+                const response =
+                    await fetch(
+                        serviceURL, {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(body)
+                    });
+                if (response.status == 201) {
+                    alert('cart saved successfully');
+                    location.reload(true);
+                };
+            } catch (error) {
+                alert
+                    ('There is a problem deleting cart data, please try again later.<br />' + error);
+            }
+        }
+    });
+
+    $("#submit_cart").click(function (e) {
+        e.preventDefault();
+        $('#main-section').hide();
+        $('#hidden-section').show();
+        var total = 0,
+            idx = 0,
+            data = $('form').serializeArray().reduce(function (obj, item) {
+                if (item.name == 'menuId') {
+                    obj[idx] = {};
+                }
+                obj[idx][item.name] = item.value;
+                switch (item.name) {
+                    case 'menuId':
+                        subtotal = 1;
+                        break;
+                    case 'price':
+                        subtotal *= item.value;
+                        break;
+                    case 'quantity':
+                        subtotal *= item.value;
+                        obj[idx]['subtotal'] = subtotal;
+                        idx++;
+                        break;
+                }
+                return obj;
+            }, {});
+        // console.log(data);
+
+        var total = 0;
+        for (const [key, value] of Object.entries(data)) {
+            if (value['quantity'] > 0) {
+                row = '<tbody><tr align="center">' +
+                    '<td style="display:none">{}</td>'.format(value['menuId']) +
+                    '<td>{}</td>'.format(value['foodName']) +
+                    '<td><img src="img/{}.jpg" height=100 width=100></td>'.format(value['menuId']) +
+                    '<td>{}</td>'.format(value['price']) +
+                    '<td>{}</td>'.format(value['quantity']) +
+                    '<td>${}</td>'.format(value['subtotal']) +
+                    '</tr></tbody>';
+                total += value['subtotal'];
+                $("#added-cart-table").append(row);
+            }
+        }
+        row = '<tbody><tr><td align="right" colspan=4><b>Total Amount</b></td><td align="center"><b>${}</b></td></tr></tbody>'.format(total);
+        $("#added-cart-table").append(row);
+    });
+
+    $("#payment").click(async function (event) {
+        event.preventDefault();
+        var address = $('#address').val(),
+            postal_code = $('#postal_code').val(),
+            contact_person = $('#contact_person').val(),
+            cart_table = document.getElementById("added-cart-table"),
+            order_items = [];
+        item_field = ['menuId', 'foodName', 'image', 'price', 'quantity']
+
+        for (var i = 1; i < cart_table.rows.length - 1; i++) {
+            var row = cart_table.rows.item(i).cells,
+                item = {};
+            for (var j = 0; j < row.length - 1; j++) {
+                if (j != 2) {
+                    item[item_field[j]] = row.item(j).innerHTML;
+                }
+                if (j == 3) {
+                    item[item_field[j]] = row.item(j).innerHTML.substring(2);
+                }
+            }
+            order_items.push(item);
+        }
+        // TODO: Date time of the order
+        console.log(new Date());
+        var order = {
+            'userid': userid,
+            'address': address,
+            'postal_code': postal_code,
+            'contact_person': contact_person,
+            'order_items': order_items
+        };
+        console.log(order);
+
+        serviceURL = 'http://127.0.0.1:5555/payment'
+        try {
+            const response =
+                await fetch(
+                    serviceURL, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(order)
+                }
+                );
+            console.log('calling');
+            const result = await response;
+            if (result.status == 400) {
+                alert('Payment Failed');
+            } else {
+                alert('Payment succeed');
+                // window.location.href = "http://www.w3schools.com"; // for redirect 
+                return;
+            }
+        } catch (error) {
+            // Errors when calling the service; such as network error, 
+            // service offline, etc
+            alert
+                ('There is a problem with payment, please try again later.<br />' + error);
+
+        } // error
+
+    })
+
+
+</script>
+
+
+</html>
