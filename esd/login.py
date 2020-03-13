@@ -233,7 +233,7 @@ def OrderProcessing():
                         var rows = "";
                         var totalAmt=0.0;
                         var l=0;
-                        
+
                         for (const item of menu) {
                             if (item.menuId in MenuList){
                                 eachRow =
@@ -245,7 +245,7 @@ def OrderProcessing():
                                     "<td>"+MenuList[item.menuId]*item.price+"</td>";
                                 totalAmt+=MenuList[item.menuId]*item.price
                                 rows += "<tr>" + eachRow + "</tr>";
-                            };
+                            };   
                             l++;
                         }
                         if (rows==''){
@@ -311,11 +311,9 @@ def OrderProcessing():
                         showError('Server Error, please try again later.<br />'+error);
                 } 
             }
-
         })
     </script>
     '''
-
     return output
 
 if __name__ == "__main__":
