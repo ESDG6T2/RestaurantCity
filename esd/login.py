@@ -101,6 +101,8 @@ def mainPage():
                     </table>
                     <input type='submit' name='submit'>
                 </form>
+                <h1>Locate Us!</h1>
+                <iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?q=Stamford Road, SMU School of Information Systems, Singapore&key=AIzaSyCpukJ8bc2TwSB-4IuGp1sUjuZEF4-VVms" allowfullscreen></iframe>
             </div>
         </body>
     </html>
