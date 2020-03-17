@@ -1,0 +1,120 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <h1><center>Driver page</center></h1>
+        <!-- <link rel="stylesheet" href="style.css"> -->
+        <!-- <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">    -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+         </head>
+
+    <body>
+        <form id="driverForm" action = "driver.py" method="POST" >
+            <table id='driverTable' border='1'>
+                
+                <div class="table">
+                   
+                <tr>
+                    <th>driverId</th><th>orderId</th><th>customer_name</th><th>contactNo</th><th>billingAddress</th>
+                    
+                </tr>
+            
+            </div>
+            </table>
+            
+            <div class="text">
+           
+              <textarea id="driver" rows="1" cols="50" required>Input Driver ID here</textarea>
+            </div>
+    
+            <div class = "submit">
+        
+            <input type="submit" value="Submit">
+            </div>
+    
+        </form>
+
+    </body>
+
+<script>
+        function showError(message) {
+            // Hide the table and button in the event of error
+            $('#driverTable').hide();
+    
+            // Display an error under the main container
+            $('#main-container')
+                .append("<label>"+message+"</label>");
+        }
+        $(async() => {           
+                // Change serviceURL to your own
+                var serviceURL = "http://127.0.0.1:5001/driver";
+            
+                try {
+                    const response =
+                     await fetch(
+                       serviceURL, { method: 'GET' }
+                    );
+                    const data = await response.json();
+                    var driver = data.driver; //the arr is in data.driver of the JSON data
+                    // console.log(driver)
+                    // array or array.length are falsy
+                    if (!driver || !driver.length) {
+                        showError('Driver list empty or undefined.')
+                    } else {
+                        // for loop to setup all table rows with obtained book data
+                        var rows = "";
+                        for (const item of driver) {
+                            eachRow =
+                                "<td align='center'>" + item.driverId + "</td>" +
+                                "<td align='center'>" + item.orderId+ "</td>" +
+                                "<td align='center'>" + item.customer_name + "</td>" +
+                                "<td align='center'>" + item.contactNo + "</td>"+
+                                "<td align='center'>" + item.billingAddress + ">/td>";
+                                for (i=0;i<=5;i++){
+                                    eachRow+='<option value='+i+'>'+i+'</option>';
+                                }
+                                eachRow+="</select></td>";
+                            rows += "<tr>" + eachRow + "</tr>";
+                        }
+                        // add all the rows to the table
+                        $('#driverTable').append(rows);
+                    }
+                } catch (error) {
+                    // Errors when calling the service; such as network error, 
+                    // service offline, etc
+                    showError
+                    ('There is a problem retrieving driver data, please try again later.<br />'+error);
+               
+            } // error
+        });
+
+        $("#driverForm").submit(async (event) => {
+            //Prevents screen from refreshing when submitting
+            event.preventDefault();
+
+            if (noErrorMsg){
+                var serviceURL = "http://127.0.0.1:5001/driver";
+                try {
+                    const response =
+                    await fetch(
+                    serviceURL, { method: 'POST',headers: {
+                        'Content-Type': 'application/json'
+                        }, body:  JSON.stringify({driverId :driverId ,orderId:orderId, customer_name:customer_name, contactNo:contactNo, billingAddress:billingAddress}) 
+                    });
+                    const data = await response.json();
+                    if (!response.ok){
+                        showError(data.message)
+                    }else{
+                        $("#driverForm").unbind('submit').submit();
+                    }
+                    
+                } catch (error) {
+                        // Errors when calling the service; such as network error, 
+                        // service offline, etc
+                        showError('Server Error, please try again later.<br />'+error);
+                    
+                } 
+            }
+
+        })
+        </script>
