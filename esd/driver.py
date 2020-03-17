@@ -7,30 +7,40 @@ from flask_sqlalchemy import SQLAlchemy
 import pika
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/fill in DB'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/restaurantdel'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 CORS(app)
 
-class driver(db.Model):
-    __tablename__ = 'order'
-    orderID = db.Column(db.Integer, primary_key=True)
-    driverID = db.Column(db.String(1000), nullable=False)
-    order = db.Column(db.String(1000), nullable=False)
-    address = db.Column(db.String(1000), nullable=False)
-    def __init__(self, driverID):
-        self.orderID = orderID
-        self.driverID = driverID
-        self.order = order
-        self.address = address
+class Driver(db.Model):
+    __tablename__ = 'driver'
+    driverId = db.Column(db.String(45), primary_key=True)
+    orderId = db.Column(db.String(45), nullable=False)
+    customer_name = db.Column(db.String(45), nullable=False)
+    contactNo = db.Column(db.String(45), nullable=False)
+    billingAddress = db.Column(db.String(45), nullable=False)
+    def __init__(self, driverId, orderId, customer_name, contactNo, billingAddress):
+        self.driverId = driverId
+        self.orderId = orderId
+        self.customer_name = customer_name
+        self.contactNo = contactNo
+        self.billingAddress = billingAddress
 
     def json(self):
-        return {"orderID":self.orderID,"driverID": self.driverID, "order": self.order, "address": self.address}
+        return {"driverId":self.driverId,"orderId": self.orderId, "customer_name": self.customer_name, "contactNo": self.contactNo, "billingAddress": self.billingAddress}
 
-
+@app.route("/driver/<string:driverId>")
 #take out the order information and address using driverID.
-def find_by_driverID(driverID):
-    driver_order_details = 
+def find_by_driverID(driverId):
+    driver_order_details = Driver.query.filter_by(driverId=driverId).first()
+
+    if driver_order_details:
+        return jsonify(driver_order_details.json()), 200
+    else:
+        return jsonify({'message':'Invalid driver or there is no order assigned'}),404
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5002)
 
 
