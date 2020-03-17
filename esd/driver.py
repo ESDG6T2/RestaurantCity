@@ -34,11 +34,10 @@ class Driver(db.Model):
 #take out the order information and address using driverID.
 def find_by_driverID(driverId):
     driver_order_details = Driver.query.filter_by(driverId=driverId).first()
-
     if driver_order_details:
         return jsonify(driver_order_details.json()), 200
     else:
-        return jsonify({'message':'Invalid driver or there is no order assigned'}),404
+        return jsonify({'message':'Invalid driver or there is no order assigned'}), 404
 
 if __name__ == "__main__":
     app.run(debug=True, port=5002)
