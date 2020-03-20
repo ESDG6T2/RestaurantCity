@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <title>Restaurant City Management</title>
+</head>
+<body>
+    <div id='option-bar'>
+        <table>
+            <tr><th colspan="2"><h3>Restaurant City Management</h3></th></tr>
+            <tr>
+                <td><input type="button" id='monitoring' name='monitoring' value="Monitoring"/></td>
+                <td><input type="button" id='order' name='order' value="Order List"/></td>
+            </tr>
+        </table>
+    </div>
+    <div id='main-container'>
+        <table border="1" id='ordertable'>
+            <tr>
+                <th>OrderID</th>
+                <th>Food List</th>
+                <th>UserID</th>
+                <th>Billing Address</th>
+                <th>Postal Address</th>
+                <th>Contact Number</th>
+                <th>Date/Time</th>
+                <th>Total Amount</th>
+                <th>Delivery man</th>
+                <th>Status</th>
+            </tr>
+        </table>
+
+        <table border="1" id='monitoringtable'>
+            <tr>
+                <th>Monitoring ID</th>
+                <th>Monitoring Information</th>
+            </tr>
+        </table>
+    </div>
+</body>
+
+<script>
+    $(async () => {
+        var message = [
+ {"userId": "a",
+  "menuItem": {
+    "F02": 3,
+    "F04": 4
+  },
+  "orderId": "1",
+  "billingAddress": "a",
+  "postalCode": "a",
+  "contactNo": "123",
+  "orderStatus": "Paid",
+  "datetime": "20-03-2020",
+  "total_amount": 50,
+  "driverId": "unassigned"
+},
+{"userId": "a",
+  "menuItem": {
+    "F02": 3,
+    "F04": 4
+  },
+  "orderId": "1",
+  "billingAddress": "a",
+  "postalCode": "a",
+  "contactNo": "123",
+  "orderStatus": "Paid",
+  "datetime": "20-03-2020",
+  "total_amount": 50,
+  "driverId": "unassigned"
+}];
+
+            $('#monitoringtable').hide();
+            // var serviceURL = "http://127.0.0.1:5003/order";
+            // console.log(serviceURL);
+            try {
+                // const response =
+                //     await fetch(
+                //         serviceURL, {
+                //         method: 'GET',
+                //     }
+                //     );
+                // const data = await response.json();
+                // const order_list = data.order; //the arr is in data.order of the JSON data
+                // // window.menu_items = menu_items;
+                var data = JSON.parse(JSON.stringify(message))
+                console.log(data);
+
+                var order_list = [1,2,3];
+
+                if (!order_list || !order_list.length) {
+                    alert('Order List is empty or undefined.')
+                } else {
+                    for (var i = 0; i < data.length ; i++) {
+                    var eachRow = "<tr>";
+                    // console.log(data[i]);
+                    // for (const [key, value] of Object.entries(data[i])) {
+                        // console.log(data[i]['orderId']);
+                        eachRow += "<td align='center'>" + data[i]['orderId'] + "</td>";
+                        eachRow += "<td>";
+                        for (const food in data[i]['menuItem']) {
+                            eachRow += food + '<br>'; 
+                        }
+                        eachRow += "</td>";
+                        eachRow += "<td align='center'>" + data[i]['userId'] + "</td>" + 
+                        "<td align='center'>" + data[i]['billingAddress'] + "</td>" + 
+                        "<td align='center'>" + data[i]['postalCode'] + "</td>" + 
+                        "<td align='center'>" + data[i]['contactNo'] + "</td>" + 
+                        "<td align='center'>" + data[i]['datetime'] + "</td>" + 
+                        "<td align='center'>$" + data[i]['total_amount'] + "</td>" + 
+                        "<td align='center'>" + data[i]['driverId'] + "</td>" + 
+                        "<td align='center'>" + data[i]['orderStatus'] + "<input type='button' id='preparing' name='preparing' value='Preparing'/><input type='button' id='delivering' name='delivering' value='Delivering'/></td>";
+                    eachRow += "</tr>";
+                    $('#ordertable').append(eachRow);
+                    }
+                }
+            } catch (error) {
+            //     // Errors when calling the service; such as network error, 
+            //     // service offline, etc
+            //     alert
+            //         ('There is a problem retrieving books data, please try again later.<br />' + error);
+
+            } // error
+
+        });
+
+    $("#monitoring").click(async (event) => { 
+        var message = [
+        {"monitoringId": "a",
+        "message": "12345",
+        },
+        {"monitoringId": "b",
+        "message": "99345",
+        }];
+        $('#ordertable').hide();
+        $('#monitoringtable').show();
+        $('#monitoringtable').empty();
+        var serviceURL = "http://127.0.0.1:5002/monitoring/";
+        try {
+                // const response =
+                //     await fetch(
+                //         serviceURL, {
+                //         method: 'GET',
+                //     }
+                //     );
+                // const data = await response.json();
+                // const order_list = data.order; //the arr is in data.order of the JSON data
+                // // window.menu_items = menu_items;
+                var data = JSON.parse(JSON.stringify(message))
+                // console.log(data);
+                var order_list = [1,2,3];
+
+                if (!order_list || !order_list.length) {
+                    alert('Order List is empty or undefined.')
+                } else {
+                    for (var i = 0; i < data.length ; i++) {
+                    console.log(data[i]['monitoringId']);
+                    var eachRow = "";
+                    eachRow+="<tr><td align='center'>" + data[i]['monitoringId'] + "</td><td align='center' margin = >" + data[i]['message'] + "</td></tr>";
+                    $('#monitoringtable').append(eachRow);
+                }
+                }
+            } catch (error) {
+            //     // Errors when calling the service; such as network error, 
+            //     // service offline, etc
+            //     alert
+            //         ('There is a problem retrieving books data, please try again later.<br />' + error);
+
+            } // error
+
+            $("#order").click(async (event) => { 
+                $('#ordertable').show();
+                 $('#monitoringtable').hide();
+            });
+
+    });
+</script>
