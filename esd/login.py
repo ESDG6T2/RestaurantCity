@@ -3,7 +3,7 @@ from flask_cors import CORS
 
 app = Flask(__name__, static_folder="img")
 CORS(app)
-
+@app.route('/')
 @app.route('/login')
 def login():
     output='''<html>
@@ -83,7 +83,7 @@ def mainPage():
     password=request.form.get('pwd')
 
     output='''
-    <html>
+<html>
         <head>
             <!-- jquery google CDN -->
             <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
@@ -93,7 +93,7 @@ def mainPage():
             Welcome,'''+userID+'''
             <div id="main-container"">
                 <form action='orderProcessing' method='POST'>
-                    <input type='hidden' name='userID' value='''+str(userID)+'''>
+                    <input type='hidden' name='userID' value='''+userID+'''>
                     <table id='menuTable' border='1'>
                         <tr>
                             <th>Menu ID</th><th>Food</th><th>Food Name</th><th>Price</th><th>Quantity</th>
@@ -101,8 +101,6 @@ def mainPage():
                     </table>
                     <input type='submit' name='submit'>
                 </form>
-                <h1>Locate Us!</h1>
-                <iframe width="600" height="450" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?q=Stamford Road, SMU School of Information Systems, Singapore&key=AIzaSyCpukJ8bc2TwSB-4IuGp1sUjuZEF4-VVms" allowfullscreen></iframe>
             </div>
         </body>
     </html>
@@ -235,7 +233,7 @@ def OrderProcessing():
                         var rows = "";
                         var totalAmt=0.0;
                         var l=0;
-
+                        
                         for (const item of menu) {
                             if (item.menuId in MenuList){
                                 eachRow =
@@ -247,13 +245,13 @@ def OrderProcessing():
                                     "<td>"+MenuList[item.menuId]*item.price+"</td>";
                                 totalAmt+=MenuList[item.menuId]*item.price
                                 rows += "<tr>" + eachRow + "</tr>";
-                            };   
+                            };
                             l++;
                         }
                         if (rows==''){
                             rows+="<tr><th colspan='6'>No item selected</th></tr>";
                         }
-                        rows+="<tr><th colspan='5' align='right'>Total Amount</th><td>$"+totalAmt+"</td></tr>";
+                        rows+="<tr><th colspan='5' align='right'>Total Amount</th><td>$"+totalAmt+" <input id='totalAmt' type='hidden' value="+totalAmt+"></td></tr>";
                         // add all the rows to the table
                         $('#OrderTable').append(rows);
                     }
@@ -268,6 +266,7 @@ def OrderProcessing():
         $("#orderForm").submit(async (event) => {
             //Prevents screen from refreshing when submitting
             var userID=$('#userID').val();
+            var totalAmt=$('#totalAmt').val();
             event.preventDefault();
             var noErrorMsg= true;
             if ($('#billingAddress').val().length === 0){
@@ -292,13 +291,13 @@ def OrderProcessing():
                 var contactNo = $('#contactNo').val();
             }
             if (noErrorMsg){
-                var serviceURL = "http://127.0.0.1:5001/order";
+                var serviceURL = "http://127.0.0.1:5001/orderCreate";
                 try {
                     const response =
                     await fetch(
                     serviceURL, { method: 'POST',headers: {
                         'Content-Type': 'application/json'
-                        }, body:  JSON.stringify({userId :userID ,menuItem:MenuList, billingAddress:billingAddress, postalCode:postalCode, contactNo:contactNo}) 
+                        }, body:  JSON.stringify({userId :userID ,menuItem:MenuList, billingAddress:billingAddress, postalCode:postalCode, contactNo:contactNo,totalAmt:totalAmt}) 
                     });
                     const data = await response.json();
                     if (!response.ok){
@@ -313,10 +312,14 @@ def OrderProcessing():
                         showError('Server Error, please try again later.<br />'+error);
                 } 
             }
+
         })
     </script>
     '''
+
     return output
+
+
 
 if __name__ == "__main__":
     app.run(port=5000, debug=True)

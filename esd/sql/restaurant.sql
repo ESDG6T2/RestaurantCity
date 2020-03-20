@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 11, 2020 at 05:29 AM
+-- Generation Time: Mar 20, 2020 at 12:44 AM
 -- Server version: 5.7.21
 -- PHP Version: 7.2.4
 
@@ -81,6 +81,10 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `billingAddress` varchar(45) NOT NULL,
   `postalCode` varchar(45) NOT NULL,
   `contactNo` varchar(45) NOT NULL,
+  `datetime` datetime NOT NULL,
+  `totalAmount` decimal(6,2) NOT NULL,
+  `orderStatus` varchar(45) NOT NULL,
+  `driverId` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`orderId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
