@@ -9,10 +9,11 @@ def login():
     output='''<html>
     <head>
         <title>Login Page</title>
-        <!-- jquery google CDN -->
-        <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
     </head>
     <body>
+
         <form id='loginForm' action='mainPage' method='POST'>
             <table>
                 <tr>
