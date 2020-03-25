@@ -53,11 +53,13 @@ CREATE TABLE IF NOT EXISTS `order` (
   `contactNumber` varchar(45) NOT NULL,
   `totalAmount` float(5,2) NOT NULL,
   `orderStatus` varchar(10) DEFAULT NULL,
+  `datetime` datetime NOT NULL,
   PRIMARY KEY (`orderId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 ALTER TABLE `orderdetail`
   ADD CONSTRAINT `orderdetail_fk1` FOREIGN KEY (`orderId`) REFERENCES `order` (`orderId`) ON DELETE CASCADE;
 COMMIT;
+
 
 
