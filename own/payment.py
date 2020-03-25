@@ -1,56 +1,52 @@
 from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
-import pika, os, json, requests
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/restaurant'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-db = SQLAlchemy(app)
+import pika, json, requests, uuid
+
+from datetime import datetime
+import paypalrestsdk
+
+app = Flask(__name__)
 CORS(app)
-# FIXME: something wrong with send_order
-def send_order(order):
+def generate_order_id():
+    return uuid.uuid4().hex
+
+# Note: port must be 5672 for pika
+def send_order(order): # only when paypal payment succeed
     hostname = 'localhost'
-    port = 5555
+    port = 5672
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
     channel = connection.channel()
     
-    exchange_name = 'order_direct'
-    channel.exchange_declare(exchange=exchange_name, exchange_type='direct')
-    
-    channelqueue = channel.queue_declare(queue='order_direct')
-
     message = json.dumps(order,default=str)
 
-     
-    # TODO: if payment fails, send back to Cart
+    exchange_name = 'order_direct'
+    channel.exchange_declare(exchange=exchange_name, exchange_type='direct')
+    channel.queue_declare(queue='order',durable=True)
+    channel.basic_publish(exchange=exchange_name, routing_key='order.receive', body=message,properties=pika.BasicProperties(delivery_mode=2))
 
-    # if payment succeed, send to Order
-    channel.queue_declare(queue='order', durable=True)
-    channel.queue_bind(exchange=exchange_name, queue='order', routing_key='order_create')
-    channel.basic_publish(exchange=exchange_name, routing_key='order_create', body=message,
-        properties=pika.BasicProperties(delivery_mode=2)
-    )
-    
-    # trial run send monitoring
-    # no need to create queue
-    exchange_name = 'order_fanout'
-    channel.exchange_declare(exchange=exchange_name, exchange_type='fanout')
-    channel.basic_publish(exchange=exchange_name,routing_key='order_update',body=message)
     print('Payment succeeded, order is sent')
 
 @app.route('/payment',methods=['POST'])
 def pay_order():
-    print('call pay_order')
-    order = None
+    # Assuming payment successful
     order = request.get_json()
-    order['order_status'] = 'paid'
-    paid = True
+    order['orderStatus']='paid'
+    order['orderId'] = generate_order_id()
+    order['orderDatetime'] = datetime.now().strftime(format='%Y-%m-%d %H:%M:%S')
     print(order)
-    print()
-    if paid:
-        # send_order(jsonify(order))
-        return jsonify(order), 200
+    send_order(order)
+    # TODO: integrating with Paypal
+    # Call paypal api here 
+    # r = requests.post('http://127.0.01/7000/checkout',json=order)
+
+    # if r.status_code == 200:
+    #     send_order(order)
+    #     return jsonify(order), 200
+    # else:
+    #     return jsonify(order), 400
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=5555,debug=True)
+
+

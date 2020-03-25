@@ -1,6 +1,5 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
-
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -24,6 +23,7 @@ class Menu(db.Model):
 
     def json(self):
         return {"menuId": self.menuId, "foodName": self.foodName, "price": self.price}
+
 
 @app.route("/menu")
 def getAllMenu():
