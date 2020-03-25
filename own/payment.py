@@ -36,6 +36,8 @@ def pay_order():
     order['orderDatetime'] = datetime.now().strftime(format='%Y-%m-%d %H:%M:%S')
     print(order)
     send_order(order)
+    return jsonify(order), 200
+
     # TODO: integrating with Paypal
     # Call paypal api here 
     # r = requests.post('http://127.0.01/7000/checkout',json=order)
