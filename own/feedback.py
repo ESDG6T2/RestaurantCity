@@ -35,7 +35,7 @@ class Feedback(db.Model):
         self.star = star
 
     def json(self):
-        return {"datetime":self.datetime,"feedback": self.feedback, "star": self.star}
+        return {"datetime":self.datetime,"feedback": self.feedback, "star": str(self.star)}
 
 @app.route("/feedback", methods=['POST'])
 def create_feedback():
