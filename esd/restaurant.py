@@ -110,8 +110,16 @@ def addToDatabase(order):
             return ({"message": "Order created successfully."})
     return ({"message": "Order created successfully."})
 
+# @app.route("/getOrders")
+# def getAllOrder():
+#     orders={"orders": [order.json() for order in Orders.query.filter_by(orderStatus!='Delivered')]}
+#     # book = Book.query.filter_by(isbn13=isbn13).first()
+#     # return jsonify({"Menu": [menu.json() for menu in Menu.query.all()]})
+#     receiveOrder()
+#     return orders
 
 if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')
     print("This is " + os.path.basename(__file__) + ": restaurant for an order...")
-    app.run(port=5003, debug=True)
     receiveOrder()
+    # app.run(port=5003, debug=True)
+    
