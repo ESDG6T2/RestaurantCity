@@ -490,10 +490,7 @@
         event.preventDefault();
         var content = $('#feedback-content').val(),
             rating = $('#feedback-rating-score').val(),
-            now = new Date(),
-            datetime = now.toISOString().split('T')[0] + " " + now.toISOString().split('T')[1].split(".")[0];
         var feedback = {
-            'datetime': datetime,
             'feedback': content,
             'star': rating
         };
@@ -511,6 +508,7 @@
                 }
                 );
             const result = await response;
+
             if (result.status == 201) {
                 alert('Feedback Submitted');
             }
