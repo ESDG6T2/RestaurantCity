@@ -1,11 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
-import pika, json, requests, uuid
+import pika, json, requests, uuid, pytz
 
 from datetime import datetime
 import paypalrestsdk
-
+tz = pytz.timezone('Asia/Singapore')
 app = Flask(__name__)
 CORS(app)
 def generate_order_id():
@@ -33,9 +33,11 @@ def pay_order():
     order = request.get_json()
     order['orderStatus']='paid'
     order['orderId'] = generate_order_id()
-    order['orderDatetime'] = datetime.now().strftime(format='%Y-%m-%d %H:%M:%S')
+    order['orderDatetime'] = datetime.now(tz).strftime(format='%Y-%m-%d %H:%M:%S')
     print(order)
     send_order(order)
+    return jsonify(order), 200
+
     # TODO: integrating with Paypal
     # Call paypal api here 
     # r = requests.post('http://127.0.01/7000/checkout',json=order)
