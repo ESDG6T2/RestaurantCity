@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
 from flask_cors import CORS
+import json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/restaurant'
@@ -60,8 +61,8 @@ def getAllOrder():
 
 @app.route("/getAllOrders")
 def getAllOrderDriver():
-    orders={"orders": [order.json() for order in Orders.query.filter(Orders.orderStatus=="Delivering").all()]}
-    return(orders)
+    orders = {"orders": [order.json() for order in Orders.query.all()]}
+    return (orders)
 
 @app.route("/getDeliveryOrders/<string:driverId>", methods=['GEt'])
 def getDeliveryOrder(driverId):
