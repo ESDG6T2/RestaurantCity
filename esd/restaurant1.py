@@ -58,6 +58,11 @@ def getAllOrder():
     orders={"orders": [order.json() for order in Orders.query.filter(Orders.orderStatus!="Delivered", Orders.orderStatus!="Delivering").all()]}
     return(orders)
 
+@app.route("/getAllOrders")
+def getAllOrderDriver():
+    orders={"orders": [order.json() for order in Orders.query.filter(Orders.orderStatus=="Delivering").all()]}
+    return(orders)
+
 @app.route("/getDeliveryOrders/<string:driverId>", methods=['GEt'])
 def getDeliveryOrder(driverId):
     if driverId=='':
