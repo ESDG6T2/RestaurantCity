@@ -19,6 +19,7 @@
         </form>
         <div id="main-container" class="container"> 
         <table id='driverTable' border='1'>    
+            <thead>
             <div class="table">         
                 <tr>
                     <th>Delivery man</th>
@@ -33,6 +34,9 @@
                     <th>Status</th>
                     <th>Action</th>
                 </tr>
+            </thead>
+            <tbody>
+            </tbody>
             </div>
         </table>
         </div>
@@ -47,7 +51,6 @@
         });
 
         async function getAll(){
-            console.log('heelo')
             var serviceURL = "http://127.0.0.1:5002/getAll";
             try {
                     const response = 
@@ -55,7 +58,40 @@
                        serviceURL, { method: 'GET' }
                     );
                     const data = await response.json();
-                    console.log(data)
+                    // console.log(data)
+                    var driver = data.driverId; //the arr is in data.driver of the JSON data
+                    driver.sort(function(a, b){
+                         return a.driverId - b.driverId;
+                    });
+                    // console.log(driver)
+                    // array or array.length are falsy
+                    if (!driver || !driver.length) {
+                        showError('Driver list empty or undefined.')
+                    } else {
+                        // for loop to setup all table rows with obtained delivery data
+                        for(var i = 0; i < driver.length ; i++){
+                            var eachRow = "<tr>";
+                            eachRow += "<td align='center'>" + driver[i]['driverId'] + "</td>" + 
+                        "<td align='center'>" + driver[i]['billingAddress'] + "</td>" + 
+                        "<td align='center'>" + driver[i]['postalCode'] + "</td>" + 
+                        "<td align='center'>" + driver[i]['userId'] + "</td>" + 
+                        "<td align='center'>" + driver[i]['contactNo'] + "</td>" + 
+                         "<td align='center'>" + driver[i]['orderId'] + "</td>";
+                        eachRow += "<td>";
+                        for (var l = 0; l < driver[i]['menuItem'].length ; l++) {
+                        // for (const food in orders[i]['menuItem'][l]) {
+                            eachRow += driver[i]['menuItem'][l]['menuId'] + ' X'+ driver[i]['menuItem'][l]['Qty'] + '<br>';
+                        }
+                        eachRow += "</td>";
+                        eachRow += "<td align='center'>" + driver[i]['datetime'] + "</td>" + 
+                        "<td align='center'>$" + driver[i]['totalAmount'] + "</td>" + 
+                        "<td align='center'>" + driver[i]['orderStatus'] +"</td>"+
+                        "<td align='center'><input type='button' id='delivered' name='delivered"+driver[i]['orderId']+"' onclick='updateStatusDelivered("+driver[i]['orderId']+")' value='Delivered'/></td>";
+                        eachRow += "</tr>";
+                        // // add all the rows to the table
+                        $('#driverTable').find('tbody').append(eachRow);
+                    }
+                    }
             }catch (error) {
                     // Errors when calling the service; such as network error, 
                     // service offline, etc
@@ -73,6 +109,7 @@
         $("#driverForm").submit(async (event) => {        
                 // Change serviceURL to your own
                 event.preventDefault();
+                $("#driverTable").find('tbody').empty();
                 $('#return').show();
                 var driverId = $('#driver').val();
                 var serviceURL = "http://127.0.0.1:5002/driver/" + driverId;
@@ -85,9 +122,9 @@
                        serviceURL, { method: 'GET' }
                     );
                     const data = await response.json();
-                    // console.log(data)
-                    var driver = data.driverId; //the arr is in data.driver of the JSON data
-                    // console.log(driver)
+                    // console.log(data.orders)
+                    var driver = data.orders; //the arr is in data.driver of the JSON data
+                    console.log(driver)
                     // array or array.length are falsy
                     if (!driver || !driver.length) {
                         showError('Driver list empty or undefined.')
@@ -121,7 +158,7 @@
                         //         "<td align='center'>" + data.billingAddress + "</td>";
                         //     rows += "<tr>" + eachRow + "</tr>";
                         // // add all the rows to the table
-                        $('#driverTable').append(eachRow);
+                        $('#driverTable').find('tbody').append(eachRow);
                     }
                     }
                 } catch (error) {
@@ -151,6 +188,7 @@
                 showError(data.message);
             }else{
                 location.reload(true);
+                alert("You have successfully updated!")
             }
         } catch (error) {
             // Errors when calling the service; such as network error, 
@@ -160,5 +198,6 @@
             
         } // error updateStatusDelivered
     }
+
 
         </script>

@@ -14,6 +14,8 @@ db = SQLAlchemy(app)
 CORS(app)
 import requests
 getallURL= "http://127.0.0.1:5003/getAllOrders"
+getByDriverId = "http://127.0.0.1:5003/getByDriverId"
+updateOrderURL = "http://127.0.0.1:5003/updateOrder"
 
 class Driver(db.Model):
     __tablename__ = 'driver'
@@ -34,28 +36,25 @@ class Driver(db.Model):
 
 @app.route("/getAll")
 def getAll():
-    # return jsonify("heelo")
     response=requests.get(getallURL)
-    msg = json.dumps(response)
-    return jsonify(msg)
-    # for i in response_dict:
-        # print("key: ", i, "val: ", response_dict[i])
-    # if r.is_json():
-    #     json_data = r.json()
-    #     print(json_data)
-    # else:
-    #     print('yes')
+    return response.text
 
     
 
 @app.route("/driver/<string:driverId>")
 #take out the order information and address using driverID.
 def find_by_driverID(driverId):
-    driver_order_details = Driver.query.filter_by(driverId=driverId).first()
-    if driver_order_details:
-        return jsonify(driver_order_details.json()), 200
-    else:
-        return jsonify({'message':'Invalid driver or there is no order assigned'}), 404
+    driver = {"DriverId": driverId}
+    response=requests.get(getByDriverId, json=driver)
+    return response.text
+
+@app.route("/updateOrder", methods=['POST'])
+def updateOrder():
+    data=request.get_json()
+    response=requests.post(updateOrderURL, json=data)
+    return response.text
+    
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5002)

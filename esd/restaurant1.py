@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from sqlalchemy_serializer import SerializerMixin
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
 from flask_cors import CORS
@@ -59,10 +60,34 @@ def getAllOrder():
     orders={"orders": [order.json() for order in Orders.query.filter(Orders.orderStatus!="Delivered", Orders.orderStatus!="Delivering").all()]}
     return(orders)
 
+
+@app.route("/getByDriverId")
+def getByDriverId():
+    driverData=None
+    if request.is_json:
+        driverData = request.get_json()
+    else:
+        driverData = request.get_data()
+        print("Received an invalid driverId:")
+        print(driverData)
+        replymessage = json.dumps({"message": "driverId should be in JSON", "data": driverData}, default=str)
+        return replymessage, 400 # Bad Request
+    DriverId = str(driverData["DriverId"])
+    # return DriverId
+    orders = {"orders": [order.json() for order in Orders.query.filter(Orders.orderStatus=="Delivering", Orders.driverId==DriverId).all()]}
+    return (orders)
+
 @app.route("/getAllOrders")
 def getAllOrderDriver():
-    orders = {"orders": [order.json() for order in Orders.query.all()]}
-    return (orders)
+    orders = {"driverId": [order.json() for order in Orders.query.filter(Orders.orderStatus=="Delivering").all()]}
+    return orders
+    # orders = [order.json() for order in Orders.query.all()]
+    # return json.dumps({'orders': orders}, indent=4, sort_keys=True, default=str)
+    # orders = [order for order in Orders.query.all()]
+    # print(orders)
+    # orders = json.load(orders)
+    # return (json.dumps(orders))
+    # orders.as_dict()
 
 @app.route("/getDeliveryOrders/<string:driverId>", methods=['GEt'])
 def getDeliveryOrder(driverId):
