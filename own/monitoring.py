@@ -25,12 +25,13 @@ def callback(channel, method, properties, body): # required signature for the ca
     data = json.loads(body)
 
     if data['type'] == 'order_receive':
-        print("Receive an order:")
-        print(data)
+        print("Receive an order:")   
     elif data['type'] == 'order_update':
         print("Order updated:")
-        print(data)
-
+    elif data['type'] == 'feedback_receive':
+        print("Receive a piece of feedback:")
+    
+    print(data)
 if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')
     print("This is " + os.path.basename(__file__) + ": monitoring order creation and feedback submission...")
     receiveLog()

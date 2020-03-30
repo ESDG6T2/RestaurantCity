@@ -14,18 +14,17 @@ CORS(app)
 
 tz = pytz.timezone('Asia/Singapore')
 
-def send_feedback(datetime,rating):
+def send_feedback(data):
     hostname = 'localhost'
     port = 5672
     connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
     channel = connection.channel()
     
-    message = {'Feedback update':'Received one piece of feedback on {} with Rating {}/5'.format(datetime,rating)}
-    message = json.dumps(message,default=str)
+    message = json.dumps({'star':data['star'],"datetime":data['datetime'],'type':'feedback_receive'}, default=str)
     exchange_name = 'info_update'
     channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
     channel.basic_publish(exchange=exchange_name, routing_key='feedback.info', body=message)
-    print('Feedback sent to notification') # for debugging
+    print('Feedback sent to monitoring') # for debugging
 
 class Feedback(db.Model):
     __tablename__ = 'feedback'
@@ -45,11 +44,12 @@ class Feedback(db.Model):
 def create_feedback():
     data = request.get_json()
     feedbackDatetime = datetime.now(tz).strftime(format='%Y-%m-%d %H:%M:%S')
+    data['datetime'] = feedbackDatetime
     feedback = Feedback(feedbackDatetime,data['feedback'],data['star'])
     try:
         db.session.add(feedback)
         db.session.commit()
-        send_feedback(feedbackDatetime,data['star'])
+        send_feedback(data)
     except Exception as e:
         print(e)
         return jsonify({"message": "An error occurred creating the feedback."}), 500
