@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-from sqlalchemy_serializer import SerializerMixin
 from flask_sqlalchemy import SQLAlchemy
 from random import randint
 from flask_cors import CORS

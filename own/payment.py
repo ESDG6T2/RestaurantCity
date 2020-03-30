@@ -4,7 +4,7 @@ from flask_cors import CORS
 import pika, json, requests, uuid, pytz
 
 from datetime import datetime
-import paypalrestsdk
+# import paypalrestsdk
 tz = pytz.timezone('Asia/Singapore')
 app = Flask(__name__)
 CORS(app)
