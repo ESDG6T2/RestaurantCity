@@ -17,16 +17,20 @@ class OrderAllocation(db.Model):
     customerName = db.Column(db.String(45), nullable=False)
     contactNumber = db.Column(db.String(45), nullable=False)
     deliveryAddress = db.Column(db.String(45), nullable=False)
-    
-    def __init__(self, driverId, orderId, customerName, contactNumber, deliveryAddress):
+    orderStatus = db.Column(db.String(45),nullable=False)
+
+    def __init__(self, driverId, orderId, customerName, contactNumber, deliveryAddress,orderStatus):
         self.driverId = driverId
         self.orderId = orderId
         self.customerName = customerName
         self.contactNumber = contactNumber
         self.deliveryAddress = deliveryAddress
+        self.orderStatus = orderStatus
 
     def json(self):
-        return {"driverId":self.driverId,"orderId": self.orderId, "customerName": self.customerName, "contactNumber": self.contactNumber, "deliveryAddress": self.deliveryAddress}
+        return {"driverId": self.driverId, "orderId": self.orderId, "customerName": self.customerName, "contactNumber": self.contactNumber, "deliveryAddress": self.deliveryAddress,
+            'orderStatus':self.orderStatus
+        }
 
 @app.route("/order/<string:driverId>")
 #take out the order information and address using driverID.
