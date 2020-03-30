@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+import pika
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/restaurantcity_order'
@@ -8,6 +9,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 CORS(app)
+
+def send_order_status_update(order):
+    hostname = 'localhost'
+    port = 5672
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
+    channel = connection.channel()
+    
+    message = json.dumps(order, default=str)
+    
+    exchange_name = 'info_update'
+    channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
+    channel.basic_publish(exchange=exchange_name, routing_key='order.info', body=body)
 
 class Order(db.Model):
     __tablename__ = 'order'
