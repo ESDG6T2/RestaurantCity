@@ -22,9 +22,14 @@ def receiveLog():
     channel.start_consuming() # an implicit loop waiting to receive messages; it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
 
 def callback(channel, method, properties, body): # required signature for the callback; no return
-    print("Received an log by " + __file__)
-    print(json.loads(body))
-    print()
+    data = json.loads(body)
+
+    if data['type'] == 'order_receive':
+        print("Receive an order:")
+        print(data)
+    elif data['type'] == 'order_update':
+        print("Order updated:")
+        print(data)
 
 if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')
     print("This is " + os.path.basename(__file__) + ": monitoring order creation and feedback submission...")

@@ -22,7 +22,7 @@ def receiveOrder():
     channel.start_consuming() # an implicit loop waiting to receive messages; it doesn't exit by default. Use Ctrl+C in the command window to terminate it.
 
 def callback(channel, method, properties, body):  # required signature for the callback; no return
-    print("Received an log by " + __file__)
+    print("Receive an order:\n")
     order = json.loads(body)
     print(order)
     
@@ -31,9 +31,13 @@ def callback(channel, method, properties, body):  # required signature for the c
     r = requests.post(url='http://127.0.0.1:6666/add-order/{}'.format(orderId),json=order)
     
     # send to monitoring and notification
+
+    order['type'] = 'order_receive'
+    message = json.dumps(order, default=str)
+
     exchange_name = 'info_update'
     channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
-    channel.basic_publish(exchange=exchange_name, routing_key='order.info', body=body)
+    channel.basic_publish(exchange=exchange_name, routing_key='order.info', body=message)
     
 if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')
     print("This is " + os.path.basename(__file__) + ": monitoring order creation and feedback submission...")
