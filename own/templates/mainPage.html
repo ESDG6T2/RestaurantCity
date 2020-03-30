@@ -220,6 +220,8 @@
         $('#Home').hide();
         $('#Cart').hide();
         $('#Feedback').hide();
+        $('#main-section').show();
+        $('#hidden-section').hide();
         if(this.text=='Home'){
             $('#Home').show();
         }else if(this.text=='Cart'){
@@ -232,7 +234,7 @@
 
     // function create_table()
     function create_menu_table(use_cart) {
-        $('#menu-table tbody').empty();
+        $('#menu-table').empty();
         for (const item of window.menu_items) {
             var qty = 0;
             if ((window.cart_items != null) & (use_cart == true)) {
@@ -251,18 +253,17 @@
               "<a href='#'><img class='card-img-top' src='../img/{}.jpg' alt=''></a>".format(item.menuId) +
               "<div class='card-body'>"+
                 "<h4 class='card-title'>"+
-                  "{} <input type='hidden' name='foodName' value='{}'>".format(item.foodName, item.foodName)+
+                  "<input type='hidden' name='menuId' value='{}'>{} <input type='hidden' name='foodName' value='{}'>".format(item.menuId,item.foodName, item.foodName)+
                 "</h4>"+
                 "<h5>${} <input type='hidden' name='price' value={}></h5>".format(item.price, item.price)+
                 "<p class='card-text'>Quantity: <input type='number' min='0' max='10' name='quantity' id='{}' value={}></p>".format(order_num_tag, qty)+
               "</div>"+
               "<div class='card-footer'>"+
-                "<small class='text-muted'><input type='hidden' name='menuId' value='{}'>{}</small>".format(item.menuId, item.menuId)+
+                "<small class='text-muted'>{}</small>".format(item.menuId)+
               "</div>"+
             "</div>"+
           "</div>";
             $('#menu-table').append(eachRow);
-            // console.log(eachRow);
         }
     }
     // load menu
@@ -281,7 +282,7 @@
             const data = await response.json();
             const menu_items = data.menu; //the arr is in data.items of the JSON data
             window.menu_items = menu_items;
-            console.log(menu_items);
+            //console.log(menu_items);
             if (!menu_items || !menu_items.length) {
                 alert('Menu is empty or undefined.')
             } else {
@@ -315,7 +316,6 @@
                 var rows = "";
                 for (const item of cart_items) {
                     var itemUrl = "http://127.0.0.1:5001/menu/{}".format(item.menuId);
-                    console.log(itemUrl);
                     const response =
                         await fetch(
                             itemUrl, {
@@ -323,7 +323,7 @@
                         }
                         );
                     const item_data = await response.json();
-                    console.log(item_data);
+                    //console.log(item_data);
                     var item_name = item_data.foodName;
                     var item_price = item_data.price;
 
@@ -380,7 +380,7 @@
     async function delete_cart_data() {
         if (confirm("Confirm delete saved cart?")) {
             var serviceURL = "http://127.0.0.1:5002/delete-cart/{}".format(userid);
-            console.log(serviceURL);
+            //console.log(serviceURL);
             try {
                 const response =
                     await fetch(
@@ -403,14 +403,15 @@
         e.preventDefault();
         var idx = 0, has_item = false,
             data = $('form').serializeArray().reduce(function (obj, item) {
-                sub_obj = {};
                 if (item.name == 'menuId') {
+                    sub_obj = {};
                     sub_obj[item.name] = item.value;
                 }
                 if (item.name == 'quantity') {
                     sub_obj[item.name] = parseInt(item.value);
                     if (item.value > 0) {
                         has_item = true;
+                        console.log(sub_obj);
                         obj.push(sub_obj);
                     }
                 }
@@ -433,7 +434,7 @@
 
             var body = {};
             body["items"] = data;
-
+            console.log(data);
             var serviceURL = "http://127.0.0.1:5002/add-cart/{}".format(userid);
             try {
                 const response =
@@ -485,8 +486,10 @@
         // console.log(data);
 
         var total = 0;
+        $("#added-cart-table tbody").empty()
         for (const [key, value] of Object.entries(data)) {
             if (value['quantity'] > 0) {
+                console.log(value);
                 row = '<tbody><tr align="center">' +
                     '<td style="display:none">{}</td>'.format(value['menuId']) +
                     '<td>{}</td>'.format(value['foodName']) +
@@ -533,7 +536,7 @@
             'orderItems': order_items,
             'totalAmount': total
         };
-        console.log(order);
+        //console.log(order);
 
         serviceURL = 'http://127.0.0.1:5555/payment'
         try {
