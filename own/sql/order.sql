@@ -54,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `order` (
   `totalAmount` float(5,2) NOT NULL,
   `orderStatus` varchar(10) DEFAULT NULL,
   `datetime` datetime NOT NULL,
+  `driverId` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`orderId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 

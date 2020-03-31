@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+import pika,json
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/restaurantcity_order'
@@ -8,6 +9,19 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 CORS(app)
+
+def send_order_status_update(update_info):
+    hostname = 'localhost'
+    port = 5672
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
+    channel = connection.channel()
+
+    update_info['type'] = 'order_update'
+    message = json.dumps(update_info, default=str)
+    
+    exchange_name = 'info_update'
+    channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
+    channel.basic_publish(exchange=exchange_name, routing_key='order.info', body=message)
 
 class Order(db.Model):
     __tablename__ = 'order'
@@ -77,18 +91,23 @@ def add_order(orderId):
 
     return jsonify(order.json()), 201  # CREATED
     
-@app.route('/update-order/<string:orderId>', methods=['POST'])
+@app.route('/update-order/<string:orderId>', methods=['PUT'])
 # to be used in business web UI
 def update_order(orderId):
+    if not Order.query.filter_by(orderId=orderId).first():
+        return jsonify({"message": "No order with id: {}.".format(orderId)}), 400
+
     data = request.get_json()
+    output = {"orderId":orderId,"orderStatus":data['orderStatus']}
     try:
         Order.query.filter_by(orderId=orderId).update(dict(orderStatus=data['orderStatus'])) # to update a order status
         db.session.commit()
+        send_order_status_update(output)
     except Exception as e:
         print(e)
-        return jsonify({"message": "Error occurred updating order status of order with id{}.".format(orderId)}), 400
+        return jsonify({"message": "Error occurred updating order status of order with id: {}.".format(orderId)}), 400
         
-    return jsonify(data),201
+    return jsonify(output),201
 
 @app.route('/order/<string:userId>') # complete
 def retrieve_order(userId):
