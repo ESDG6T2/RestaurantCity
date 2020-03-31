@@ -8,7 +8,7 @@ paypalrestsdk.configure({
   "client_id": "AdYNpArZeEoIQS7QUQk4BfO5HbY3I5ppd7ttEK1aimWGDIdywW1CWWBZ_1tR5JEm4vg5UMpP9lkaKPVK",
   "client_secret": "EFk8M9WgnCn5OBJaGiqEskzGcPZaUiqmP8-zKyHx7PGxdvZyze4FuHKg2jjCPJBp2MzSvUiOjc8BqmqX" })
 
-@app.route('/checkout')
+@app.route('/checkout',methods=['POST'])
 def index():
     return render_template('index.html')
 
