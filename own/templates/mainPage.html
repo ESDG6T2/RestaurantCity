@@ -41,18 +41,27 @@
         }
 
         body {
-            background-color: #d4fffe;
+            background-color: #cfd7ec;
+            height: 100%;
         }
 
-        .imagebg {
+        .container-fluid{
             background-image: url('../img/feedback-background.jpg'); 
-            background-position: center center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
+            background-position: center center;
             background-size: cover;
-            background-color: #464646;
         }
 
+        .navbar {
+            background-color: #19193e;
+        }
+
+        footer {
+            background: #19193e;
+            color: white;
+            line-height: 25px;
+            padding: 0 20px;
+        }
 
     </style>
 </head>
@@ -60,7 +69,7 @@
 <body>
     
     <!-- Navigation Home -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-info fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
         <div class="container">
         <a class="navbar-brand" href="#">Restaurant City</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,9 +103,7 @@
     <div id='main-section' height='100%'; width='100%'>
         <div id='Home'>
             <div id='cart-form'>
-                <div class="mx-auto" style="width: 200px;">
-                    Centered element
-                  </div>
+                <div class="mx-auto" style="width: 200px;"></div>
                 <form id='order-form'>
                     <div class="container">
                         <!-- <div class="collapse navbar-collapse" id="Home"></div> -->
@@ -134,12 +141,17 @@
                     </div>
                 </form>
             </div>
+            <div class='row'><br><br></div>
         </div>
 
+        <!-- Footer -->
+        <footer class="page-footer font-small blue fixed-bottom">
+        <div class="footer-copyright text-center py-3">© 2020 Copyright: RestaurantCity</div>
+        </footer>
 
         <!-- Cart -->
         <div id='Cart'>
-        <main class="mt-5 pt-4">
+            <main class="mt-2 pt-2">
                 <div class="container wow fadeIn">
                   <h2 class="my-5 h2 text-center">Your Cart</h2>
                   <div class="row">
@@ -152,9 +164,11 @@
                                         <th>Item name</th>
                                         <th>Item price</th>
                                         <th>Item number</th>
+                                        <th>Delete</th>
                                     </tr>
                                 </thead>
                                     <tr>
+                                        <th><p>xxx</p></th>
                                         <th><p>xxx</p></th>
                                         <th><p>xxx</p></th>
                                         <th><p>xxx</p></th>
@@ -233,85 +247,60 @@
                   </div>
                 </div>
               </main>
-              <!--Footer-->
-              <footer class="page-footer text-center font-small mt-4 wow fadeIn">
-                <hr class="my-4">
-                <!--Copyright-->
-                <div class="footer-copyright py-3">
-                  © 2020 Copyright: RestaurantCity
-                </div>
-                <!--/.Copyright-->
-              </footer>
-              <!--/.Footer-->
         </div>
 
         <!-- Feedback Form -->
-        <div class="imagebg" style="height: 100%; width: 100%;" >
-        <div id='Feedback' class="container" class='center' style="height: 100%; width: 100%;">
+        <!-- <div class="imagebg">-->
             <div class="row" style= "margin-top: 40px">
-                <div id='feedback' class="col-md-6 col-md-offset-3 form-container">
-                    <h2>Feedback</h2>
-                    <p>
-                        Please provide your feedback below:
-                    </p>
-                    <form id="feedback-form" role="form" method="post">
-                    <div id='feedback-rating'>
-                    <label>How do you rate your overall experience? Rate from 1 to 3</label>
+            <div class="container-fluid">
+            <div id='Feedback' class="container" class='center'>
+                    <div class="row"><br><br></div>
+                    <div id='feedback' class="col">
+                        <h2>Feedback</h2>
                         <p>
-                            <label class="radio-inline">
-                            <input type="radio" name="experience" id="feedback-rating-score" value="1" >
-                            1-Bad
-                            </label>
-                            <br>
-                            <label class="radio-inline">
-                            <input type="radio" name="experience" id="feedback-rating-score" value="2" >
-                            2-Average
-                            </label>
-                            <br>
-                            <label class="radio-inline">
-                            <input type="radio" name="experience" id="feedback-rating-score" value="3" >
-                            3-Good
-                            </label>
-                            <br>
+                            Please provide your feedback below:
                         </p>
+                        <form id="feedback-form" role="form" method="post">
+                        <div id='feedback-rating'>
+                        <label>How do you rate your overall experience? Rate from 1 to 3</label>
+                            <p>
+                                <label class="radio-inline">
+                                <input type="radio" name="experience" id="feedback-rating-score" value="1" >
+                                1-Bad
+                                </label>
+                                <br>
+                                <label class="radio-inline">
+                                <input type="radio" name="experience" id="feedback-rating-score" value="2" >
+                                2-Average
+                                </label>
+                                <br>
+                                <label class="radio-inline">
+                                <input type="radio" name="experience" id="feedback-rating-score" value="3" >
+                                3-Good
+                                </label>
+                                <br>
+                            </p>
+                        </div>
                     </div>
-                </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="comments">
+                                Comments:</label>
+                            <textarea class="form-control" type="textarea" name="comments" id="comments" placeholder="Your Comments" maxlength="1000" rows="7"></textarea>
+                        </div>
+                    </div>
+                    <div class="row"><br></div>
+                    <div class="row">
+                        <div class="col">                    
+                            <button type="reset" class="btn btn-lg btn-warning ">Reset</button>
+                            <button id='submit-feedback' class="btn btn-lg btn-warning " >Post </button>
+                        </div>
+                    </div>
+                    <div class="row"><br><br><br><br><br><br></div>
             </div>
-
-            <div class="row">
-                <div class="col-lg-12 col-md-6 mb-4 form-group">
-                    <label for="comments">
-                        Comments:</label>
-                    <textarea class="form-control" type="textarea" name="comments" id="comments" placeholder="Your Comments" maxlength="1000" rows="7"></textarea>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="col-sm-12 form-group">                    
-                    <button type="reset" class="btn btn-lg btn-warning ">Reset</button>
-                    <button id='submit-feedback' class="btn btn-lg btn-warning " >Post </button>
-                </div>
-            </div>
-
-            <div class="row">   </div>
-
             </form>
-
-                    <div id="success_message" style="width:100%; height:100%; display:none">
-                        <h3>Posted your feedback successfully!</h3>
-                    </div>
-                    <div id="error_message" style="width:100%; height:100%; display:none; ">
-                        <h3>Error</h3>
-                        Sorry there was an error sending your form.
-                    </div>
-
-                    <div class="container-background">
-                        <p></p>
-                    </div>
             </div>
-            </div>
-
-
+        </div>
 
 <!--         
         <div id='Feedback'>
@@ -491,6 +480,26 @@
 
     });
 
+    // // delete item from saved cart 
+    // function deleteitem() { 
+    //     $(async () => {
+    //     var serviceURL = "http://127.0.0.1:5002/cart/{}".format(userid);
+    //     try {
+    //         const response =
+    //             await fetch(
+    //                 serviceURL, {
+    //                 method: 'GET'
+    //             }
+    //             );
+        
+    //     } catch (error) {
+    //         // Errors when calling the service; such as network error, 
+    //         // service offline, etc
+    //         alert
+    //             ('There is a problem deleting item. Please try again later.<br />' + error);
+    //     } // error
+    // });
+
     // load saved cart
     $(async () => {
         var serviceURL = "http://127.0.0.1:5002/cart/{}".format(userid);
@@ -525,6 +534,8 @@
                         "<td>{}<input type='hidden' name='foodName' value='{}'></td>".format(item_name, item_name) +
                         "<td>${}<input type='hidden' name='price' value='{}'></td>".format(item_price, item_price) +
                         "<td>{}<input type='hidden' name='quantity' value='{}'></td>".format(item.quantity, item.quantity) +
+                        // delete button
+                        "<td><button onclick"+delete(menuId)+">Delete</button></td>" + 
                         "</tr></tbody>";
                     $('#saved-cart-table').append(eachRow);
                 }
