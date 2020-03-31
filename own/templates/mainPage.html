@@ -99,7 +99,7 @@
                   </div>
                 <form id='order-form'>
                     <div class="container">
-                        <div class="collapse navbar-collapse" id="Home"></div>
+                        <!-- <div class="collapse navbar-collapse" id="Home"></div> -->
                         <div class="row">
                             <div class="col-lg-12 col-md-6 mb-4" >
                               <div class="headimage" style="background-image: url('../img/restaurantcity.jpg'); background-size: 100% 100% ;background-repeat:no-repeat;">
@@ -138,6 +138,7 @@
 
 
         <!-- Cart -->
+        <div id='Cart'>
         <main class="mt-5 pt-4">
                 <div class="container wow fadeIn">
                   <h2 class="my-5 h2 text-center">Your Cart</h2>
@@ -242,6 +243,7 @@
                 <!--/.Copyright-->
               </footer>
               <!--/.Footer-->
+        </div>
 
         <!-- Feedback Form -->
         <div class="imagebg" style="height: 100%; width: 100%;" >
@@ -405,21 +407,21 @@
     $('#Feedback').hide();
     for (var i = 0; i < btns.length; i++) {
         btns[i].addEventListener("click", function() {
-        var current = document.getElementsByClassName("active");
-        current[0].className = current[0].className.replace(" active", "");
-        this.className += " active";
-        $('#Home').hide();
-        $('#Cart').hide();
-        $('#Feedback').hide();
-        $('#main-section').show();
-        $('#hidden-section').hide();
-        if(this.text=='Home'){
-            $('#Home').show();
-        }else if(this.text=='Cart'){
-            $('#Cart').show();
-        }else if(this.text=='Feedback'){
-            $('#Feedback').show();
-        }
+            var current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+            $('#Home').hide();
+            $('#Cart').hide();
+            $('#Feedback').hide();
+            $('#main-section').show();
+            $('#hidden-section').hide();
+            if(this.text=='Home'){
+                $('#Home').show();
+            }else if(this.text=='Cart'){
+                $('#Cart').show();
+            }else if(this.text=='Feedback'){
+                $('#Feedback').show();
+            }
         });
     }
 
