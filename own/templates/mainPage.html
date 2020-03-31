@@ -2,10 +2,13 @@
 <html lang="en">
 
 <head>
+    <title>Welcome to Restaurant City</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
-    <title>Welcome to Restaurant City</title>
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -13,6 +16,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
     <style>
         .headimage {
             padding: 7.5rem 2rem;
@@ -41,6 +45,7 @@
         }
 
         body {
+            background-image: url('../img/feedback-background.jpg'); 
             background-color: #cfd7ec;
             height: 100%;
         }
@@ -63,9 +68,12 @@
             padding: 0 20px;
         }
 
+        .form {
+            font-weight: 500;
+        }
+
     </style>
 </head>
-
 <body>
     
     <!-- Navigation Home -->
@@ -258,25 +266,25 @@
                     <div id='feedback' class="col">
                         <h2>Feedback</h2>
                         <p>
-                            Please provide your feedback below:
+                            <h5>Please provide your feedback below:</h3>
                         </p>
                         <form id="feedback-form" role="form" method="post">
-                        <div id='feedback-rating'>
+                        <div id='feedback-rating' class="form">
                         <label>How do you rate your overall experience? Rate from 1 to 3</label>
                             <p>
                                 <label class="radio-inline">
                                 <input type="radio" name="experience" id="feedback-rating-score" value="1" >
-                                1-Bad
+                                1 - Bad
                                 </label>
                                 <br>
                                 <label class="radio-inline">
                                 <input type="radio" name="experience" id="feedback-rating-score" value="2" >
-                                2-Average
+                                2 - Average
                                 </label>
                                 <br>
                                 <label class="radio-inline">
                                 <input type="radio" name="experience" id="feedback-rating-score" value="3" >
-                                3-Good
+                                3 - Good
                                 </label>
                                 <br>
                             </p>
@@ -330,7 +338,100 @@
                 </table>
             </div>
         </div> -->
-        
+    
+    <div id='Contact'>
+            <div class="container">
+                 <div class="row">
+      <!-- How to change your own map point
+              1. Go to Google Maps
+              2. Click on your location point
+              3. Click "Share" and choose "Embed map" tab
+              4. Copy only URL and paste it within the src="" field below
+      -->
+
+            <div id="google-map">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3647.3030413476204!2d100.5641230193719!3d13.757206847615207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xf51ce6427b7918fc!2sG+Tower!5e0!3m2!1sen!2sth!4v1510722015945" allowfullscreen></iframe>
+            </div>
+            <div class="col-md-6 col-sm-12">
+                <div class="col-md-12 col-sm-12">
+                    <div class="section-title">
+                            <h2>Contact Us</h2>
+                    </div>
+                </div>
+                <form action="#" method="post" class="wow fadeInUp" id="contact-form" role="form" data-wow-delay="0.8s">
+                    <h6 class="text-success">Your message has been sent successfully.</h6>
+                    <h6 class="text-danger">E-mail must be valid and message must be longer than 1 character.</h6>
+                    <div class="col-md-6 col-sm-6">
+                            <input type="text" class="form-control" id="cf-name" name="name" placeholder="Full name">
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                            <input type="email" class="form-control" id="cf-email" name="email" placeholder="Email address">
+                    </div>
+                    <div class="col-md-12 col-sm-12">
+                            <input type="text" class="form-control" id="cf-subject" name="subject" placeholder="Subject">
+                            <textarea class="form-control" rows="6" id="cf-message" name="message" placeholder="Tell about your project"></textarea>
+                            <button type="submit" class="form-control" id="cf-submit" name="submit">Send Message</button>
+                    </div>
+                </form>
+            </div>
+            </div>
+            </div>
+       </section>          
+  
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-sm-8">
+                    <div class="footer-info">
+                        <div class="section-title"><h2>Find us</h2></div>
+                        <p>123 nulla a cursus rhoncus,<br> augue sem viverra 10870<br>id ultricies sapien</p>
+                    </div>
+                </div>
+
+                <div class="col-md-3 col-sm-8">
+                    <div class="footer-info">
+                        <div class="section-title">
+                            <h2>Reservation</h2>
+                        </div>
+                        <p>090-080-0650 | 090-070-0430</p>
+                        <p><a href="mailto:info@company.com">info@company.com</a></p>
+                        <p>LINE: eatery247 </p>
+                    </div>
+                </div>
+
+                <div class="col-md-4 col-sm-8">
+                    <div class="footer-info footer-open-hour">
+                        <div class="section-title">
+                            <h2>Open Hours</h2>
+                        </div>
+                        <p>Monday: Closed</p>
+                        <div>
+                            <strong>Tuesday to Friday</strong>
+                            <p>7:00 AM - 9:00 PM</p>
+                        </div>
+                        <div>
+                            <strong>Saturday - Sunday</strong>
+                            <p>11:00 AM - 10:00 PM</p>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2 col-sm-4">
+                    <ul class="social-icon">
+                        <li><a href="#" class="fa fa-facebook-square" attr="facebook icon"></a></li>
+                        <li><a href="#" class="fa fa-twitter"></a></li>
+                        <li><a href="#" class="fa fa-instagram"></a></li>
+                        <li><a href="#" class="fa fa-google"></a></li>
+                    </ul>
+
+                    <div class="copyright-text"> 
+                        <p><br>Copyright &copy; 2018 <br>Your Company Name 
+                        
+                        <br><br>Design: <a rel="nofollow" href="http://templatemo.com" target="_parent">TemplateMo</a></p>
+                    </div>
+                </div>
+        </div>
+    </div>
 
     <div id='hidden-section' width='100%'>
         <div id='cart-info' style='width:40%;display:inline-table'>
