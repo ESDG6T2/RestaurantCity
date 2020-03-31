@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <title>Welcome to Restaurant City</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <style>
+        .headimage {
+            padding: 7.5rem 2rem;
+            margin-bottom: 2rem;
+            background-color: #e9ecef;
+            border-radius: 0.25rem;
+        }
+
+        .card-img-top:hover {
+            transform: scale(1.5);
+            /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
+        }
+
+        tbody:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .scrollable {
+            height: 30px;
+            /* or any value */
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body>
+      <!-- Navigation Home -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+        <a class="navbar-brand" href="#">Restaurant City</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#Cart">Cart</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#Feedback">Feedback</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#Contact">Contact</a>
+            </li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+    
+
+    <div id='top-section' style='text-align:center'>
+        <h1>Welcome to Restaurant City</h1>
+        <hr>
+    </div>
+    <div id='main-section' width='100%' >
+        <div id='Home'>
+            <div id='cart-form'>
+                <h2 style='text-align:center'>Please place your order here</h2>
+                <form id='order-form'>
+                    <div class="container">
+                        <div class="collapse navbar-collapse" id="Home">ssssssssssssssssssse</div>
+                        <div class="row" >
+                            <div class="col-lg-12 col-md-6 mb-4" >
+                              <div class="headimage" style="background-image: url('../img/restaurantcity.jpg'); background-size: 100% 100% ;background-repeat:no-repeat;">
+                                <div class="container">
+                                  <h1 class="display-4" ></h1>
+                                  <p class="lead"></p>
+                                </div>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="row" id='menu-table'>
+                            
+                        </div>
+                    </div>
+                    <!-- <table border='1' id='menu-table' class="scrollable">
+                        <thead>
+                            <tr align="center">
+                                <th style='display:None'>Item id</th>
+                                <th>Item name</th>
+                                <th>Item image</th>
+                                <th>Item price</th>
+                                <th>Item number</th>
+                            </tr>
+                        </thead>
+                    </table> -->
+                    <br>
+                    <div class="row" >
+                        <div class="col-lg-12 col-md-6 mb-4">
+                            <input type="submit" value="Check out your cart" id='submit_cart'>
+
+                            <input type="submit" value="Save your cart" id='save_cart'>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id='Cart'>
+            <div id='saved-cart'>
+                <h2 style='text-align:center'>Your Saved Cart</h2>
+                <table id='saved-cart-table' border="1" style='width:100%'>
+                    <thead>
+                        <tr>
+                            <th>Item name</th>
+                            <th>Item price</th>
+                            <th>Item number</th>
+                        </tr>
+                    </thead>
+                </table>
+                <p id='cart-update-outcome'></p>
+                <br>
+                <button onclick='create_menu_table(true)'>Use saved cart</button>
+                <button onclick='delete_cart_data()' style='margin: 0 0 0 20px;'>Delete your cart</button>
+            </div>
+        </div>
+        <div id='Feedback'>
+            <div id='feedback'>
+                <h2 style='text-align:center'> Submit your Feedback</h2>
+                <form id='feedback-form'>
+                    <textarea name="" id="feedback-content" cols="50" rows="10"></textarea>
+                    <br><br>
+                    <div id='feedback-rating'> -->
+                        <!-- https://codepen.io/hesguru/pen/BaybqXv?__cf_chl_jschl_tk__=f4dfdd0aeaf0b754b928edc09689008c5e3d418a-1584512208-0-AeK94-NiWOJxKF2DRTkhuQJMdOQNAxPVaCVS-5AJAOo5TSTv3azvDHJf8hGoZeZe9u6Kk_3ccd7FOsb9bDv1qYfyj-Rk40iSQDYBBlXptypfsotqRa8DsLMgXwTFTUd8mS3c77cqau8JaSDmlRNNFI9y3jT0zU6HELoo67DEoqJrHUWoTzsnuoXfeNWZZi5NmKttbFP-qQp2wepQX52rj3Ibg_OtUUpUbZfVIuZgvG8e9hMoB28B--_8wj9qx__mdzl-FUp_zoSCaNoaEBeprXJLwnxA_6bdATVgnMeY0Oet2mm6r5zMsm3i9TjNhGpTKnHt_sl5ppR8t7JN7elhPnhnOj3z3D2IUm1_Ee6KXjkx -->
+                        Enter your rating out of 5: <input type="number" name="" id="feedback-rating-score" min='1'
+                            max='5'>
+                    </div>
+                    <br>
+                    <button id='submit-feedback'>Submit Your Feedback</button>
+                    <button type="reset">Reset</button>
+                </form>
+            </div>
+        </div>
+        <!-- <div id='right-panel' style='margin:0 0 0 80px;;display:inline-table;'>
+            <div id='current-order'>
+                <h2 style='text-align:center'>Your ongoing orders</h2>
+                <table id='ongoing-order-table' border="1" style='width:100%'>
+                </table>
+            </div>
+        </div> -->
+
+    </div>
+    <div id='hidden-section' width='100%'>
+        <div id='cart-info' style='width:40%;display:inline-table'>
+            <h2>Your ordered food items</h2>
+            <table border='1' id='added-cart-table'>
+                <thead>
+                    <tr align="center">
+                        <th style='display:None'>Item id</th>
+                        <th>Item name</th>
+                        <th>Item image</th>
+                        <th>Unit price</th>
+                        <th>Quantity ordered</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div id='customer-info' style='margin:0 0 0 100px;width:50%;display:inline-table'>
+            <h2>Please key in your information</h2>
+            <form onsubmit="return false" method="POST">
+                <table style='padding:10px 0 0 0'>
+                    <tr>
+                        <td>Delivery Address</td>
+                        <td><input type="text" id='address'></td>
+                    </tr>
+                    <tr>
+                        <td>Contact Person</td>
+                        <td><input type="text" id='contact_person'></td>
+                    </tr>
+                    <tr>
+                        <td>Contact Number</td>
+                        <td><input type="text" id='contact_number'></td>
+                    </tr>
+                    <tr></tr>
+                    <tr>
+                        <td colspan="2"><input type="submit" value='Proceed to Payment' id='payment'></td>
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+</body>
+
+
+<script>
+    const userid = 'a';
+    // helper function 
+    String.prototype.format = function () {
+        var i = 0,
+            args = arguments;
+        return this.replace(/{}/g, function () {
+            return typeof args[i] != 'undefined' ? args[i++] : '';
+        });
+    };
+
+
+    // Add active class to the current button (highlight it)
+    var header = document.getElementById("navbarResponsive");
+    var btns = header.getElementsByClassName("nav-link");
+    // initalize page
+    $('#Home').show();
+    $('#Cart').hide();
+    $('#Feedback').hide();
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", function() {
+        var current = document.getElementsByClassName("active");
+        current[0].className = current[0].className.replace(" active", "");
+        this.className += " active";
+        $('#Home').hide();
+        $('#Cart').hide();
+        $('#Feedback').hide();
+        $('#main-section').show();
+        $('#hidden-section').hide();
+        if(this.text=='Home'){
+            $('#Home').show();
+        }else if(this.text=='Cart'){
+            $('#Cart').show();
+        }else if(this.text=='Feedback'){
+            $('#Feedback').show();
+        }
+        });
+    }
+
+    // function create_table()
+    function create_menu_table(use_cart) {
+        $('#menu-table').empty();
+        for (const item of window.menu_items) {
+            var qty = 0;
+            if ((window.cart_items != null) & (use_cart == true)) {
+                for (var cart_item of window.cart_items) {
+                    // console.log(cart_item.menuId, item.menuId);
+                    if (cart_item.menuId == item.menuId) {
+                        qty = cart_item.quantity;
+                    }
+                }
+                $('#cart-update-outcome').text('Saved cart is loaded into the order table')
+            }
+            // console.log(qty);
+            order_num_tag = item.menuId + '_qty'
+            eachRow="<div class='col-lg-4 col-md-6 mb-4'>"+
+            "<div class='card h-100'>"+
+              "<a href='#'><img class='card-img-top' src='../img/{}.jpg' alt=''></a>".format(item.menuId) +
+              "<div class='card-body'>"+
+                "<h4 class='card-title'>"+
+                  "<input type='hidden' name='menuId' value='{}'>{} <input type='hidden' name='foodName' value='{}'>".format(item.menuId,item.foodName, item.foodName)+
+                "</h4>"+
+                "<h5>${} <input type='hidden' name='price' value={}></h5>".format(item.price, item.price)+
+                "<p class='card-text'>Quantity: <input type='number' min='0' max='10' name='quantity' id='{}' value={}></p>".format(order_num_tag, qty)+
+              "</div>"+
+              "<div class='card-footer'>"+
+                "<small class='text-muted'>{}</small>".format(item.menuId)+
+              "</div>"+
+            "</div>"+
+          "</div>";
+            $('#menu-table').append(eachRow);
+        }
+    }
+    // load menu
+    $(async () => {
+
+        $('#hidden-section').hide();
+        var serviceURL = "http://127.0.0.1:5001/menu";
+
+        try {
+            const response =
+                await fetch(
+                    serviceURL, {
+                    method: 'GET',
+                }
+                );
+            const data = await response.json();
+            const menu_items = data.menu; //the arr is in data.items of the JSON data
+            window.menu_items = menu_items;
+            //console.log(menu_items);
+            if (!menu_items || !menu_items.length) {
+                alert('Menu is empty or undefined.')
+            } else {
+                create_menu_table(false);
+            }
+        } catch (error) {
+            // Errors when calling the service; such as network error, 
+            // service offline, etc
+            alert
+                ('There is a problem retrieving books data, please try again later.<br />' + error);
+
+        } // error
+
+    });
+
+    // load saved cart
+    $(async () => {
+        var serviceURL = "http://127.0.0.1:5002/cart/{}".format(userid);
+
+        try {
+            const response =
+                await fetch(
+                    serviceURL, {
+                    method: 'GET'
+                }
+                );
+            const data = await response.json();
+            var cart_items = data.cart; //the arr is in data.items of the JSON data
+            window.cart_items = cart_items;
+            if (cart_items) {
+                var rows = "";
+                for (const item of cart_items) {
+                    var itemUrl = "http://127.0.0.1:5001/menu/{}".format(item.menuId);
+                    const response =
+                        await fetch(
+                            itemUrl, {
+                            method: 'GET'
+                        }
+                        );
+                    const item_data = await response.json();
+                    //console.log(item_data);
+                    var item_name = item_data.foodName;
+                    var item_price = item_data.price;
+
+                    eachRow = "<tbody><tr align='center'>" +
+                        "<td style='display:none'><input type='hidden' name='menuId' value='{}'>{}</td>".format(item.menuId, item.menuId) +
+                        "<td>{}<input type='hidden' name='foodName' value='{}'></td>".format(item_name, item_name) +
+                        "<td>${}<input type='hidden' name='price' value='{}'></td>".format(item_price, item_price) +
+                        "<td>{}<input type='hidden' name='quantity' value='{}'></td>".format(item.quantity, item.quantity) +
+                        "</tr></tbody>";
+                    $('#saved-cart-table').append(eachRow);
+                }
+            }
+        } catch (error) {
+            // Errors when calling the service; such as network error, 
+            // service offline, etc
+            alert
+                ('There is a problem retrieving cart data, please try again later.<br />' + error);
+        } // error
+    });
+
+    // load current orders
+    // async function load_orders() {
+    //     var serviceURL = "http://127.0.0.1:6666/order/".format(userid);
+
+    //     try {
+    //         const response =
+    //             await fetch(
+    //                 serviceURL, {
+    //                 method: 'GET'
+    //             }
+    //             );
+    //         const data = await response.json();
+    //         var idx = 1;
+    //         for (var order of data) {
+    //             each
+    //             eachRow = "<tbody><tr align='center'>" +
+    //                 "<td style='display:none'><input type='hidden' name='menuId' value='{}'>{}</td>".format(item.menuId, item.menuId) +
+    //                 "<td>{}<input type='hidden' name='foodName' value='{}'></td>".format(item_name, item_name) +
+    //                 "<td>${}<input type='hidden' name='price' value='{}'></td>".format(item_price, item_price) +
+    //                 "<td>{}<input type='hidden' name='quantity' value='{}'></td>".format(item.quantity, item.quantity) +
+    //                 "</tr></tbody>";
+    //             $('#ongoing-order-table').append(eachRow);
+
+    //         }
+    //     } catch (error) {
+    //         // Errors when calling the service; such as network error, 
+    //         // service offline, etc
+    //         alert
+    //             ('There is a problem retrieving cart data, please try again later.<br />' + error);
+    //     } // error
+
+    // };
+
+    async function delete_cart_data() {
+        if (confirm("Confirm delete saved cart?")) {
+            var serviceURL = "http://127.0.0.1:5002/delete-cart/{}".format(userid);
+            //console.log(serviceURL);
+            try {
+                const response =
+                    await fetch(
+                        serviceURL, {
+                        method: 'GET'
+                    }
+                    );
+                if (response.status == 200) {
+                    $('#saved-cart-table tbody').empty();
+                    location.reload(true);
+                };
+            } catch (error) {
+                alert
+                    ('There is a problem deleting cart data, please try again later.<br />' + error);
+            }
+        }
+    }
+
+    $('#save_cart').click(async function (e) {
+        e.preventDefault();
+        var idx = 0, has_item = false,
+            data = $('form').serializeArray().reduce(function (obj, item) {
+                if (item.name == 'menuId') {
+                    sub_obj = {};
+                    sub_obj[item.name] = item.value;
+                }
+                if (item.name == 'quantity') {
+                    sub_obj[item.name] = parseInt(item.value);
+                    if (item.value > 0) {
+                        has_item = true;
+                        console.log(sub_obj);
+                        obj.push(sub_obj);
+                    }
+                }
+                return obj;
+            }, []);
+
+        // validate if select any item
+        if (has_item == false) {
+            alert('There is no item added to the cart.');
+            return
+        }
+
+        // validate if saved cart already contains items
+        var to_save = true;
+        if (window.cart_items.length > 0) {
+            to_save = confirm('There are items in the saved cart currently? Do you want to delete them and saved the current cart?');
+        }
+
+        if (to_save) {
+
+            var body = {};
+            body["items"] = data;
+            console.log(data);
+            var serviceURL = "http://127.0.0.1:5002/add-cart/{}".format(userid);
+            try {
+                const response =
+                    await fetch(
+                        serviceURL, {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(body)
+                    });
+                if (response.status == 201) {
+                    alert('cart saved successfully');
+                    location.reload(true);
+                };
+            } catch (error) {
+                alert
+                    ('There is a problem deleting cart data, please try again later.<br />' + error);
+            }
+        }
+    });
+
+    $("#submit_cart").click(function (e) {
+        e.preventDefault();
+        $('#main-section').hide();
+        $('#hidden-section').show();
+        var total = 0,
+            idx = 0,
+            data = $('form').serializeArray().reduce(function (obj, item) {
+                if (item.name == 'menuId') {
+                    obj[idx] = {};
+                }
+                obj[idx][item.name] = item.value;
+                switch (item.name) {
+                    case 'menuId':
+                        subtotal = 1;
+                        break;
+                    case 'price':
+                        subtotal *= item.value;
+                        break;
+                    case 'quantity':
+                        subtotal *= item.value;
+                        obj[idx]['subtotal'] = subtotal;
+                        idx++;
+                        break;
+                }
+                return obj;
+            }, {});
+        // console.log(data);
+
+        var total = 0;
+        $("#added-cart-table tbody").empty()
+        for (const [key, value] of Object.entries(data)) {
+            if (value['quantity'] > 0) {
+                console.log(value);
+                row = '<tbody><tr align="center">' +
+                    '<td style="display:none">{}</td>'.format(value['menuId']) +
+                    '<td>{}</td>'.format(value['foodName']) +
+                    '<td><img src="../img/{}.jpg" height=100 width=100></td>'.format(value['menuId']) +
+                    '<td>{}</td>'.format(value['price']) +
+                    '<td>{}</td>'.format(value['quantity']) +
+                    '<td>${}</td>'.format(value['subtotal']) +
+                    '</tr></tbody>';
+                total += value['subtotal'];
+                $("#added-cart-table").append(row);
+            }
+        }
+        row = '<tbody><tr><td align="right" colspan=4><b>Total Amount</b></td><td align="center"><b>${}</b></td></tr></tbody>'.format(total);
+        $("#added-cart-table").append(row);
+    });
+
+    $("#payment").click(async function (event) {
+        event.preventDefault();
+        var address = $('#address').val(),
+            contact_number = $('#contact_number').val(),
+            contact_person = $('#contact_person').val(),
+            cart_table = document.getElementById("added-cart-table"),
+            order_items = [];
+        item_field = ['menuId', 'foodName', 'image', 'price', 'quantity'];
+        total = 0;
+        for (var i = 1; i < cart_table.rows.length - 1; i++) {
+            var row = cart_table.rows.item(i).cells,
+                item = {};
+            for (var j = 0; j < row.length - 1; j++) {
+                if (j != 2) {
+                    item[item_field[j]] = row.item(j).innerHTML;
+                }
+            }
+            order_items.push(item);
+            total += item['price'] * item['quantity']
+
+        }
+
+        var order = {
+            'userId': userid,
+            'deliveryAddress': address,
+            'contactNumber': contact_number,
+            'customerName': contact_person,
+            'orderItems': order_items,
+            'totalAmount': total
+        };
+        //console.log(order);
+
+        serviceURL = 'http://127.0.0.1:5555/payment'
+        try {
+            const response =
+                await fetch(
+                    serviceURL, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(order)
+                }
+                );
+            const result = await response;
+            if (result.status == 400) {
+                alert('Payment Failed');
+            } else {
+                alert('Payment succeed');
+                // window.location.href = "http://www.w3schools.com"; // for redirect 
+                return;
+            }
+        } catch (error) {
+            // Errors when calling the service; such as network error, 
+            // service offline, etc
+            alert
+                ('There is a problem with payment, please try again later.<br />' + error);
+
+        } // error
+
+    })
+
+    $("#submit-feedback").click(async function (event) {
+        event.preventDefault();
+        var content = $('#feedback-content').val(),
+            rating = $('#feedback-rating-score').val(),
+            feedback = {
+                'feedback': content,
+                'star': rating
+            };
+
+        var serviceURL = 'http://127.0.0.1:5556/feedback';
+        try {
+            const response =
+                await fetch(
+                    serviceURL, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(feedback)
+                }
+                );
+            const result = await response;
+
+            if (result.status == 201) {
+                alert('Feedback Submitted');
+            }
+        } catch (error) {
+            // Errors when calling the service; such as network error, 
+            // service offline, etc
+            alert
+                ('There is a problem with feedback submission, please try again later.<br />' + error);
+
+        } // error
+
+    })
+</script>
+
+
+</html>

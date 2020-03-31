@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import requests
 
 import pika, json, requests, uuid, pytz
 
@@ -36,16 +37,17 @@ def pay_order():
     order['orderDatetime'] = datetime.now(tz).strftime(format='%Y-%m-%d %H:%M:%S')
     print(order)
     send_order(order)
-    return jsonify(order), 200
+    # return jsonify(order), 200
 
     # TODO: integrating with Paypal
     # Call paypal api here 
-    # r = requests.post('http://127.0.0.1/7000/checkout',json=order)
-    # if r.status_code == 200:
-    #     send_order(order)
-    #     return jsonify(order), 200
-    # else:
-    #     return jsonify(order), 400
+    r = requests.post('http://127.0.0.1:7000/checkout',json=order)
+    if r.status_code == 200:
+        send_order(order)
+        return jsonify(order), 200
+    else:
+        return jsonify(order), 400
+        # return "hello"
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=5555,debug=True)
