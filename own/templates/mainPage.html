@@ -27,11 +27,16 @@
             /* or any value */
             overflow-y: auto;
         }
+
+        body {
+            background-color: white;;
+        }
     </style>
 </head>
 
 <body>
-      <!-- Navigation Home -->
+    
+    <!-- Navigation Home -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <div class="container">
         <a class="navbar-brand" href="#">Restaurant City</a>
@@ -59,16 +64,18 @@
     
 
     <div id='top-section' style='text-align:center'>
-        <h1>Welcome to Restaurant City</h1>
+        <!-- <h1>Welcome to Restaurant City</h1> -->
         <hr>
     </div>
     <div id='main-section' width='100%' >
         <div id='Home'>
             <div id='cart-form'>
-                <h2 style='text-align:center'>Please place your order here</h2>
+                <div class="mx-auto" style="width: 200px;">
+                    Centered element
+                  </div>
                 <form id='order-form'>
                     <div class="container">
-                        <div class="collapse navbar-collapse" id="Home">ssssssssssssssssssse</div>
+                        <div class="collapse navbar-collapse" id="Home"></div>
                         <div class="row" >
                             <div class="col-lg-12 col-md-6 mb-4" >
                               <div class="jumbotron jumbotron" style="background-image: url('../img/restaurant-city.jpg'); background-size: 100% 100% ;background-repeat:no-repeat;">
@@ -95,10 +102,9 @@
                         </thead>
                     </table> -->
                     <br>
-                    <div class="row" >
+                    <div class="row" align='center'>
                         <div class="col-lg-12 col-md-6 mb-4">
                             <input type="submit" value="Check out your cart" id='submit_cart'>
-
                             <input type="submit" value="Save your cart" id='save_cart'>
                         </div>
                     </div>
@@ -124,9 +130,10 @@
                 <button onclick='delete_cart_data()' style='margin: 0 0 0 20px;'>Delete your cart</button>
             </div>
         </div>
+        
         <div id='Feedback'>
+            <div class="col-lg-12 col-md-6 mb-4" >
             <div id='feedback'>
-                <h2 style='text-align:center'> Submit your Feedback</h2>
                 <form id='feedback-form'>
                     <textarea name="" id="feedback-content" cols="50" rows="10"></textarea>
                     <br><br>
@@ -139,6 +146,7 @@
                     <button id='submit-feedback'>Submit Your Feedback</button>
                     <button type="reset">Reset</button>
                 </form>
+                <
             </div>
         </div>
         <!-- <div id='right-panel' style='margin:0 0 0 80px;;display:inline-table;'>
