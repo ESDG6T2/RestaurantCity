@@ -28,8 +28,8 @@ def payment():
         "transactions": [{ # TODO: need to input item list: get from BODY
             "item_list": {
                 "items": [{
-                    "name": "Bola Obi",
                     "sku": "F01",
+                    "name": "Bola Obi",
                     "price": "10.00",
                     "currency": "SGD",
                     "quantity": 1}]},

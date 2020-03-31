@@ -431,7 +431,7 @@
             contact_person = $('#contact_person').val(),
             cart_table = document.getElementById("added-cart-table"),
             order_items = [];
-        item_field = ['menuId', 'foodName', 'image', 'price', 'quantity'];
+        item_field = ['sku', 'name', 'image', 'price', 'quantity'];
         total = 0;
         for (var i = 1; i < cart_table.rows.length - 1; i++) {
             var row = cart_table.rows.item(i).cells,
