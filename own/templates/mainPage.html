@@ -109,7 +109,7 @@
                   <div class="row">
                     <div class="col-md-8 mb-4">
                       <div id ='saved-cart' class="card">
-                        <form class="card-body">
+                        <form id='savedCartForm' class="card-body">
                         <table id='saved-cart-table' border="1" style='width:100%'>
                             <thead>
                                 <tr>
@@ -155,7 +155,7 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
                           <span>Total (SGD)</span>
-                          <strong id='TotalAmt'>$0.00</strong>
+                          <strong id='TotalAmt'>$0.00</strong><input type='hidden' id='totalAmount' value='0.0'>
                         </li>
                       </ul>
                       <form class="card p-2">
@@ -565,6 +565,8 @@
                 $('#saved-cart-table').append("<tbody><td colspan='3'></td><td align='center'><input type='button' onclick=delete_cart_data() value='Clear Cart'></td></tbody>");
                 $('#Cnt').text(count);
                 $('#TotalAmt').text('$'+totalAmt);
+                $('#totalAmount').val(totalAmt);
+                
                 
             }
         } catch (error) {
@@ -826,22 +828,24 @@
         var address = $('#address').val(),
             contact_number = $('#contact_number').val(),
             contact_person = $('#contact_person').val(),
-            cart_table = document.getElementById("added-cart-table"),
-            order_items = [];
-        item_field = ['menuId', 'foodName', 'image', 'price', 'quantity'];
-        total = 0;
-        for (var i = 1; i < cart_table.rows.length - 1; i++) {
-            var row = cart_table.rows.item(i).cells,
-                item = {};
-            for (var j = 0; j < row.length - 1; j++) {
-                if (j != 2) {
-                    item[item_field[j]] = row.item(j).innerHTML;
-                }
-            }
-            order_items.push(item);
-            total += item['price'] * item['quantity']
+            totalAmount=$('#totalAmount').val();
 
-        }
+        order_items = $('#savedCartForm').serializeArray().reduce(function (obj, item) {
+            // console.log(item);
+            if (item.name == 'menuId') {
+                sub_obj = {};
+                sub_obj[item.name] = item.value;
+            }else if(item.name == 'quantity') {
+                sub_obj[item.name] = parseInt(item.value);
+                // console.log(item.name);
+                obj.push(sub_obj);
+
+            }else{
+                sub_obj[item.name] = item.value;
+            }
+            return obj;
+        }, []);
+
 
         var order = {
             'userId': userid,
@@ -849,9 +853,9 @@
             'contactNumber': contact_number,
             'customerName': contact_person,
             'orderItems': order_items,
-            'totalAmount': total
+            'totalAmount': totalAmount
         };
-        //console.log(order);
+        // //console.log(order);
 
         serviceURL = 'http://127.0.0.1:5555/payment'
         try {

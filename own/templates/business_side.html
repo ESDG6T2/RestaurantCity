@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <title>Restaurant City Management</title>
+</head>
+<body>
+    <div id='option-bar'>
+        <table>
+            <tr><th colspan="2"><h3>Restaurant City Management</h3></th></tr>
+            <!-- <tr>
+                <td><input type="button" id='delivering' name='delivering' value="Delivering"/></td>
+                <td><input type="button" id='order' name='order' value="Order List"/></td>
+            </tr> -->
+        </table>
+    </div>
+    <div id='main-container'>
+        <table border="1" id='ordertable'>
+            <tr>
+                <th>OrderID</th>
+                <th>Food List</th>
+                <th>UserID</th>
+                <th>Contact Number</th>
+                <th>Date/Time</th>
+                <th>Total Amount</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </table>
+
+        <!-- <table border="1" id='deliveringtable'>
+            <tr>
+                <th>OrderIDss</th>
+                <th>Food List</th>
+                <th>UserID</th>
+                <th>Billing Address</th>
+                <th>Postal Address</th>
+                <th>Contact Number</th>
+                <th>Date/Time</th>
+                <th>Total Amount</th>
+                <th>Delivery man</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+            <tbody id='deliveringtableBody'>
+
+            </tbody>
+        </table> -->
+    </div>
+</body>
+
+<script>
+    function showError(message) {
+        // Hide the table and button in the event of error
+        $('#ordertable').hide();
+        $('#deliveringtable').hide();
+
+        // Display an error under the main container
+        $('#main-container')
+            .append("<label>"+message+"</label>");
+    }
+    $(async () => {
+        $('#deliveringtable').hide();
+        var serviceURL = "http://127.0.0.1:8010/getOrders";
+            
+        try {
+            const response =
+                await fetch(
+                serviceURL, { method: 'GET' }
+            );
+            const data = await response.json();
+            var orders = data.orders; //the arr is in data.menu of the JSON data
+            if (!orders || !orders.length) {
+                $('#ordertable').append("<tr><td align='center' colspan='11'>Delivery List is empty or undefined.</td></tr>");
+            } else {
+                console.log(orders);
+                for (var i = 0; i < orders.length ; i++) {
+                    var eachRow = "<tr>";
+                    // console.log(data[i]);
+                    eachRow += "<td align='center'>" + orders[i]['orderId'] + "</td>";
+                    eachRow += "<td>";
+                    for (var l = 0; l < orders[i]['menuItem'].length ; l++) {
+                    // for (const food in orders[i]['menuItem'][l]) {
+                        eachRow += orders[i]['menuItem'][l]['menuId'] + ' X'+ orders[i]['menuItem'][l]['quantity'] + '<br>';
+                    }
+                    eachRow += "</td>";
+                    eachRow += "<td align='center'>" + orders[i]['userId'] + "</td>" +  
+                    "<td align='center'>" + orders[i]['contactNumber'] + "</td>" + 
+                    "<td align='center'>" + orders[i]['datetime'] + "</td>" + 
+                    "<td align='center'>$" + orders[i]['totalAmount'] + "</td>" + 
+                    "<td align='center'>" + orders[i]['orderStatus'] +"</td>"+
+                    "<td align='center'><input type='button' id='preparing' name='preparing"+orders[i]['orderId']+"' onclick=updateStatusP('"+orders[i]['orderId']+"') value='Preparing'/><input type='button' id='delivering' name='delivering"+orders[i]['orderId']+"' onclick=updateStatusD('"+orders[i]['orderId']+"') value='Delivering'/></td>";
+                    eachRow += "</tr>";
+                    $('#ordertable').append(eachRow);
+                }
+            }
+        } catch (error) {
+            // Errors when calling the service; such as network error, 
+            // service offline, etc
+            showError
+            ('There is a problem retrieving order data, please try again later.<br />'+error);
+            
+        } // error
+    })
+    // $("#delivering").click(async (event) => { 
+    //     $('#ordertable').hide();
+    //     $('#deliveringtable').show();
+    //     $('#deliveringtableBody').empty();
+    //     // do dropdown to filter between all or single driverID
+    //     var serviceURL = "http://127.0.0.1:5003/getDeliveryOrders/3";
+            
+    //     try {
+    //         const response =
+    //         await fetch(
+    //         serviceURL, { method: 'GET' }
+    //         );
+    //         const data = await response.json();
+    //         var orders = data.orders; //the arr is in data.menu of the JSON data
+    //         if (!orders || !orders.length) {
+    //             $('#deliveringtableBody').append("<tr><td align='center' colspan='11'>Order List is empty or undefined.</td></tr>");
+    //         } else {
+    //             for (var i = 0; i < orders.length ; i++) {
+    //                 var eachRow = "<tr>";
+    //                 // console.log(data[i]);
+    //                 // for (const [key, value] of Object.entries(data[i])) {
+    //                     // console.log(data[i]['orderId']);
+    //                     eachRow += "<td align='center'>" + orders[i]['orderId'] + "</td>";
+    //                     eachRow += "<td>";
+    //                     for (var l = 0; l < orders[i]['menuItem'].length ; l++) {
+    //                     // for (const food in orders[i]['menuItem'][l]) {
+    //                         eachRow += orders[i]['menuItem'][l]['menuId'] + ' X'+ orders[i]['menuItem'][l]['Qty'] + '<br>';
+    //                     }
+    //                     eachRow += "</td>";
+    //                     eachRow += "<td align='center'>" + orders[i]['userId'] + "</td>" + 
+    //                     "<td align='center'>" + orders[i]['billingAddress'] + "</td>" + 
+    //                     "<td align='center'>" + orders[i]['postalCode'] + "</td>" + 
+    //                     "<td align='center'>" + orders[i]['contactNo'] + "</td>" + 
+    //                     "<td align='center'>" + orders[i]['datetime'] + "</td>" + 
+    //                     "<td align='center'>$" + orders[i]['totalAmount'] + "</td>" + 
+    //                     "<td align='center'>" + orders[i]['driverId'] + "</td>" + 
+    //                     "<td align='center'>" + orders[i]['orderStatus'] +"</td>"+
+    //                     "<td align='center'><input type='button' id='delivered' name='Delivered"+orders[i]['orderId']+"' onclick='updateStatusDelivered("+orders[i]['orderId']+")' value='Delivered'/></td>";
+    //                 eachRow += "</tr>";
+    //                 $('#deliveringtableBody').append(eachRow);
+    //             }
+    //         }
+    //     } catch (error) {
+    //         // Errors when calling the service; such as network error, 
+    //         // service offline, etc
+    //         showError
+    //         ('There is a problem retrieving books data, please try again later.<br />'+error);
+            
+    //     } // error
+
+    //     $("#order").click(async (event) => { 
+    //         $('#ordertable').show();
+    //         $('#deliveringtable').hide();
+    //     });
+
+    // });
+    async function updateStatusP(selectedId) {
+        var serviceURL = "http://127.0.0.1:8010/update-order";
+            
+        try {
+            const response =
+                await fetch(
+                serviceURL, { method: 'PUT',headers: {
+                    'Content-Type': 'application/json'
+                    }, body:  JSON.stringify({orderId :selectedId ,orderStatus: 'Preparing'}) 
+                });
+            const data = await response.json();
+            if (!response.ok){
+                showError(data.message);
+            }else{
+                location.reload(true);
+            }
+        } catch (error) {
+            // Errors when calling the service; such as network error, 
+            // service offline, etc
+            showError
+            ('There is a problem retrieving books data, please try again later.<br />'+error);
+            
+        } // error
+    }
+
+    async function updateStatusD(selectedId) {
+        var serviceURL = "http://127.0.0.1:8010/update-order";
+            
+        try {
+            const response =
+                await fetch(
+                serviceURL, { method: 'PUT',headers: {
+                    'Content-Type': 'application/json'
+                    }, body:  JSON.stringify({orderId :selectedId ,orderStatus: 'Delivering'}) 
+                });
+            const data = await response.json();
+            if (!response.ok){
+                showError(data.message);
+            }else{
+                location.reload(true);
+            }
+        } catch (error) {
+            // Errors when calling the service; such as network error, 
+            // service offline, etc
+            showError
+            ('There is a problem retrieving books data, please try again later.<br />'+error);
+            
+        } // error 
+    }
+    // async function updateStatusDelivered(selectedId) {
+    //     var serviceURL = "http://127.0.0.1:5003/update-order";
+            
+    //     try {
+    //         const response =
+    //             await fetch(
+    //             serviceURL, { method: 'POST',headers: {
+    //                 'Content-Type': 'application/json'
+    //                 }, body:  JSON.stringify({orderId :selectedId ,action: 'Delivered'}) 
+    //             });
+    //         const data = await response.json();
+    //         if (!response.ok){
+    //             showError(data.message);
+    //         }else{
+    //             location.reload(true);
+    //         }
+    //     } catch (error) {
+    //         // Errors when calling the service; such as network error, 
+    //         // service offline, etc
+    //         showError
+    //         ('There is a problem retrieving books data, please try again later.<br />'+error);
+            
+    //     } // error updateStatusDelivered
+    // }
+</script>

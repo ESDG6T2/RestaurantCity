@@ -10,18 +10,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
 
-def send_order_status_update(update_info):
-    hostname = 'localhost'
-    port = 5672
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
-    channel = connection.channel()
+# def send_order_status_update(update_info):
+#     hostname = 'localhost'
+#     port = 5672
+#     connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
+#     channel = connection.channel()
 
-    update_info['type'] = 'order_update'
-    message = json.dumps(update_info, default=str)
+#     update_info['type'] = 'order_update'
+#     message = json.dumps(update_info, default=str)
     
-    exchange_name = 'info_update'
-    channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
-    channel.basic_publish(exchange=exchange_name, routing_key='order.info', body=message)
+#     exchange_name = 'info_update'
+#     channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
+#     channel.basic_publish(exchange=exchange_name, routing_key='order.info', body=message)
 
 class Order(db.Model):
     __tablename__ = 'order'
@@ -49,6 +49,13 @@ class Order(db.Model):
         return {"orderId": self.orderId, "userId": self.userId, "deliveryAddress": self.deliveryAddress, "customerName": self.customerName, "contactNumber": self.contactNumber,
             "totalAmount":self.totalAmount, "orderStatus":self.orderStatus, "datetime":self.datetime
         }
+
+    def json2(self):
+        output={"orderId": self.orderId, "userId": self.userId, "deliveryAddress": self.deliveryAddress, "customerName": self.customerName, "contactNumber": self.contactNumber,
+            "totalAmount":self.totalAmount, "orderStatus":self.orderStatus, "datetime":self.datetime
+        }
+        output['menuItem']=[orderlist.json() for orderlist in OrderDetail.query.filter_by(orderId=self.orderId).all()] 
+        return output
 
 class OrderDetail(db.Model):
     __tablename__ = 'orderdetail'
@@ -91,18 +98,19 @@ def add_order(orderId):
 
     return jsonify(order.json()), 201  # CREATED
     
-@app.route('/update-order/<string:orderId>', methods=['PUT'])
+@app.route('/update-order', methods=['PUT'])
 # to be used in business web UI
-def update_order(orderId):
+def update_order():
+    data = request.get_json()
+    orderId=data['orderId']
     if not Order.query.filter_by(orderId=orderId).first():
         return jsonify({"message": "No order with id: {}.".format(orderId)}), 400
 
-    data = request.get_json()
     output = {"orderId":orderId,"orderStatus":data['orderStatus']}
     try:
         Order.query.filter_by(orderId=orderId).update(dict(orderStatus=data['orderStatus'])) # to update a order status
         db.session.commit()
-        send_order_status_update(output)
+        # send_order_status_update(output)
     except Exception as e:
         print(e)
         return jsonify({"message": "Error occurred updating order status of order with id: {}.".format(orderId)}), 400
@@ -117,6 +125,11 @@ def retrieve_order(userId):
         order['orderItem']= items
 
     return jsonify(all_orders), 200
+
+@app.route("/getOrders")
+def getAllOrder():
+    orders={"orders": [order.json2() for order in Order.query.filter(Order.orderStatus!="Delivered", Order.orderStatus!="Delivering").all()]}
+    return(orders)
     
 if __name__ == "__main__":
-    app.run(port=6666, host='0.0.0.0', debug=True)
+     app.run(port=8010, host='0.0.0.0', debug=True)
