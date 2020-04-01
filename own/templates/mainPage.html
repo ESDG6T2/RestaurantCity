@@ -111,12 +111,12 @@
                       <div id ='saved-cart' class="card">
                         <form class="card-body">
                         <table id='saved-cart-table' border="1" style='width:100%'>
-                            <thead>
+                            <thead style='text-align:center'>
                                 <tr>
                                     <th>Item name</th>
                                     <th>Item price</th>
                                     <th>Item number</th>
-                                    <th>Remove</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                         </table>
@@ -267,35 +267,35 @@
      <!-- CONTACT -->
      <section id="contact" data-stellar-background-ratio="0.5">
         <div class="container">
-                <div class="row">
-                <div class="wow fadeInUp col-md-6 col-sm-12" data-wow-delay="0.4s">
-                        <div id="google-map">
-                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7952471658855!2d103.84722961462221!3d1.2975487990536225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19a340000001%3A0xdb2ba83d5e574a35!2sSMU%20School%20of%20Information%20Systems!5e0!3m2!1sen!2ssg!4v1585730574901!5m2!1sen!2ssg" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
-                        </div>
-                    </div>    
-                    <div class="col-md-6 col-sm-12">
-                        <div class="col-md-12 col-sm-12">
-                            <div class="section-title wow fadeInUp" data-wow-delay="0.1s">
-                                    <h2>Contact Us</h2>
-                            </div>
-                        </div>
-                        <form action="#" method="post" class="wow fadeInUp" id="contact-form" role="form" data-wow-delay="0.8s">
-                            <h6 class="text-success">Your message has been sent successfully.</h6>
-                            <h6 class="text-danger">E-mail must be valid and message must be longer than 1 character.</h6>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="text" class="form-control" id="cf-name" name="name" placeholder="Full name">
-                            </div>
-                            <div class="col-md-6 col-sm-6">
-                                <input type="email" class="form-control" id="cf-email" name="email" placeholder="Email address">
-                            </div>
-                            <div class="col-md-12 col-sm-12">
-                                <input type="text" class="form-control" id="cf-subject" name="subject" placeholder="Subject">
-                                <textarea class="form-control" rows="6" id="cf-message" name="message" placeholder="Tell about your project"></textarea>
-                                <button type="submit" class="btn btn-lg btn-warning btn-block" id="cf-submit" name="submit">Send Message</button>
-                            </div>
-                        </form>
+            <div class="row">
+            <div class="wow fadeInUp col-md-6 col-sm-12" data-wow-delay="0.4s">
+                    <div id="google-map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7952471658855!2d103.84722961462221!3d1.2975487990536225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19a340000001%3A0xdb2ba83d5e574a35!2sSMU%20School%20of%20Information%20Systems!5e0!3m2!1sen!2ssg!4v1585730574901!5m2!1sen!2ssg" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
                     </div>
-                   </div>
+                </div>    
+                <div class="col-md-6 col-sm-12">
+                    <div class="col-md-12 col-sm-12">
+                        <div class="section-title wow fadeInUp" data-wow-delay="0.1s">
+                                <h2>Contact Us</h2><br>
+                        </div>
+                    </div>
+                    <form action="#" method="post" class="wow fadeInUp" id="contact-form" role="form" data-wow-delay="0.8s">
+                        <h6 class="text-success">Your message has been sent successfully.</h6>
+                        <h6 class="text-danger">E-mail must be valid and message must be longer than 1 character.</h6>
+                        <div class="col-md-6 col-sm-6">
+                            <input type="text" class="form-control" id="cf-name" name="name" placeholder="Full name">
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <input type="email" class="form-control" id="cf-email" name="email" placeholder="Email address">
+                        </div>
+                        <div class="col-md-12 col-sm-12">
+                            <input type="text" class="form-control" id="cf-subject" name="subject" placeholder="Subject">
+                            <textarea class="form-control" rows="4" id="cf-message" name="message" placeholder="Ask us anything!"></textarea>
+                            <button type="submit" class="btn btn-lg btn-warning btn-block" id="cf-submit" name="submit">Send Message</button>
+                        </div>
+                    </form>
+                </div>
+                </div>
             </div>
        </section> 
        
@@ -326,7 +326,7 @@
                       </div>
                  </div>
 
-                 <div class="col-md-4 col-sm-8">
+                 <div class="col-md-3 col-sm-8">
                       <div class="footer-info footer-open-hour">
                            <div class="section-title">
                                 <h2 class="wow fadeInUp" data-wow-delay="0.2s">Open Hours</h2>
@@ -343,9 +343,22 @@
                                 </div>
                            </div>
                       </div>
-                 </div>          
+                 </div> 
+                 
+                 <div class="col-md-3 col-sm-8">
+                    <div class="footer-info footer-open-hour">
+                         <div class="section-title">
+                              <h2 class="wow fadeInUp" data-wow-delay="0.2s">Socials</h2>
+                         </div>
+                         <div class="wow fadeInUp" data-wow-delay="0.4s">
+                              <p>Instagram: restaurantcity555</p>
+
+                         </div>
+                    </div>
+                </div>   
+
             </div>
-       </div>
+       </div><br><br><br><br><br><br>
 
        
 
@@ -543,7 +556,7 @@
                         "<td>${}<input type='hidden' name='price' value='{}'></td>".format(item_price, item_price) +
                         "<td>{}<input type='hidden' name='quantity' value='{}'></td>".format(item.quantity, item.quantity) +
                         // delete button
-                        "<td><input type='button' onclick=deleteitem('{}') value='Remove'></td>".format(item.menuId) + 
+                        "<td><button class='button' onclick=deleteitem('{}')>Remove</td>".format(item.menuId) + 
                         "</tr></tbody>";
                     
                     $('#saved-cart-table').append(eachRow);
