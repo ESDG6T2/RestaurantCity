@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 from flask_cors import CORS
 import requests
 
@@ -28,26 +28,46 @@ def send_order(order): # only when paypal payment succeed
 
     print('Payment succeeded, order is sent')
 
+# @app.route('/test', methods=['POST'])
+# def testing():
+#     return render_template('index.html')
+
 @app.route('/payment',methods=['POST'])
 def pay_order():
     # Assuming payment successful
     order = request.get_json()
-    order['orderStatus']='paid'
-    order['orderId'] = generate_order_id()
-    order['orderDatetime'] = datetime.now(tz).strftime(format='%Y-%m-%d %H:%M:%S')
+    return order, 200
     # print(order)
     # send_order(order)
     # return jsonify(order), 200
 
     # TODO: integrating with Paypal
     # Call paypal api here 
-    r = requests.post('http://127.0.0.1:7000/checkout',json=order)
-    if r.status_code == 200:
-        print(order)
-        send_order(order)
-        return jsonify(order), 200
+    # r = requests.post('http://127.0.0.1:7000/checkout',json=order)
+    # if r.status_code == 200:
+    #     print(order)
+    #     send_order(order)
+    #     return jsonify(order), 200
+    # else:
+    #     return jsonify(order), 400
+@app.route('/successpayment',methods=['POST'])
+def success_order():
+    if request.is_json:
+        order = request.get_json()
+        order['orderStatus']='paid'
+        order['orderId'] = generate_order_id()
+        order['orderDatetime'] = datetime.now(tz).strftime(format='%Y-%m-%d %H:%M:%S')
     else:
-        return jsonify(order), 400
+        order = request.get_data()
+        print("Received an invalid order:")
+        print(order)
+        replymessage = json.dumps({"message": "Order should be in JSON", "data": order}, default=str)
+        return replymessage, 400 # Bad Request
+    print("Received an order log by " + __file__)
+    send_order(order)
+    return jsonify('Successfully paid'), 201
+
+
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=5555,debug=True)
