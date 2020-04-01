@@ -49,6 +49,9 @@ def pay_order():
 def success_order():
     if request.is_json:
         order = request.get_json()
+        for i in range(len(order['orderItems'])):
+            order['orderItems'][i]['menuId'] = order['orderItems'][i].pop('sku')
+            print(order['orderItems'][i])
         order['orderStatus']='paid'
         order['orderId'] = generate_order_id()
         order['orderDatetime'] = datetime.now(tz).strftime(format='%Y-%m-%d %H:%M:%S')
