@@ -38,7 +38,6 @@ def pay_order():
     # print(order)
     # send_order(order)
     # return jsonify(order), 200
-
     # TODO: integrating with Paypal
     # Call paypal api here 
     r = requests.post('http://127.0.0.1:7000/checkout',json=order)
