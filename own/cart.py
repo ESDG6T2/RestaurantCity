@@ -41,6 +41,17 @@ def delete_cart(userid):
 
     return jsonify({"message":"Cart is deleted successfully"}), 200
 
+
+@app.route("/delete-cart-item/<string:userid>&<string:menuId>",methods=['GET'])
+def delete_cart_item(userid,menuId):
+    try:
+        Cart.query.filter_by(userid=userid,menuId=menuId).delete()
+        db.session.commit()
+    except:
+        return jsonify({"message": "An error occurred deleting the item."}), 500
+
+    return jsonify({"message":"Item is deleted successfully"}), 200
+
 @app.route("/add-cart/<string:userid>",methods=['POST'])
 def create_cart(userid):
     data = request.get_json()

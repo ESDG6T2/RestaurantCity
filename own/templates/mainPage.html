@@ -12,7 +12,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="form.css" >
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
@@ -60,7 +59,6 @@
                 <div class="mx-auto" style="width: 200px;"></div>
                 <form id='order-form'>
                     <div class="container">
-                        <!-- <div class="collapse navbar-collapse" id="Home"></div> -->
                         <div class="row">
                             <div class="col-lg-12 col-md-6 mb-4" >
                               <div class="headimage" style="background-image: url('../img/restaurantcity.jpg'); background-size: 100% 100% ;background-repeat:no-repeat;">
@@ -89,8 +87,8 @@
                     <br>
                     <div class="row" align='center'>
                         <div class="col-lg-12 col-md-6 mb-4">
-                            <button id="save_cart" input type="submit" class="btn btn-lg btn-warning ">Save Cart</button>
-                            <button id="submit_cart" input type="submit" class="btn btn-lg btn-warning ">Check Out</button>
+                            <button id="save_cart" input type="submit" class="btn btn-lg btn-warning ">Save To Cart</button>
+                            <button id="submit_cart" input type="submit" class="btn btn-lg btn-warning ">Check Out Cart</button>
                         </div>
                     </div>
                 </form>
@@ -113,80 +111,51 @@
                       <div id ='saved-cart' class="card">
                         <form class="card-body">
                         <table id='saved-cart-table' border="1" style='width:100%'>
-                                <thead>
-                                    <tr>
-                                        <th>Item name</th>
-                                        <th>Item price</th>
-                                        <th>Item number</th>
-                                        <th>Delete</th>
-                                    </tr>
-                                </thead>
-                                    <tr>
-                                        <th><p>xxx</p></th>
-                                        <th><p>xxx</p></th>
-                                        <th><p>xxx</p></th>
-                                        <th><p>xxx</p></th>
-                                    </tr>
-                            </table>
-                            <p id='cart-update-outcome'></p>
-                          <div class="row">
-                            <div class="col-md-6 mb-2">
-                              <div class="md-form ">
-                                <label for="firstName" class="">First name</label>
-                                <input type="text" id="firstName" class="form-control">
-                              </div>
-                            </div>
-                            <div class="col-md-6 mb-2">
-                              <div class="md-form">
-                                <label for="lastName" class="">Last name</label>
-                                <input type="text" id="lastName" class="form-control">
-                              </div>
-                            </div>
-                          </div>
-                          <div class="md-form mb-5">
+                            <thead>
+                                <tr>
+                                    <th>Item name</th>
+                                    <th>Item price</th>
+                                    <th>Item number</th>
+                                    <th>Remove</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <p id='cart-update-outcome'></p>
+                          <div class="md-form mb-2">
                             <label for="address" class="">Address</label>
-                            <input type="text" id="address" class="form-control" placeholder="1234 Main St">
+                            <input type="text" id='address' class="form-control" placeholder="1234 Main St">
                           </div>
-                          <hr>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="save-info">
-                            <label class="custom-control-label" for="save-info">Save this information for next time</label>
+                          <div class="md-form mb-2">
+                            <label for="contact_person" class="">Name of Person Of Contact</label>
+                            <input type="text" id='contact_person' class="form-control" placeholder="Your Name">
+                          </div>
+                          <div class="md-form mb-2">
+                            <label for="address" class="">Contact Number</label>
+                            <input type="text" id='contact_number' class="form-control" placeholder="Contact No">
                           </div>
                           <hr class="mb-4">
-                          <button class="btn btn-warning btn-lg btn-block" type="submit">Continue to checkout</button>
+                          <button class="btn btn-warning btn-lg btn-block" id='payment' type="submit">Continue to checkout</button>
                         </form>
                       </div>
                     </div>
                     <div class="col-md-4 mb-4">
                       <h4 class="d-flex justify-content-between align-items-center mb-3">
                         <span class="text-muted">Your cart</span>
-                        <span class="badge badge-secondary badge-pill">3</span>
+                        <span class="badge badge-secondary badge-pill" id='Cnt'>0</span>
                       </h4>
+                      
                       <ul class="list-group mb-3 z-depth-1">
-                        <li class="list-group-item d-flex justify-content-between lh-condensed">
-                          <div>
-                            <h6 class="my-0">Product name</h6>
-                            <small class="text-muted">Brief description</small>
-                          </div>
-                          <span class="text-muted">$12</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between lh-condensed">
-                          <div>
-                            <h6 class="my-0">Second product</h6>
-                            <small class="text-muted">Brief description</small>
-                          </div>
-                          <span class="text-muted">$8</span>
-                        </li>
+                        <div id='subTotal'></div>
                         <li class="list-group-item d-flex justify-content-between bg-light">
                           <div class="text-success">
                             <h6 class="my-0">Promo code</h6>
                             <small>EXAMPLECODE</small>
                           </div>
-                          <span class="text-success">-$5</span>
+                          <span class="text-success">-$0</span>
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
                           <span>Total (SGD)</span>
-                          <strong>$20</strong>
+                          <strong id='TotalAmt'>$0.00</strong>
                         </li>
                       </ul>
                       <form class="card p-2">
@@ -216,21 +185,31 @@
                         </p>
                         <form id="feedback-form" role="form" method="post">
                         <div id='feedback-rating' class="form">
-                        <label>How do you rate your overall experience? Rate from 1 to 3</label>
+                        <label>How do you rate your overall experience? Rate from 1 to 5</label>
                             <p>
                                 <label class="radio-inline">
                                 <input type="radio" name="experience" id="feedback-rating-score" value="1" >
-                                1 - Bad
+                                1 - Highly Dissatisfied 
+                                </label>
+                                <br>
+                                <label class="radio-inline">
+                                    <input type="radio" name="experience" id="feedback-rating-score" value="1" >
+                                2 - Dissatisfied 
+                                </label>
+                                <br>
+                                <label class="radio-inline">
+                                    <input type="radio" name="experience" id="feedback-rating-score" value="1" >
+                                3 - Average 
                                 </label>
                                 <br>
                                 <label class="radio-inline">
                                 <input type="radio" name="experience" id="feedback-rating-score" value="2" >
-                                2 - Average
+                                4 - Satisfied
                                 </label>
                                 <br>
                                 <label class="radio-inline">
                                 <input type="radio" name="experience" id="feedback-rating-score" value="3" >
-                                3 - Good
+                                5 - Good
                                 </label>
                                 <br>
                             </p>
@@ -368,11 +347,11 @@
             </div>
        </div>
 
-       <div class="container"><br><br><br><br></div>
+       
 
     <!-- End of Contact -->
 
-    <div id='hidden-section' width='100%'>
+    <!-- <div id='hidden-section' width='100%'>
         <div id='cart-info' style='width:40%;display:inline-table'>
             <h2>Your ordered food items</h2>
             <table border='1' id='added-cart-table'>
@@ -411,7 +390,7 @@
                 </table>
             </form>
         </div>
-    </div>
+    </div> -->
 </body>
 
 
@@ -434,6 +413,8 @@
     $('#Home').show();
     $('#Cart').hide();
     $('#Feedback').hide();
+    $('#Contact').hide();
+    
     for (var i = 0; i < btns.length; i++) {
         btns[i].addEventListener("click", function() {
             var current = document.getElementsByClassName("active");
@@ -442,6 +423,7 @@
             $('#Home').hide();
             $('#Cart').hide();
             $('#Feedback').hide();
+            $('#Contact').hide();
             $('#main-section').show();
             $('#hidden-section').hide();
             if(this.text=='Home'){
@@ -450,8 +432,10 @@
                 $('#Cart').show();
             }else if(this.text=='Feedback'){
                 $('#Feedback').show();
+            }else if(this.text=='Contact'){
+                $('#Contact').show();
             }
-        });
+        })
     }
 
     // function create_table()
@@ -520,25 +504,7 @@
 
     });
 
-    // // delete item from saved cart 
-    // function deleteitem() { 
-    //     $(async () => {
-    //     var serviceURL = "http://127.0.0.1:5002/cart/{}".format(userid);
-    //     try {
-    //         const response =
-    //             await fetch(
-    //                 serviceURL, {
-    //                 method: 'GET'
-    //             }
-    //             );
-        
-    //     } catch (error) {
-    //         // Errors when calling the service; such as network error, 
-    //         // service offline, etc
-    //         alert
-    //             ('There is a problem deleting item. Please try again later.<br />' + error);
-    //     } // error
-    // });
+
 
     // load saved cart
     $(async () => {
@@ -555,6 +521,8 @@
             var cart_items = data.cart; //the arr is in data.items of the JSON data
             window.cart_items = cart_items;
             if (cart_items) {
+                var totalAmt=0;
+                var count=0;
                 var rows = "";
                 for (const item of cart_items) {
                     var itemUrl = "http://127.0.0.1:5001/menu/{}".format(item.menuId);
@@ -565,20 +533,37 @@
                         }
                         );
                     const item_data = await response.json();
-                    //console.log(item_data);
+                    // console.log(item.men);
                     var item_name = item_data.foodName;
                     var item_price = item_data.price;
-
+                    
                     eachRow = "<tbody><tr align='center'>" +
                         "<td style='display:none'><input type='hidden' name='menuId' value='{}'>{}</td>".format(item.menuId, item.menuId) +
                         "<td>{}<input type='hidden' name='foodName' value='{}'></td>".format(item_name, item_name) +
                         "<td>${}<input type='hidden' name='price' value='{}'></td>".format(item_price, item_price) +
                         "<td>{}<input type='hidden' name='quantity' value='{}'></td>".format(item.quantity, item.quantity) +
                         // delete button
-                        "<td><button onclick"+delete(menuId)+">Delete</button></td>" + 
+                        "<td><input type='button' onclick=deleteitem('{}') value='Remove'></td>".format(item.menuId) + 
                         "</tr></tbody>";
+                    
                     $('#saved-cart-table').append(eachRow);
+                    
+                    subtotal=item.quantity*item_price;
+                    row="<li class='list-group-item d-flex justify-content-between lh-condensed'>"+
+                            "<div>"+
+                                "<h6 class='my-0'>{}</h6>".format(item_name)+
+                                "<small class='text-muted'>Quantity: {} X ${}</small>".format(item.quantity,item_price)+
+                            "</div>"+
+                            "<span class='text-muted'>${}</span>".format(subtotal)+
+                        "</li>";
+                    $('#subTotal').append(row);
+                    totalAmt+=subtotal;
+                    count++;
                 }
+                $('#saved-cart-table').append("<tbody><td colspan='3'></td><td align='center'><input type='button' onclick=delete_cart_data() value='Clear Cart'></td></tbody>");
+                $('#Cnt').text(count);
+                $('#TotalAmt').text('$'+totalAmt);
+                
             }
         } catch (error) {
             // Errors when calling the service; such as network error, 
@@ -588,6 +573,30 @@
         } // error
     });
 
+
+    // delete item from saved cart 
+    async function deleteitem(menuId) { 
+        var serviceURL = "http://127.0.0.1:5002/delete-cart-item/{}&{}".format(userid,menuId);
+        try {
+            const response =
+                await fetch(
+                    serviceURL, {
+                    method: 'GET'
+                }
+            );
+            if (response.status == 200) {
+                    $('#saved-cart-table tbody').empty();
+                    $('#subTotal').empty();
+                    location.reload(true);
+
+                };
+        } catch (error) {
+            // Errors when calling the service; such as network error, 
+        // service offline, etc
+            alert
+                ('There is a problem deleting item, please try again later.<br />' + error);
+        }
+    }
     // load current orders
     // async function load_orders() {
     //     var serviceURL = "http://127.0.0.1:6666/order/".format(userid);
@@ -634,6 +643,7 @@
                     );
                 if (response.status == 200) {
                     $('#saved-cart-table tbody').empty();
+                    $('#subTotal').empty();
                     location.reload(true);
                 };
             } catch (error) {
@@ -645,8 +655,8 @@
 
     $('#save_cart').click(async function (e) {
         e.preventDefault();
-        var idx = 0, has_item = false,
-            data = $('form').serializeArray().reduce(function (obj, item) {
+        var idx = 0, has_item = false;
+            data = $('#order-form').serializeArray().reduce(function (obj, item) {
                 if (item.name == 'menuId') {
                     sub_obj = {};
                     sub_obj[item.name] = item.value;
@@ -655,7 +665,7 @@
                     sub_obj[item.name] = parseInt(item.value);
                     if (item.value > 0) {
                         has_item = true;
-                        console.log(sub_obj);
+                        // console.log(item.name);
                         obj.push(sub_obj);
                     }
                 }
@@ -701,54 +711,113 @@
         }
     });
 
-    $("#submit_cart").click(function (e) {
+
+    $("#submit_cart").click(async function (e) {
         e.preventDefault();
-        $('#main-section').hide();
-        $('#hidden-section').show();
-        var total = 0,
-            idx = 0,
-            data = $('form').serializeArray().reduce(function (obj, item) {
+        var idx = 0, has_item = false;
+            data = $('#order-form').serializeArray().reduce(function (obj, item) {
                 if (item.name == 'menuId') {
-                    obj[idx] = {};
+                    sub_obj = {};
+                    sub_obj[item.name] = item.value;
                 }
-                obj[idx][item.name] = item.value;
-                switch (item.name) {
-                    case 'menuId':
-                        subtotal = 1;
-                        break;
-                    case 'price':
-                        subtotal *= item.value;
-                        break;
-                    case 'quantity':
-                        subtotal *= item.value;
-                        obj[idx]['subtotal'] = subtotal;
-                        idx++;
-                        break;
+                if (item.name == 'quantity') {
+                    sub_obj[item.name] = parseInt(item.value);
+                    if (item.value > 0) {
+                        has_item = true;
+                        // console.log(item.name);
+                        obj.push(sub_obj);
+                    }
                 }
                 return obj;
-            }, {});
-        // console.log(data);
+            }, []);
 
-        var total = 0;
-        $("#added-cart-table tbody").empty()
-        for (const [key, value] of Object.entries(data)) {
-            if (value['quantity'] > 0) {
-                console.log(value);
-                row = '<tbody><tr align="center">' +
-                    '<td style="display:none">{}</td>'.format(value['menuId']) +
-                    '<td>{}</td>'.format(value['foodName']) +
-                    '<td><img src="../img/{}.jpg" height=100 width=100></td>'.format(value['menuId']) +
-                    '<td>{}</td>'.format(value['price']) +
-                    '<td>{}</td>'.format(value['quantity']) +
-                    '<td>${}</td>'.format(value['subtotal']) +
-                    '</tr></tbody>';
-                total += value['subtotal'];
-                $("#added-cart-table").append(row);
+        // validate if select any item
+        
+        if (has_item == true) {
+            var to_save = true;
+            if (window.cart_items.length > 0) {
+                to_save = confirm('There are items in the saved cart currently? Do you want to overwrite the current cart?');
+            }
+            if (to_save) {
+
+                var body = {};
+                body["items"] = data;
+                console.log(data);
+                var serviceURL = "http://127.0.0.1:5002/add-cart/{}".format(userid);
+                try {
+                    const response =
+                        await fetch(
+                            serviceURL, {
+                            method: 'POST',
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(body)
+                        });
+                    if (response.status == 201) {
+                        alert('Item saved to cart successfully');
+                        location.reload(true);
+                    };
+                } catch (error) {
+                    alert
+                        ('There is a problem deleting cart data, please try again later.<br />' + error);
+                }
             }
         }
-        row = '<tbody><tr><td align="right" colspan=4><b>Total Amount</b></td><td align="center"><b>${}</b></td></tr></tbody>'.format(total);
-        $("#added-cart-table").append(row);
-    });
+        $('#Home').hide();
+        $('#Cart').show();
+
+        
+
+    })
+    // $("#submit_cart").click(function (e) {
+    //     e.preventDefault();
+    //     $('#main-section').hide();
+    //     $('#hidden-section').show();
+    //     var total = 0,
+    //         idx = 0,
+    //         data = $('form').serializeArray().reduce(function (obj, item) {
+    //             if (item.name == 'menuId') {
+    //                 obj[idx] = {};
+    //             }
+    //             obj[idx][item.name] = item.value;
+    //             switch (item.name) {
+    //                 case 'menuId':
+    //                     subtotal = 1;
+    //                     break;
+    //                 case 'price':
+    //                     subtotal *= item.value;
+    //                     break;
+    //                 case 'quantity':
+    //                     subtotal *= item.value;
+    //                     obj[idx]['subtotal'] = subtotal;
+    //                     idx++;
+    //                     break;
+    //             }
+    //             return obj;
+    //         }, {});
+    //     // console.log(data);
+
+    //     var total = 0;
+    //     $("#added-cart-table tbody").empty()
+    //     for (const [key, value] of Object.entries(data)) {
+    //         if (value['quantity'] > 0) {
+    //             console.log(value);
+    //             row = '<tbody><tr align="center">' +
+    //                 '<td style="display:none">{}</td>'.format(value['menuId']) +
+    //                 '<td>{}</td>'.format(value['foodName']) +
+    //                 '<td><img src="../img/{}.jpg" height=100 width=100></td>'.format(value['menuId']) +
+    //                 '<td>{}</td>'.format(value['price']) +
+    //                 '<td>{}</td>'.format(value['quantity']) +
+    //                 '<td>${}</td>'.format(value['subtotal']) +
+    //                 '</tr></tbody>';
+    //             total += value['subtotal'];
+    //             $("#added-cart-table").append(row);
+    //         }
+    //     }
+    //     row = '<tbody><tr><td align="right" colspan=4><b>Total Amount</b></td><td align="center"><b>${}</b></td></tr></tbody>'.format(total);
+    //     $("#added-cart-table").append(row);
+    // });
 
     $("#payment").click(async function (event) {
         event.preventDefault();
