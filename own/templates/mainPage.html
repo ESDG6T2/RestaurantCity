@@ -17,62 +17,8 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
-    <style>
-        .headimage {
-            padding: 7.5rem 2rem;
-            margin-bottom: 2rem;
-            background-color: #e9ecef;
-            border-radius: 0.25rem;
-        }
-
-        .card-img-top:hover {
-            transform: scale(1.1);
-            /* (150% zoom - Note: if the zoom is too large, it will go outside of the viewport) */
-        }
-
-        .card {
-            background-color: #e8e8e8;
-        }
-
-        tbody:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-
-        .scrollable {
-            height: 30px;
-            /* or any value */
-            overflow-y: auto;
-        }
-
-        body {
-            background-image: url('../img/feedback-background.jpg'); 
-            background-color: #cfd7ec;
-            height: 100%;
-        }
-
-        .container-fluid{
-            background-image: url('../img/feedback-background.jpg'); 
-            background-repeat: no-repeat;
-            background-position: center center;
-            background-size: cover;
-        }
-
-        .navbar {
-            background-color: #19193e;
-        }
-
-        footer {
-            background: #19193e;
-            color: white;
-            line-height: 25px;
-            padding: 0 20px;
-        }
-
-        .form {
-            font-weight: 500;
-        }
-
-    </style>
+    <!-- MAIN CSS -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     
@@ -339,99 +285,92 @@
             </div>
         </div> -->
     
-    <div id='Contact'>
-            <div class="container">
-                 <div class="row">
-      <!-- How to change your own map point
-              1. Go to Google Maps
-              2. Click on your location point
-              3. Click "Share" and choose "Embed map" tab
-              4. Copy only URL and paste it within the src="" field below
-      -->
-
-            <div id="google-map">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3647.3030413476204!2d100.5641230193719!3d13.757206847615207!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0xf51ce6427b7918fc!2sG+Tower!5e0!3m2!1sen!2sth!4v1510722015945" allowfullscreen></iframe>
-            </div>
-            <div class="col-md-6 col-sm-12">
-                <div class="col-md-12 col-sm-12">
-                    <div class="section-title">
-                            <h2>Contact Us</h2>
-                    </div>
-                </div>
-                <form action="#" method="post" class="wow fadeInUp" id="contact-form" role="form" data-wow-delay="0.8s">
-                    <h6 class="text-success">Your message has been sent successfully.</h6>
-                    <h6 class="text-danger">E-mail must be valid and message must be longer than 1 character.</h6>
-                    <div class="col-md-6 col-sm-6">
-                            <input type="text" class="form-control" id="cf-name" name="name" placeholder="Full name">
-                    </div>
-                    <div class="col-md-6 col-sm-6">
-                            <input type="email" class="form-control" id="cf-email" name="email" placeholder="Email address">
-                    </div>
-                    <div class="col-md-12 col-sm-12">
-                            <input type="text" class="form-control" id="cf-subject" name="subject" placeholder="Subject">
-                            <textarea class="form-control" rows="6" id="cf-message" name="message" placeholder="Tell about your project"></textarea>
-                            <button type="submit" class="form-control" id="cf-submit" name="submit">Send Message</button>
-                    </div>
-                </form>
-            </div>
-            </div>
-            </div>
-       </section>          
-  
+     <!-- CONTACT -->
+     <section id="contact" data-stellar-background-ratio="0.5">
         <div class="container">
+                <div class="row">
+                <div class="wow fadeInUp col-md-6 col-sm-12" data-wow-delay="0.4s">
+                        <div id="google-map">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.7952471658855!2d103.84722961462221!3d1.2975487990536225!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da19a340000001%3A0xdb2ba83d5e574a35!2sSMU%20School%20of%20Information%20Systems!5e0!3m2!1sen!2ssg!4v1585730574901!5m2!1sen!2ssg" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                        </div>
+                    </div>    
+                    <div class="col-md-6 col-sm-12">
+                        <div class="col-md-12 col-sm-12">
+                            <div class="section-title wow fadeInUp" data-wow-delay="0.1s">
+                                    <h2>Contact Us</h2>
+                            </div>
+                        </div>
+                        <form action="#" method="post" class="wow fadeInUp" id="contact-form" role="form" data-wow-delay="0.8s">
+                            <h6 class="text-success">Your message has been sent successfully.</h6>
+                            <h6 class="text-danger">E-mail must be valid and message must be longer than 1 character.</h6>
+                            <div class="col-md-6 col-sm-6">
+                                <input type="text" class="form-control" id="cf-name" name="name" placeholder="Full name">
+                            </div>
+                            <div class="col-md-6 col-sm-6">
+                                <input type="email" class="form-control" id="cf-email" name="email" placeholder="Email address">
+                            </div>
+                            <div class="col-md-12 col-sm-12">
+                                <input type="text" class="form-control" id="cf-subject" name="subject" placeholder="Subject">
+                                <textarea class="form-control" rows="6" id="cf-message" name="message" placeholder="Tell about your project"></textarea>
+                                <button type="submit" class="btn btn-lg btn-warning btn-block" id="cf-submit" name="submit">Send Message</button>
+                            </div>
+                        </form>
+                    </div>
+                   </div>
+            </div>
+       </section> 
+       
+       <div class="container">
             <div class="row">
-                <div class="col-md-3 col-sm-8">
-                    <div class="footer-info">
-                        <div class="section-title"><h2>Find us</h2></div>
-                        <p>123 nulla a cursus rhoncus,<br> augue sem viverra 10870<br>id ultricies sapien</p>
-                    </div>
-                </div>
 
-                <div class="col-md-3 col-sm-8">
-                    <div class="footer-info">
-                        <div class="section-title">
-                            <h2>Reservation</h2>
-                        </div>
-                        <p>090-080-0650 | 090-070-0430</p>
-                        <p><a href="mailto:info@company.com">info@company.com</a></p>
-                        <p>LINE: eatery247 </p>
-                    </div>
-                </div>
+                 <div class="col-md-3 col-sm-8">
+                      <div class="footer-info">
+                           <div class="section-title">
+                                <h2 class="wow fadeInUp" data-wow-delay="0.2s">Find us</h2>
+                           </div>
+                           <address class="wow fadeInUp" data-wow-delay="0.4s">
+                                <p>80 Stamford Road,<br>Singapore 178902</p>
+                           </address>
+                      </div>
+                 </div>
 
-                <div class="col-md-4 col-sm-8">
-                    <div class="footer-info footer-open-hour">
-                        <div class="section-title">
-                            <h2>Open Hours</h2>
-                        </div>
-                        <p>Monday: Closed</p>
-                        <div>
-                            <strong>Tuesday to Friday</strong>
-                            <p>7:00 AM - 9:00 PM</p>
-                        </div>
-                        <div>
-                            <strong>Saturday - Sunday</strong>
-                            <p>11:00 AM - 10:00 PM</p>
-                        </div>
-                        </div>
-                    </div>
-                </div>
+                 <div class="col-md-3 col-sm-8">
+                      <div class="footer-info">
+                           <div class="section-title">
+                                <h2 class="wow fadeInUp" data-wow-delay="0.2s">Reservation</h2>
+                           </div>
+                           <address class="wow fadeInUp" data-wow-delay="0.4s">
+                                <p>+65 6880-9876 | 9826-7843</p>
+                                <p><a href="mailto:info@company.com">restaurantcity@company.com</a></p>
+                                <p>LINE: restaurantcity </p>
+                           </address>
+                      </div>
+                 </div>
 
-                <div class="col-md-2 col-sm-4">
-                    <ul class="social-icon">
-                        <li><a href="#" class="fa fa-facebook-square" attr="facebook icon"></a></li>
-                        <li><a href="#" class="fa fa-twitter"></a></li>
-                        <li><a href="#" class="fa fa-instagram"></a></li>
-                        <li><a href="#" class="fa fa-google"></a></li>
-                    </ul>
+                 <div class="col-md-4 col-sm-8">
+                      <div class="footer-info footer-open-hour">
+                           <div class="section-title">
+                                <h2 class="wow fadeInUp" data-wow-delay="0.2s">Open Hours</h2>
+                           </div>
+                           <div class="wow fadeInUp" data-wow-delay="0.4s">
+                                <p>Monday: Closed</p>
+                                <div>
+                                     <strong>Tuesday to Friday</strong>
+                                     <p>7:00 AM - 9:00 PM</p>
+                                </div>
+                                <div>
+                                     <strong>Saturday - Sunday</strong>
+                                     <p>11:00 AM - 10:00 PM</p>
+                                </div>
+                           </div>
+                      </div>
+                 </div>          
+            </div>
+       </div>
 
-                    <div class="copyright-text"> 
-                        <p><br>Copyright &copy; 2018 <br>Your Company Name 
-                        
-                        <br><br>Design: <a rel="nofollow" href="http://templatemo.com" target="_parent">TemplateMo</a></p>
-                    </div>
-                </div>
-        </div>
-    </div>
+       <div class="container"><br><br><br><br></div>
+
+    <!-- End of Contact -->
 
     <div id='hidden-section' width='100%'>
         <div id='cart-info' style='width:40%;display:inline-table'>
