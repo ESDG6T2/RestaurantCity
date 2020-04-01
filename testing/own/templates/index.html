@@ -5,11 +5,27 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>Payment by paypal</h1>
     <div id="paypal-button"></div>
+    <a id='urlLink'>Return back</a>
+    <!-- <p>{{data}}</p> -->
 
 <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 
 <script>
+    // console.log(all_data);
+    var url = "{{data.url}}";
+    // console.log(url);
+    var orderitems = "{{data.orderItems}}";
+    var orderitems = JSON.parse(orderitems.replace(/&#39;/g,'"'));
+    var price = JSON.parse("{{data.totalAmount}}");
+    // console.log(orderitems)
+    // console.log(JSON.parse(orderitems.replace(/&#39/g,'"')))
+    // console.log(price)
+    var linkURL = document.getElementById('urlLink');
+    linkURL.setAttribute("href", url);
+
+
     var CREATE_PAYMENT_URL  = 'http://127.0.0.1:7000/payment';
     var EXECUTE_PAYMENT_URL = 'http://127.0.0.1:7000/execute';
 
@@ -20,7 +36,10 @@
         commit: true, // Show a 'Pay Now' button
 
         payment: function() {
-            return paypal.request.post(CREATE_PAYMENT_URL).then(function(data) {
+            return paypal.request.post(CREATE_PAYMENT_URL, {
+                orderitems: JSON.stringify(orderitems),
+                price: price
+            }).then(function(data) {
                 return data.paymentID;
             });
         },
@@ -30,8 +49,16 @@
                 paymentID: data.paymentID,
                 payerID:   data.payerID
             }).then(function(res) {
-
                 console.log(res.success)
+                if(res.success){
+                    var all_data = "{{data}}";
+                    var all_data = JSON.parse(all_data.replace(/&#39;/g,'"'));
+                    // console.log(all_data);
+                    window.location = url + '?' + JSON.stringify(all_data)
+                }else{
+                    var error_message = {"error": "unsuccessful"};
+                    window.location = url + '?' + JSON.stringify(error_message)
+                }
                 // The payment is complete!
                 // You can now show a confirmation message to the customer
             });
