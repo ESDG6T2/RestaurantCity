@@ -149,7 +149,7 @@
     }
 
     #contact .form-control {
-        background: transparent;
+        background: white;
         border: 0;
         border-bottom: 1px solid #dddddd;
         border-radius: 0;
@@ -198,4 +198,15 @@
     .footer-info,
     footer .social-icon {
         margin-top: 20px;
+    }
+
+    .saved-cart-table, tr, td, thead, th {
+        border: 1px black;
+        align-content: center;
+    }
+
+    .button {
+        border: 0;
+        background-color: #cbd5ec;
+        box-shadow: #292929;
     }

@@ -150,19 +150,23 @@
 
 
 <script>
-    let url = String(window.location.href);
+    var url = String(window.location.href);
     // console.log(url);
     if(url.includes('?')){
         var find_n = url.search(/[?]/g);
         var url_param = url.slice(find_n+1);
         var url_param = JSON.parse(url_param.replace(/%22/g,'"'));
+        // console.log(url_param);
+        var url_return = url_param['url'];
+        delete url_param['url'];
+        // console.log(url_param);
         if(url_param.hasOwnProperty('error')){
             alert('Payment unsuccessful')
-            window.location = "http://127.0.0.1/esdg6t2/testing/own/mainPage.html";
+            window.location = url_return;
         }
         else{
-            successOrder(url_param)
-            // window.location = "http://127.0.0.1/esdg6t2/testing/own/mainPage.html";
+            successOrder(url_param);
+            window.location = url_return;
         // console.log(url_param)
         }
         // console.log(find_n);
@@ -474,7 +478,8 @@
             'totalAmount': total
         };
         console.log(order);
-
+        var url = String(window.location.href);
+        console.log(url);
         serviceURL = 'http://127.0.0.1:5555/payment';
         // try {
             $.ajax({
@@ -485,6 +490,7 @@
                 url: serviceURL,
                 success: function (e){
                     console.log(e);
+                    order['url'] = url;
                     window.location = 'http://127.0.0.1:7000/checkout' + '?' + JSON.stringify(order)
                 },
                 error: function(error) {

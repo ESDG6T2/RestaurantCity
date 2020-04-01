@@ -150,6 +150,29 @@
 
 
 <script>
+    var url = String(window.location.href);
+    // console.log(url);
+    if(url.includes('?')){
+        var find_n = url.search(/[?]/g);
+        var url_param = url.slice(find_n+1);
+        var url_param = JSON.parse(url_param.replace(/%22/g,'"'));
+        console.log(url_param.url);
+        var url_return = url_param['url'];
+        delete url_param['url'];
+        // console.log(url_param);
+        if(url_param.hasOwnProperty('error')){
+            alert('Payment unsuccessful');
+            window.location = url_return;
+        }
+        else{
+            successOrder(url_param);
+            window.location = url_return;
+        // console.log(url_param)
+        }
+        // console.log(find_n);
+
+    }
+
     const userid = 'a';
     // helper function 
     String.prototype.format = function () {
@@ -213,7 +236,7 @@
             // Errors when calling the service; such as network error, 
             // service offline, etc
             alert
-                ('There is a problem retrieving books data, please try again later.<br />' + error);
+                ('There is a problem retrieving menu data, please try again later.<br />' + error);
 
         } // error
 
@@ -455,34 +478,50 @@
             'totalAmount': total
         };
         console.log(order);
-
-        serviceURL = 'http://127.0.0.1:5555/payment'
-        try {
-            const response =
-                await fetch(
-                    serviceURL, {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(order)
-                }
-                );
-            const result = await response;
-            if (result.status == 400) {
-                alert('Payment Failed');
-            } else {
-                alert('Payment succeed');
-                // window.location.href = "http://www.w3schools.com"; // for redirect 
-                return;
+        var url = String(window.location.href);
+        console.log(url);
+        serviceURL = 'http://127.0.0.1:5555/payment';
+        // try {
+            $.ajax({
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(order),
+                dataType: 'json',
+                url: serviceURL,
+                success: function (e){
+                    console.log(e);
+                    order['url'] = url;
+                    window.location = 'http://127.0.0.1:7000/checkout' + '?' + JSON.stringify(order)
+                },
+                error: function(error) {
+                console.log(error);
             }
-        } catch (error) {
-            // Errors when calling the service; such as network error, 
-            // service offline, etc
-            alert
-                ('There is a problem with payment, please try again later.<br />' + error);
+            });
+            // const response =
+            //     await fetch(
+            //         serviceURL, {
+            //         method: 'POST',
+            //         headers: {
+            //             "Content-Type": "application/json"
+            //         },
+            //         body: JSON.stringify(order)
+            //     }
+            //     );
+            // const result = await response;
+            // if (result.status == 400) {
+            //     alert('Payment Failed');
+            // } else {
+            //     alert('Payment succeed');
+            //     // window.location.href = "http://www.w3schools.com"; // for redirect 
+            //     return;
+            // }
+        // } catch (error) {
+        //     // Errors when calling the service; such as network error, 
+        //     // service offline, etc
+        //     alert
+        //         ('There is a problem with payment, please try again later.<br />' + error);
 
-        } // error
+        // } // error
 
     })
 
@@ -521,6 +560,33 @@
         } // error
 
     })
+
+    async function successOrder(data){
+        var serviceURL = 'http://127.0.0.1:5555/successpayment';
+        try {
+            const response =
+                await fetch(
+                    serviceURL, {
+                    method: 'POST',
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                }
+                );
+            const result = await response;
+            // console.log(result.status);
+            if (result.status == 201) {
+                alert('Payment Successful');
+            }
+        } catch (error) {
+            // Errors when calling the service; such as network error, 
+            // service offline, etc
+            alert ('There is a problem with payment submission, please try again later.<br />' + error);
+
+        }
+
+    };
 </script>
 
 
