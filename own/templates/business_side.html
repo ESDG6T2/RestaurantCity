@@ -5,31 +5,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <link rel="stylesheet" href="main.css">
     <title>Restaurant City Management</title>
 </head>
 <body>
-    <div id='option-bar'>
-        <table>
-            <tr><th colspan="2"><h3>Restaurant City Management</h3></th></tr>
-            <!-- <tr>
+    <div id='option-bar'></div>
+        <!-- <table>
+            <tr><th colspan="2"><h2>Restaurant City Management</h2></th></tr>
+             <tr>
                 <td><input type="button" id='delivering' name='delivering' value="Delivering"/></td>
                 <td><input type="button" id='order' name='order' value="Order List"/></td>
             </tr> -->
-        </table>
+        <!-- </table>  -->
+    <div class="container">
+        <p><br><br><br></p>
     </div>
-    <div id='main-container'>
-        <table border="1" id='ordertable'>
-            <tr>
-                <th>OrderID</th>
-                <th>Food List</th>
-                <th>UserID</th>
-                <th>Contact Number</th>
-                <th>Date/Time</th>
-                <th>Total Amount</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-        </table>
+
+    <div id='main-container' class="table-users">
+        <div class="header">Restaurant City Management</div>
+            <div class="container">
+            <table id="ordertable" cellspacing="0">
+                <tr>
+                    <th>OrderID</th>
+                    <th>Food List</th>
+                    <th>UserID</th>
+                    <th>Contact Number</th>
+                    <th>Date/Time</th>
+                    <th>Total Amount</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </table>
+            </div>
 
         <!-- <table border="1" id='deliveringtable'>
             <tr>
