@@ -48,11 +48,14 @@ class OrderAllocation(db.Model):
 @app.route("/order/<string:driverId>")
 #take out the order information and address using driverID.
 def find_by_driverID(driverId):
-    driver_order_details = OrderAllocation.query.filter_by(driverId=driverId).first()
-    if driver_order_details:
-        return jsonify(driver_order_details.json()), 200
-    else:
-        return jsonify({'message':'Invalid driver or there is no order assigned'}), 400
+    if driverId in ['1', '2', '3', '4', '5']:
+        driver_order_details = OrderAllocation.query.filter(OrderAllocation.driverId==driverId, OrderAllocation.orderStatus!='delivered').first()
+        if driver_order_details:
+            return jsonify(driver_order_details.json()), 200
+        else:
+            return jsonify({'message': 'There is no order assigned'}), 400
+
+    return jsonify({'message': 'Invalid driver ID'}), 400
 
 @app.route('/allocate-order/<string:orderId>', methods=['PUT'])
 def allocate_order(orderId):

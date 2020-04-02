@@ -1,15 +1,17 @@
 <!doctype html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Driver</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" >
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    </head>
-    <style>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Restaurant City Delivery</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+</head>
+<style>
     body {
-	background-color: #000;
+        background-color: #000;
     }
 
     html,
@@ -34,131 +36,118 @@
         filter: alpha(opacity=60);
     }
 
-    .form-container
-    {
+    .element-container {
         background-color: #fff;
-        box-shadow: 0 16px 24px 2px rgba(0,0,0,0.14), 0 20px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.3);
-        border-radius: 8px;	
+        box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 20px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+
     }
 
-    </style>
-    <!-- <body>
-        <div id="main-container" class="container"> 
-        <table id='driverTable' class="table">    
-            <tr>
-                <th>driverId</th>
-                <th>orderId</th>
-                <th>customer_name</th>
-                <th>contactNo</th>
-                <th>billingAddress</th>  
-            </tr>
-        </table>
-        <form id="driverForm" method="GET">
-            <h4>Driver ID</h4>
-            <div class="text">
-              <input name="driver" type="text" id="driver" placeholder="Enter your Driver ID." required/>
-            </div>
-            <div class = "submit">
-            <input type="submit" value="Submit">
-            </div>
-        </form>
-        </div>
-        <input type="button" id='return' name='return' value='Return'/>
-    </body> -->
-    <body >
-        <div id="main-container" class="container">
-            <div class="imagebg"></div>
-            <div class="row " style="margin-top: 50px">
-                <div class="col-md-6 col-md-offset-3 form-container" align='center'>
-                    <h2>Driver ID</h2> 
-                    <p> Please provide your ID below:</p>
-                    <table id='driverTable' class="table">    
-                            <tr>
-                                <th>driverId</th>
-                                <th>orderId</th>
-                                <th>customer_name</th>
-                                <th>contactNo</th>
-                                <th>billingAddress</th>  
-                            </tr>
-                    </table>
-                    <form id="driverForm" method="GET">
-                    <div class="row">
-                        <div class="col-sm-12 form-group">
-                            <textarea class="form-control" type="textarea" name="driver" id="comments" placeholder="Example: 123X" maxlength="20" rows="7" required></textarea>
-                        </div>
+    table,
+    th {
+        text-align: center;
+    }
+</style>
+
+<body>
+
+    <div id="main-container" class="container">
+        <div class="imagebg"></div>
+        <br><br>
+        <div class="col-md-6 col-md-offset-3 element-container" align='center'>
+            <h2>Find Your Allocated Orders</h2>
+            <p> Please provide your ID below:</p>
+            <form id="driverForm" method="GET">
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <input class="form-control" type="text" name="driver" id="driver" placeholder="Example: 123X"
+                            maxlength="20" rows="7" required>
                     </div>
-                    <div class="row" class="submit">
-                        <div class="col-sm-12 form-group">
-                            <button type="submit" class="btn btn-lg btn-warning btn-block" >Submit</button>
-                        </div>
-                    </div>
-                    </form>
-                    <div id="success_message" style="width:100%; height:100%; display:none; "> <h3>Posted your feedback successfully!</h3> </div>
-                    <div id="error_message" style="width:100%; height:100%; display:none; "> <h3>Error</h3> Sorry there was an error sending your form. </div>
                 </div>
+                <div class="row" class="submit">
+                    <div class="col-sm-12 form-group">
+                        <button type="submit" class="btn btn-lg btn-warning btn-block">Submit</button>
+                    </div>
+                </div>
+            </form>
+
+            <div style="padding-top:20px;margin-top: 20px;display: none;padding-bottom: 50px;" id='allocatedOrders'>
+                <h3>Your allocated order</h3>
+                <table id='allocated-order-table' border="2">
+                    <thead>
+                        <tr style="font-size: 12px;">
+                            <th>Order ID</th>
+                            <th>Customer Name</th>
+                            <th>Contact Number </th>
+                            <th>Delivery Address</th>
+                            <th>Update Status</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
         </div>
-    </body>
+    </div>
+</body>
 
 <script>
-        $(document).ready(function() {
-            $('#driverTable').hide();
-            $('#return').hide();
-        });
-        function showError(message) {
-            // Hide the table and button in the event of error
-            $('#driverTable').hide();
-            // Display an error under the main container
-            $('#main-container')
-                .append("<label>"+message+"</label>");
-        }
-        $("#driverForm").submit(async (event) => {        
-                // Change serviceURL to your own
-                event.preventDefault();
-                $('#driverTable').show();
-                $('#driverForm').hide();
-                $('#return').show();
-                var driverId = $('#driver').val();
-                var serviceURL = "http://127.0.0.1:5002/driver/" + driverId;
-                // console.log(serviceURL)
-                // console.log(driverId)
-            
-                try {
-                    const response = 
-                     await fetch(
-                       serviceURL, { method: 'GET' }
-                    );
-                    const data = await response.json();
-                    // console.log(data)
-                    var driver = data.driverId; //the arr is in data.driver of the JSON data
-                    // console.log(driver)
-                    // array or array.length are falsy
-                    if (!driver || !driverId.length) {
-                        showError('Driver list empty or undefined.')
-                    } else {
-                        // for loop to setup all table rows with obtained book data
-                        var rows = "";
-                        eachRow =
-                                "<td align='center'>" + data.driverId + "</td>" +
-                                "<td align='center'>" + data.orderId+ "</td>" +
-                                "<td align='center'>" + data.customer_name + "</td>" +
-                                "<td align='center'>" + data.contactNo + "</td>"+
-                                "<td align='center'>" + data.billingAddress + "</td>";
-                            rows += "<tr>" + eachRow + "</tr>";
-                        // add all the rows to the table
-                        $('#driverTable').append(rows);
-                    }
-                } catch (error) {
-                    // Errors when calling the service; such as network error, 
-                    // service offline, etc
-                    showError
-                    ('There is a problem retrieving driver data, please try again later.<br />'+error);
-               
-            } // error
-        });
+    $("#driverForm").submit(async (event) => {
+        $('#allocated-order-table tbody').empty();
+        event.preventDefault();
+        var driverId = $('#driver').val();
+        var serviceURL = "http://127.0.0.1:8000/order/" + driverId;
 
-        $( "#return" ).click(function() {
+        try {
+            const response =
+                await fetch(
+                    serviceURL, { method: 'GET' }
+                );
+            const data = await response.json();
+
+            if (response.status == 200) {
+                $("#allocatedOrders").show()
+                var row = "<tbody><tr align='center'>" +
+                    "<td>" + data.orderId + "</td>" +
+                    "<td>" + data.customerName + "</td>" +
+                    "<td>" + data.contactNumber + "</td>" +
+                    "<td>" + data.deliveryAddress + "</td>" +
+                    '<td><button onclick=finishDelivery("' + data.orderId + '")>Finish Delivery</button ></td ></tr ></tbody >';
+                $('#allocated-order-table').append(row);
+                console.log(row);
+            } else {
+                alert(data['message'])
+            }
+        } catch (error) {
+            alert('There is a problem retrieving driver data, please try again later.<br />' + error);
+        }
+    });
+
+    async function finishDelivery(orderId) {
+        var serviceURL = "http://127.0.0.1:8010/update-order/";
+        body = { "orderId": orderId, "orderStatus": "delivered" }
+        console.log(JSON.stringify(body));
+        try {
+            const response =
+                await fetch(
+                    serviceURL, {
+                    method: 'PUT', headers: {
+                        'Content-Type': 'application/json'
+                    }, body: JSON.stringify(body)
+                });
+            const data = await response.json();
+            if (response.status != 201) {
+                alert(data.message);
+            }
+            alert("Update order status successfully.")
             location.reload(true);
-        });
+        } catch (error) {
+            alert('There is a problem update order status, please try again later.<br />' + error);
+        } // error
+    };
+
+    $("#return").click(function () {
+        location.reload(true);
+    });
+
+
 
 </script>
