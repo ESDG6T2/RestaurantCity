@@ -63,7 +63,7 @@ def success_order():
         return replymessage, 400 # Bad Request
     print("Received an order log by " + __file__)
     send_order(order)
-    return jsonify('Successfully paid'), 201
+    return jsonify('Successfully paid'), 200
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=5555,debug=True)

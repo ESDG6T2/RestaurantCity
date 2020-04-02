@@ -28,7 +28,7 @@ def callback(channel, method, properties, body):  # required signature for the c
     
     # send request to order_flask service to update database
     orderId = order['orderId']
-    r = requests.post(url='http://127.0.0.1:6666/add-order/{}'.format(orderId),json=order)
+    r = requests.post(url='http://127.0.0.1:8010/add-order/{}'.format(orderId),json=order)
     
     # send to monitoring and notification
 

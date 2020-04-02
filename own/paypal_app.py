@@ -17,10 +17,9 @@ def index():
     url = request.url
     cut_index=url.find('?')
     url = url[cut_index+1:]
-    # print(url)
     data = unquote(unquote(url))
-    # print ()
     parsed = json.loads(data+"\"}")
+    # return parsed
     # return json.dumps(parsed, indent=4)
     # return parsed
     return render_template('index.html', data=parsed)
@@ -34,7 +33,7 @@ def payment():
     orderItemsList = []
     for i in range(len(orderItems)):
         orderItemsDict = {
-            "sku" : orderItems[i]['menuId'],
+            "sku" : orderItems[i]['sku'],
             "name" : orderItems[i]['foodName'],
             "price" : orderItems[i]['price'],
             "currency" : "SGD", 
@@ -46,8 +45,8 @@ def payment():
     # order_data = ImmutableMultiDict(order_data)
     # order_data.to_dict()
     # print(order_data['orderItems'])
-    # print(str(orderItemsList))
-    # print(str(price)+'.00')
+    print(str(orderItemsList))
+    print(str(price)+'.00')
     payment = paypalrestsdk.Payment({
         "intent": "sale",
         "payer": {
@@ -64,7 +63,7 @@ def payment():
             "description": "This is the payment transaction description."}]}) # TODO: need to input decription
 
     if payment.create():
-        print('Payment create success!')
+        print('Payment success!')
     else:
         print(payment.error)
 

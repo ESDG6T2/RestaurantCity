@@ -449,22 +449,23 @@
         var address = $('#address').val(),
             contact_number = $('#contact_number').val(),
             contact_person = $('#contact_person').val(),
-            cart_table = document.getElementById("added-cart-table"),
-            order_items = [];
-        item_field = ['sku', 'name', 'image', 'price', 'quantity'];
-        total = 0;
-        for (var i = 1; i < cart_table.rows.length - 1; i++) {
-            var row = cart_table.rows.item(i).cells,
-                item = {};
-            for (var j = 0; j < row.length - 1; j++) {
-                if (j != 2) {
-                    item[item_field[j]] = row.item(j).innerHTML;
-                }
-            }
-            order_items.push(item);
-            total += item['price'] * item['quantity']
+            totalAmount=$('#totalAmount').val();
 
-        }
+        order_items = $('#savedCartForm').serializeArray().reduce(function (obj, item) {
+            // console.log(item);
+            if (item.name == 'menuId') {
+                sub_obj = {};
+                sub_obj['sku'] = item.value;
+            }else if(item.name == 'quantity') {
+                sub_obj[item.name] = parseInt(item.value);
+                // console.log(item.name);
+                obj.push(sub_obj);
+
+            }else{
+                sub_obj[item.name] = item.value;
+            }
+            return obj;
+        }, []);
 
         var order = {
             'userId': userid,
