@@ -17,8 +17,10 @@ def index():
     url = request.url
     cut_index=url.find('?')
     url = url[cut_index+1:]
+    # print(url)
     data = unquote(unquote(url))
-    parsed = json.loads(data)
+    # print ()
+    parsed = json.loads(data+"\"}")
     # return json.dumps(parsed, indent=4)
     # return parsed
     return render_template('index.html', data=parsed)
@@ -32,8 +34,8 @@ def payment():
     orderItemsList = []
     for i in range(len(orderItems)):
         orderItemsDict = {
-            "sku" : orderItems[i]['sku'],
-            "name" : orderItems[i]['name'],
+            "sku" : orderItems[i]['menuId'],
+            "name" : orderItems[i]['foodName'],
             "price" : orderItems[i]['price'],
             "currency" : "SGD", 
             "quantity" : orderItems[i]['quantity']
