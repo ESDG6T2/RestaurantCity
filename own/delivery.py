@@ -21,7 +21,7 @@ def send_delivery_allocation(update_info):
     
     exchange_name = 'info_update'
     channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
-    channel.basic_publish(exchange=exchange_name, routing_key='order.info', body=message)
+    channel.basic_publish(exchange=exchange_name, routing_key='delivery.info', body=message)
 
 class OrderAllocation(db.Model):
     __tablename__ = 'order'
@@ -58,12 +58,20 @@ def find_by_driverID(driverId):
 def allocate_order(orderId):
     if not OrderAllocation.query.filter_by(orderId=orderId).first():
         return jsonify({"message": "No order with id: {}.".format(orderId)}), 400
+    else:
+        order = OrderAllocation.query.filter_by(orderId=orderId).first().json()
+        driverId = order['driverId']
+        if driverId:
+            return jsonify({"message": "Order {} has been assigned to driver {} for delivery.".format(orderId,driverId)}), 400
 
-    driver_list = [1, 2, 3, 4, 5]  # Assuming 5 drivers
+    driver_list = ['1', '2', '3', '4',' 5']  # Assuming 5 drivers
     delivering_orders = [x.json() for x in OrderAllocation.query.filter_by(orderStatus='delivering').all()]
+    
     delivering_man = [x['driverId'] for x in delivering_orders]
-
     available = [man for man in driver_list if man not in delivering_man]
+
+    if available == []:
+        return jsonify({"message": "No available drivers. Please wait for drivers to return"}), 400
     to_delivery = available[0]
     try:
         OrderAllocation.query.filter_by(orderId=orderId).update(dict(driverId=to_delivery)) # to update a order status

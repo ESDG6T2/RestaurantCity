@@ -23,15 +23,27 @@ def receiveLog():
 
 def callback(channel, method, properties, body): # required signature for the callback; no return
     data = json.loads(body)
-
+    orderItems = ''
     if data['type'] == 'order_receive':
-        print("Receive an order:")   
+        print("Receive an order:")
+        orderItems = 'Order Items: \n'
+        for item in data['orderItems']:
+            orderItems += "\t"+item['name'] + ": " + item['quantity'] + "\n" 
     elif data['type'] == 'order_update':
         print("Order updated:")
     elif data['type'] == 'feedback_receive':
         print("Receive a piece of feedback:")
-    
-    print(data)
+    else:
+        print("Order sent for delivery:")
+
+    monitoring_msg = "Type: {}\n".format(data['type']) + "Order ID: {}\n".format(data['orderId'])
+    if 'orderStatus' in data:
+        monitoring_msg += "Order Status: {}\n".format(data['orderStatus'])
+    else:
+        monitoring_msg += "Driver ID: {}\n".format(data['deliveryMan'])
+    monitoring_msg+=orderItems
+    print(monitoring_msg)
+    print()
 if __name__ == "__main__":  # execute this program only if it is run as a script (not by 'import')
     print("This is " + os.path.basename(__file__) + ": monitoring order creation and feedback submission...")
     receiveLog()
