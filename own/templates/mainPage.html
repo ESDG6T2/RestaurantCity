@@ -413,16 +413,16 @@
 <script>
     var url = String(window.location.href);
     // console.log(url);
-    if(url.includes('?')){
+    if(url.includes('?')&!url.includes('#')){
         var find_n = url.search(/[?]/g);
         var url_param = url.slice(find_n+1);
         var url_param = JSON.parse(url_param.replace(/%22/g,'"'));
-        // console.log(url_param);
+        console.log(url_param.url);
         var url_return = url_param['url'];
         delete url_param['url'];
         // console.log(url_param);
         if(url_param.hasOwnProperty('error')){
-            alert('Payment unsuccessful')
+            alert('Payment unsuccessful');
             window.location = url_return;
         }
         else{
@@ -432,6 +432,8 @@
         }
         // console.log(find_n);
 
+    }else if(url.includes('html#')){
+        window.location = window.location.pathname;
     }
 
     const userid = 'a';
@@ -628,12 +630,14 @@
             if (response.status == 200) {
                     $('#saved-cart-table tbody').empty();
                     $('#subTotal').empty();
-                    location.reload(true);
+                    window.location = window.location.pathname;
+                    // location.reload(true);
 
                 };
         } catch (error) {
             // Errors when calling the service; such as network error, 
         // service offline, etc
+            alert(response.status);
             alert
                 ('There is a problem deleting item, please try again later.<br />' + error);
         }
@@ -685,7 +689,8 @@
                 if (response.status == 200) {
                     $('#saved-cart-table tbody').empty();
                     $('#subTotal').empty();
-                    location.reload(true);
+                    window.location = window.location.pathname;
+                    // location.reload(true);
                 };
             } catch (error) {
                 alert
@@ -743,7 +748,8 @@
                     });
                 if (response.status == 201) {
                     alert('cart saved successfully');
-                    location.reload(true);
+                    window.location = window.location.pathname;
+                    // location.reload(true);
                 };
             } catch (error) {
                 alert
@@ -797,7 +803,8 @@
                         });
                     if (response.status == 201) {
                         alert('Item saved to cart successfully');
-                        location.reload(true);
+                        window.location = window.location.pathname;
+                        // location.reload(true);
                     };
                 } catch (error) {
                     alert
