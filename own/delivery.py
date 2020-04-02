@@ -1,4 +1,4 @@
-import json
+import json,pika
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -9,6 +9,19 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 CORS(app)
+
+def send_delivery_allocation(update_info):
+    hostname = 'localhost'
+    port = 5672
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
+    channel = connection.channel()
+
+    update_info['type'] = 'order_deliver'
+    message = json.dumps(update_info, default=str)
+    
+    exchange_name = 'info_update'
+    channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
+    channel.basic_publish(exchange=exchange_name, routing_key='delivery.info', body=message)
 
 class OrderAllocation(db.Model):
     __tablename__ = 'order'
@@ -45,16 +58,25 @@ def find_by_driverID(driverId):
 def allocate_order(orderId):
     if not OrderAllocation.query.filter_by(orderId=orderId).first():
         return jsonify({"message": "No order with id: {}.".format(orderId)}), 400
+    else:
+        order = OrderAllocation.query.filter_by(orderId=orderId).first().json()
+        driverId = order['driverId']
+        if driverId:
+            return jsonify({"message": "Order {} has been assigned to driver {} for delivery.".format(orderId,driverId)}), 400
 
-    driver_list = [1, 2, 3, 4, 5]  # Assuming 5 drivers
+    driver_list = ['1', '2', '3', '4',' 5']  # Assuming 5 drivers
     delivering_orders = [x.json() for x in OrderAllocation.query.filter_by(orderStatus='delivering').all()]
+    
     delivering_man = [x['driverId'] for x in delivering_orders]
-
     available = [man for man in driver_list if man not in delivering_man]
+
+    if available == []:
+        return jsonify({"message": "No available drivers. Please wait for drivers to return"}), 400
     to_delivery = available[0]
     try:
         OrderAllocation.query.filter_by(orderId=orderId).update(dict(driverId=to_delivery)) # to update a order status
         db.session.commit()
+        send_delivery_allocation({"orderId":orderId,"deliveryMan":to_delivery})
     except Exception as e:
         print(e)
         return jsonify({"message": "Error occurred allocating order with id: {}.".format(orderId)}), 400
