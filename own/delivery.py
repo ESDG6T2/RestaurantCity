@@ -1,4 +1,4 @@
-import json
+import json,pika
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -9,6 +9,19 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 CORS(app)
+
+def send_delivery_allocation(update_info):
+    hostname = 'localhost'
+    port = 5672
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
+    channel = connection.channel()
+
+    update_info['type'] = 'order_deliver'
+    message = json.dumps(update_info, default=str)
+    
+    exchange_name = 'info_update'
+    channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
+    channel.basic_publish(exchange=exchange_name, routing_key='order.info', body=message)
 
 class OrderAllocation(db.Model):
     __tablename__ = 'order'
@@ -55,6 +68,7 @@ def allocate_order(orderId):
     try:
         OrderAllocation.query.filter_by(orderId=orderId).update(dict(driverId=to_delivery)) # to update a order status
         db.session.commit()
+        send_delivery_allocation({"orderId":orderId,"deliveryMan":to_delivery})
     except Exception as e:
         print(e)
         return jsonify({"message": "Error occurred allocating order with id: {}.".format(orderId)}), 400

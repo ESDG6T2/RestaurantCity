@@ -10,18 +10,18 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
 
-# def send_order_status_update(update_info):
-#     hostname = 'localhost'
-#     port = 5672
-#     connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
-#     channel = connection.channel()
+def send_order_status_update(update_info):
+    hostname = 'localhost'
+    port = 5672
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
+    channel = connection.channel()
 
-#     update_info['type'] = 'order_update'
-#     message = json.dumps(update_info, default=str)
+    update_info['type'] = 'order_update'
+    message = json.dumps(update_info, default=str)
     
-#     exchange_name = 'info_update'
-#     channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
-#     channel.basic_publish(exchange=exchange_name, routing_key='order.info', body=message)
+    exchange_name = 'info_update'
+    channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
+    channel.basic_publish(exchange=exchange_name, routing_key='order.info', body=message)
 
 class Order(db.Model):
     __tablename__ = 'order'
@@ -50,7 +50,7 @@ class Order(db.Model):
             "totalAmount":self.totalAmount, "orderStatus":self.orderStatus, "datetime":self.datetime
         }
 
-    def json2(self):
+    def json_with_items(self):
         output={"orderId": self.orderId, "userId": self.userId, "deliveryAddress": self.deliveryAddress, "customerName": self.customerName, "contactNumber": self.contactNumber,
             "totalAmount":self.totalAmount, "orderStatus":self.orderStatus, "datetime":self.datetime
         }
@@ -110,7 +110,7 @@ def update_order():
     try:
         Order.query.filter_by(orderId=orderId).update(dict(orderStatus=data['orderStatus'])) # to update a order status
         db.session.commit()
-        # send_order_status_update(output)
+        send_order_status_update(output)
     except Exception as e:
         print(e)
         return jsonify({"message": "Error occurred updating order status of order with id: {}.".format(orderId)}), 400
@@ -127,8 +127,8 @@ def retrieve_order(userId):
     return jsonify(all_orders), 200
 
 @app.route("/ongoing-orders/")
-def getAllOrder():
-    orders={"orders": [order.json2() for order in Order.query.filter(Order.orderStatus!="delivered", Order.orderStatus!="delivering").all()]}
+def get_ongoing_orders():
+    orders={"orders": [order.json_with_items() for order in Order.query.filter(Order.orderStatus!="delivered", Order.orderStatus!="delivering").all()]}
     return(orders)
     
 if __name__ == "__main__":
