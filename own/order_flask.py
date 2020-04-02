@@ -98,7 +98,7 @@ def add_order(orderId):
 
     return jsonify(order.json()), 201  # CREATED
     
-@app.route('/update-order', methods=['PUT'])
+@app.route('/update-order/', methods=['PUT'])
 # to be used in business web UI
 def update_order():
     data = request.get_json()
@@ -126,10 +126,10 @@ def retrieve_order(userId):
 
     return jsonify(all_orders), 200
 
-@app.route("/getOrders")
+@app.route("/ongoing-orders/")
 def getAllOrder():
-    orders={"orders": [order.json2() for order in Order.query.filter(Order.orderStatus!="Delivered", Order.orderStatus!="Delivering").all()]}
+    orders={"orders": [order.json2() for order in Order.query.filter(Order.orderStatus!="delivered", Order.orderStatus!="delivering").all()]}
     return(orders)
     
 if __name__ == "__main__":
-     app.run(port=6666, host='0.0.0.0', debug=True)
+     app.run(port=8010, host='0.0.0.0', debug=True)
