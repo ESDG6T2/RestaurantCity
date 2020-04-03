@@ -22,13 +22,13 @@ body {
   width: 800px;
 }
 
-table {
+#ordertable {
   width: 100%;
   background-color: pink;
   border:1px;
 }
   
-td, th { 
+#ordertable td, th { 
     color: darken(lightpink);
     padding: 20px; 
 }

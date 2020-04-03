@@ -21,7 +21,7 @@
             <table id="ordertable" cellspacing="0" border="1">
                 <tr>
                     <th>Order ID</th>
-                    <th>Food List</th>
+                    <th>Food Name - Quantity</th>
                     <th>Customer Name</th>
                     <th>Contact Number</th>
                     <th>Date/Time</th>
@@ -91,12 +91,16 @@
                     var eachRow = "<tr>";
                     // console.log(data[i]);
                     eachRow += "<td align='center'>" +i+ "</td>";
-                    eachRow += "<td>";
+                    eachRow += "<td><table border='1'>";
+
                     for (var l = 0; l < orders[i]['menuItem'].length; l++) {
                         // for (const food in orders[i]['menuItem'][l]) {
-                        eachRow += window.menuDict[orders[i]['menuItem'][l]['menuId']] + " *" + orders[i]['menuItem'][l]['quantity'] + '<br>';
+                        eachRow +='<tr><td>'+ window.menuDict[orders[i]['menuItem'][l]['menuId']] + "</td>";
+                        eachRow +='<td>'+ orders[i]['menuItem'][l]['quantity'] + "</td></tr>";   
+
+                        // eachRow += window.menuDict[orders[i]['menuItem'][l]['menuId']] + " *" + orders[i]['menuItem'][l]['quantity'] + '<br>';
                     }
-                    eachRow += "</td>";
+                    eachRow += "</table></td>";
 
                     driverId = orders[i]['driverId']
                     if(!driverId){
@@ -146,29 +150,8 @@
     }
 
     async function updateStatusDelivering(selectedId) {
-        var serviceURL = "http://127.0.0.1:8010/update-order/" + selectedId;
-
-        try {
-            const response =
-                await fetch(
-                    serviceURL, {
-                    method: 'PUT', headers: {
-                        'Content-Type': 'application/json'
-                    }, body: JSON.stringify({ "orderStatus": 'delivering' })
-                });
-            const data = await response.json();
-            if (response.status != 200) {
-                showError(data.message);
-            } else {
-                location.reload(true);
-            }
-        } catch (error) {
-            showError
-                ('There is a problem updating order status, please try again later.<br />' + error);
-        } // error 
-
-
-        var serviceURL = "http://127.0.0.1:8000/allocate-order/{}".format(selectedId)
+        var serviceURL = "http://127.0.0.1:8000/allocate-order/{}".format(selectedId);
+        var to_continue = true;
         try {
             const response =
                 await fetch(
@@ -177,14 +160,36 @@
                 });
             const data = await response.json();
             if (response.status != 200) {
-                showError(data.message);
-            } else {
-                location.reload(true);
-            }
+                alert(data.message);
+                var to_continue = false;
+            } 
         } catch (error) {
             showError
                 ('There is a problem retrieving books data, please try again later.<br />' + error);
 
         } // error 
+
+        if(to_continue){
+            var serviceURL = "http://127.0.0.1:8010/update-order/" + selectedId;
+
+            try {
+                const response =
+                    await fetch(
+                        serviceURL, {
+                        method: 'PUT', headers: {
+                            'Content-Type': 'application/json'
+                        }, body: JSON.stringify({ "orderStatus": 'delivering' })
+                    });
+                const data = await response.json();
+                if (response.status != 200) {
+                    showError(data.message);
+                } else {
+                    location.reload(true);
+                }
+            } catch (error) {
+                showError
+                    ('There is a problem updating order status, please try again later.<br />' + error);
+            } // error 
+        }
     }
 </script>
