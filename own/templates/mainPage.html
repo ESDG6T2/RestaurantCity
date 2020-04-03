@@ -190,22 +190,22 @@
                                         </label>
                                         <br>
                                         <label class="radio-inline">
-                                            <input type="radio" name="experience" id="feedback-rating-score" value="1" >
+                                            <input type="radio" name="experience" id="feedback-rating-score" value="2" >
                                         2 - Dissatisfied 
                                         </label>
                                         <br>
                                         <label class="radio-inline">
-                                            <input type="radio" name="experience" id="feedback-rating-score" value="1" >
+                                            <input type="radio" name="experience" id="feedback-rating-score" value="3" >
                                         3 - Average 
                                         </label>
                                         <br>
                                         <label class="radio-inline">
-                                        <input type="radio" name="experience" id="feedback-rating-score" value="2" >
+                                        <input type="radio" name="experience" id="feedback-rating-score" value="4" >
                                         4 - Satisfied
                                         </label>
                                         <br>
                                         <label class="radio-inline">
-                                        <input type="radio" name="experience" id="feedback-rating-score" value="3" >
+                                        <input type="radio" name="experience" id="feedback-rating-score" value="5" >
                                         5 - Highly Satisfied
                                         </label>
                                         <br>
@@ -742,16 +742,16 @@
 
     $("#submit-feedback").click(async function (event) {
         event.preventDefault();
-        if ($("#feedback-content").val()=='' || $("#feedback-rating-score").val()==''){
+        var ratingS = document.querySelector('input[name="experience"]:checked');
+        if ($("#feedback-content").val()=='' || ratingS==null){
             alert('Please fill in all the field');
         }else{
-            var content = $('#feedback-content').val(),
-                rating = $('#feedback-rating-score').val(),
-                feedback = {
+            var content = $('#feedback-content').val();
+            var rating = ratingS.value;
+            var feedback = {
                     'feedback': content,
                     'star': rating
                 };
-
             var serviceURL = 'http://127.0.0.1:5556/feedback';
             try {
                 const response =
