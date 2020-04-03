@@ -128,7 +128,7 @@ def retrieve_order(userId):
 
 @app.route("/ongoing-orders/")
 def get_ongoing_orders():
-    orders={"orders": [order.json_with_items() for order in Order.query.filter(Order.orderStatus!="delivered").all()]}
+    orders={"orders": [order.json_with_items() for order in Order.query.filter(Order.orderStatus!="delivered").order_by(Order.datetime.desc()).all()]}
     return(orders),200
     
 if __name__ == "__main__":
