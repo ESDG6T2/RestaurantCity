@@ -12,21 +12,21 @@
 <body>
     <div id='option-bar'></div>
     <div class="container">
-        <p><br><br><br></p>
+        <p><br></p>
     </div>
 
-    <div id='main-container' class="table-users">
+    <div id='main-container'">
         <div class="header">Restaurant City Management</div>
         <div class="container">
             <table id="ordertable" cellspacing="0" border="1">
                 <tr>
-                    <th>OrderID</th>
+                    <th>Order ID</th>
                     <th>Food List</th>
-                    <th>UserID</th>
+                    <th>Customer Name</th>
                     <th>Contact Number</th>
                     <th>Date/Time</th>
-                    <th>Total Amount</th>
                     <th>Status</th>
+                    <th>Driver ID</th>
                     <th>Action</th>
                 </tr>
             </table>
@@ -52,10 +52,30 @@
         $('#main-container')
             .append("<label>" + message + "</label>");
     }
+    
+    $(async() =>{
+        var serviceURL = "http://127.0.0.1:5001/menu/";
+        try {
+            const response =
+                await fetch(
+                    serviceURL, { method: 'GET' }
+                );
+            const data = await response.json();
+            var menuItems = data.menu; 
+            var menuDict ={}
+            for (var i = 0; i < menuItems.length; i++) { 
+                menuDict[menuItems[i]['menuId']] = menuItems[i]['foodName']
+            }
+            window.menuDict = menuDict;
+            console.log(menuDict);
+        }catch(error){
+            showError("Error retrieving menu data: "+ error);
+        }     
+    });
+
     $(async () => {
         $('#deliveringtable').hide();
         var serviceURL = "http://127.0.0.1:8010/ongoing-orders/";
-
         try {
             const response =
                 await fetch(
@@ -70,18 +90,24 @@
                 for (var i = 0; i < orders.length; i++) {
                     var eachRow = "<tr>";
                     // console.log(data[i]);
-                    eachRow += "<td align='center'>" + orders[i]['orderId'] + "</td>";
+                    eachRow += "<td align='center'>" +i+ "</td>";
                     eachRow += "<td>";
                     for (var l = 0; l < orders[i]['menuItem'].length; l++) {
                         // for (const food in orders[i]['menuItem'][l]) {
-                        eachRow += orders[i]['menuItem'][l]['menuId'] + ' X' + orders[i]['menuItem'][l]['quantity'] + '<br>';
+                        eachRow += window.menuDict[orders[i]['menuItem'][l]['menuId']] + " *" + orders[i]['menuItem'][l]['quantity'] + '<br>';
                     }
                     eachRow += "</td>";
-                    eachRow += "<td align='center'>" + orders[i]['userId'] + "</td>" +
+
+                    driverId = orders[i]['driverId']
+                    if(!driverId){
+                        driverId ="-"
+                    }
+                    eachRow += 
+                        "<td align='center'>" + orders[i]['customerName'] + "</td>" +
                         "<td align='center'>" + orders[i]['contactNumber'] + "</td>" +
                         "<td align='center'>" + orders[i]['datetime'] + "</td>" +
-                        "<td align='center'>$" + orders[i]['totalAmount'] + "</td>" +
-                        "<td align='center'>" + orders[i]['orderStatus'] + "</td>" +
+                        "<td align='center'>" + orders[i]['orderStatus'] + "</td>" + 
+                        "<td align='center'>" + driverId + "</td>" +
                         "<td align='center'><input type='button' id='preparing' name='preparing" + orders[i]['orderId'] + "' onclick=updateStatusPreparing('" + orders[i]['orderId'] + "') value='Preparing'/><input type='button' id='delivering' name='delivering" + orders[i]['orderId'] + "' onclick=updateStatusDelivering('" + orders[i]['orderId'] + "') value='Delivering'/></td>";
                     eachRow += "</tr>";
                     $('#ordertable').append(eachRow);
@@ -108,7 +134,7 @@
                 });
 
             const data = await response.json();
-            if (response.status != 201) {
+            if (response.status != 200) {
                 showError(data.message);
             } else {
                 location.reload(true);
@@ -131,7 +157,7 @@
                     }, body: JSON.stringify({ "orderStatus": 'delivering' })
                 });
             const data = await response.json();
-            if (response.status != 201) {
+            if (response.status != 200) {
                 showError(data.message);
             } else {
                 location.reload(true);
@@ -150,7 +176,7 @@
                     method: 'PUT'
                 });
             const data = await response.json();
-            if (response.status != 201) {
+            if (response.status != 200) {
                 showError(data.message);
             } else {
                 location.reload(true);

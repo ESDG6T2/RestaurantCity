@@ -34,6 +34,7 @@ class Order(db.Model):
     totalAmount=db.Column(db.DECIMAL(5,2), nullable=False)
     orderStatus=db.Column(db.String(10), nullable=True)
     datetime = db.Column(db.DateTime, nullable=False)
+    driverId = db.Column(db.String(45),nullable=True)
 
     def __init__(self, orderId, userId, deliveryAddress,customerName,contactNumber,totalAmount,orderStatus,orderDatetime):
         self.orderId = orderId
@@ -47,12 +48,12 @@ class Order(db.Model):
 
     def json(self):
         return {"orderId": self.orderId, "userId": self.userId, "deliveryAddress": self.deliveryAddress, "customerName": self.customerName, "contactNumber": self.contactNumber,
-            "totalAmount":self.totalAmount, "orderStatus":self.orderStatus, "datetime":self.datetime
+            "totalAmount":self.totalAmount, "orderStatus":self.orderStatus, "datetime":self.datetime, "driverId":self.driverId
         }
 
     def json_with_items(self):
         output={"orderId": self.orderId, "userId": self.userId, "deliveryAddress": self.deliveryAddress, "customerName": self.customerName, "contactNumber": self.contactNumber,
-            "totalAmount":self.totalAmount, "orderStatus":self.orderStatus, "datetime":self.datetime
+            "totalAmount":self.totalAmount, "orderStatus":self.orderStatus, "datetime":self.datetime, "driverId":self.driverId
         }
         output['menuItem']=[orderlist.json() for orderlist in OrderDetail.query.filter_by(orderId=self.orderId).all()] 
         return output
@@ -112,9 +113,9 @@ def update_order(orderId):
         send_order_status_update(output)
     except Exception as e:
         print(e)
-        return jsonify({"message": "Error occurred updating order status of order with id: {}.".format(orderId)}), 400
+        return jsonify({"message": "Error occurred updating order status of order with id: {}.".format(orderId)}), 500
         
-    return jsonify(output),201
+    return jsonify(output),200
 
 @app.route('/order/<string:userId>') # complete
 def retrieve_order(userId):
@@ -127,8 +128,8 @@ def retrieve_order(userId):
 
 @app.route("/ongoing-orders/")
 def get_ongoing_orders():
-    orders={"orders": [order.json_with_items() for order in Order.query.filter(Order.orderStatus!="delivered", Order.orderStatus!="delivering").all()]}
-    return(orders)
+    orders={"orders": [order.json_with_items() for order in Order.query.filter(Order.orderStatus!="delivered").all()]}
+    return(orders),200
     
 if __name__ == "__main__":
      app.run(port=8010, host='0.0.0.0', debug=True)

@@ -76,6 +76,7 @@ def allocate_order(orderId):
     if available == []:
         return jsonify({"message": "No available drivers. Please wait for drivers to return"}), 400
     to_delivery = available[0]
+    
     try:
         OrderAllocation.query.filter_by(orderId=orderId).update(dict(driverId=to_delivery)) # to update a order status
         db.session.commit()
@@ -84,7 +85,7 @@ def allocate_order(orderId):
         print(e)
         return jsonify({"message": "Error occurred allocating order with id: {}.".format(orderId)}), 400
         
-    return jsonify({"orderId":orderId,"driverId":to_delivery}),201
+    return jsonify({"orderId":orderId,"driverId":to_delivery}),200
 
 if __name__ == "__main__":
     app.run(debug=True, port=8000,host='0.0.0.0')

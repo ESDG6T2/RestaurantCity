@@ -110,7 +110,7 @@
                     "<td>" + data.customerName + "</td>" +
                     "<td>" + data.contactNumber + "</td>" +
                     "<td>" + data.deliveryAddress + "</td>" +
-                    '<td><button onclick=finishDelivery("' + data.orderId + '")>Finish Delivery</button ></td ></tr ></tbody >';
+                    '<td><button style="background-color:gray;color:white;" onclick=finishDelivery("' + data.orderId + '")>Finish Delivery</button ></td ></tr ></tbody >';
                 $('#allocated-order-table').append(row);
                 console.log(row);
             } else {
@@ -134,7 +134,7 @@
                     }, body: JSON.stringify(body)
                 });
             const data = await response.json();
-            if (response.status != 201) {
+            if (response.status != 200) {
                 alert(data.message);
             }
             alert("Update order status successfully.")
