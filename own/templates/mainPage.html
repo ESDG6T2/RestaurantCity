@@ -501,7 +501,7 @@
                 var count=0;
                 var rows = "";
                 for (const item of cart_items) {
-                    var itemUrl = "http://127.0.0.1:5001/menu/{}".format(item.menuId);
+                    var itemUrl = "http://127.0.0.1:5001/menu-item/{}".format(item.menuId);
                     const response =
                         await fetch(
                             itemUrl, {
