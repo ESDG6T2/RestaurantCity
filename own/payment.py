@@ -28,11 +28,11 @@ def send_order(order): # only when paypal payment succeed
 
     print('Payment succeeded, order is sent')
 
-@app.route('/payment',methods=['POST'])
-def pay_order():
-    # Assuming payment successful
-    order = request.get_json()
-    return order, 200
+# @app.route('/payment',methods=['POST'])
+# def pay_order():
+#     # Assuming payment successful
+#     order = request.get_json()
+#     return order, 200
     # print(order)
     # send_order(order)
     # return jsonify(order), 200

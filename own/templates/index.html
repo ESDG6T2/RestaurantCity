@@ -13,6 +13,34 @@
 <script src="https://www.paypalobjects.com/api/checkout.js"></script>
 
 <script>
+        async function successPost(data){
+    var serviceURL = 'http://127.0.0.1:5555/successpayment';
+    try {
+        const response =
+            await fetch(
+                serviceURL, {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            }
+            );
+        const result = await response;
+        // console.log(result.status);
+        if (result.status == 200) {
+            alert('Payment Successful');
+            window.location = url;
+        }
+    } catch (error) {
+        // Errors when calling the service; such as network error, 
+        // service offline, etc
+        // alert(result.status);
+        alert('There is a problem with payment submission, please try again later.<br />' + error);
+        window.location = url;
+
+    }
+    };
     // console.log(all_data);
     var url = "{{data.url}}";
     // console.log(url);
@@ -49,15 +77,18 @@
                 paymentID: data.paymentID,
                 payerID:   data.payerID
             }).then(function(res) {
-                console.log(res.success)
+                // console.log(res.success);
                 if(res.success){
                     var all_data = "{{data}}";
                     var all_data = JSON.parse(all_data.replace(/&#39;/g,'"'));
-                    // console.log(all_data);
-                    window.location = url + '?' + JSON.stringify(all_data)
+                    // console.log(all_data['url']);
+                    delete all_data['url'];
+                    // console.log(all_data['url']);
+                    successPost(all_data);
+                    // window.location = url + '?' + JSON.stringify(all_data)
                 }else{
                     var error_message = {"error": "unsuccessful"};
-                    window.location = url + '?' + JSON.stringify(error_message)
+                    // window.location = url + '?' + JSON.stringify(error_message)
                 }
                 // The payment is complete!
                 // You can now show a confirmation message to the customer

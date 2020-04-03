@@ -98,11 +98,10 @@ def add_order(orderId):
 
     return jsonify(order.json()), 201  # CREATED
     
-@app.route('/update-order/', methods=['PUT'])
+@app.route('/update-order/<string:orderId>', methods=['PUT'])
 # to be used in business web UI
-def update_order():
+def update_order(orderId):
     data = request.get_json()
-    orderId=data['orderId']
     if not Order.query.filter_by(orderId=orderId).first():
         return jsonify({"message": "No order with id: {}.".format(orderId)}), 400
 
