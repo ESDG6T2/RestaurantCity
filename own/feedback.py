@@ -56,5 +56,9 @@ def create_feedback():
 
     return jsonify(feedback.json()), 201
 
+@app.route("/getFeedback")
+def getAllFeedback():
+    return jsonify({"Feedback": [feedback.json() for feedback in Feedback.query.all()]})
+
 if __name__ == '__main__':
     app.run(port=5556, debug=True,host='0.0.0.0') 

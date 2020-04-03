@@ -5,13 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js'></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="main.css">
     <title>Restaurant City Management</title>
 </head>
 
 <body>
-    <div id='option-bar'></div>
-    <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+        <a class="navbar-brand" href="#">Restaurant City</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">Order</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#Feedback">Feedback</a>
+            </li>
+            </ul>
+        </div>
+        </div>
+    </nav>
+    <div  class="container">
         <p><br></p>
     </div>
 
@@ -31,10 +52,41 @@
                 </tr>
             </table>
         </div>
+        <div class="container">
+            <table id="feedbacktable" cellspacing="0" border="1">
+                <tr>
+                    <th>Feedback ID</th>
+                    <th>Date Time</th>
+                    <th>Feedback</th>
+                    <th>Rating</th>
+                </tr>
+            </table>
+        </div>
     </div>
 </body>
 
 <script>
+    // Add active class to the current button (highlight it)
+    var header = document.getElementById("navbarResponsive");
+    var btns = header.getElementsByClassName("nav-link");
+    // initalize page
+    $('#ordertable').show();
+    $('#feedbacktable').hide();
+    for (var i = 0; i < btns.length; i++) {
+        btns[i].addEventListener("click", async function() {
+            var current = document.getElementsByClassName("active");
+            current[0].className = current[0].className.replace(" active", "");
+            this.className += " active";
+            $('#ordertable').hide();
+            $('#feedbacktable').hide();
+            if(this.text=='Order'){
+                $('#ordertable').show();
+            }else if(this.text=='Feedback'){
+                $('#feedbacktable').show();
+            }
+        })
+    }
+    
     String.prototype.format = function () {
         var i = 0,
             args = arguments;
@@ -46,7 +98,6 @@
     function showError(message) {
         // Hide the table and button in the event of error
         $('#ordertable').hide();
-        $('#deliveringtable').hide();
 
         // Display an error under the main container
         $('#main-container')
@@ -74,7 +125,6 @@
     });
 
     $(async () => {
-        $('#deliveringtable').hide();
         var serviceURL = "http://127.0.0.1:8010/ongoing-orders/";
         try {
             const response =
@@ -86,11 +136,11 @@
             if (!orders || !orders.length) {
                 $('#ordertable').append("<tr><td align='center' colspan='11'>Delivery List is empty or undefined.</td></tr>");
             } else {
-                console.log(orders);
+                // console.log(orders);
                 for (var i = 0; i < orders.length; i++) {
                     var eachRow = "<tr>";
                     // console.log(data[i]);
-                    eachRow += "<td align='center'>" +i+ "</td>";
+                    eachRow += "<td align='center'>" +(i+1)+ "</td>";
                     eachRow += "<td><table border='1'>";
 
                     for (var l = 0; l < orders[i]['menuItem'].length; l++) {
@@ -125,6 +175,37 @@
 
         } // error
     })
+    $(async() =>{
+        var serviceURL = "http://127.0.0.1:5556/getFeedback";
+        try {
+            const response =
+                await fetch(
+                    serviceURL, { method: 'GET' }
+                );
+            const data = await response.json();
+            var feedback = data.Feedback;
+            var total=0;
+            var count=0;
+            for (var i = 0; i < feedback.length; i++) {
+                var eachRow = "<tr>";
+                // console.log(data[i]);
+                eachRow += "<td align='center'>" +(i+1)+ "</td>"+
+                    "<td align='center'>" + feedback[i]['datetime'] + "</td>" +
+                    "<td align='center'>" + feedback[i]['feedback'] + "</td>" +
+                    "<td align='center'>" + Math.round(feedback[i]['star'],2)+ "</td>"+
+                 "</tr>";
+                count++;
+                total=total+parseInt(feedback[i]['star']);
+                $('#feedbacktable').append(eachRow); 
+            }
+            console.log(total);
+            average=total/count;
+            $('#feedbacktable').append("<tr><th colspan='3' class='text-right'>Average  Rating</th><th class='text-center'>"+average+"</th></tr>")
+            // console.log(feedback);
+        }catch(error){
+            showError("Error retrieving menu data: "+ error);
+        }     
+    });
 
     async function updateStatusPreparing(selectedId) {
         var serviceURL = "http://127.0.0.1:8010/update-order/" + selectedId;
