@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
+from os import environ
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root@localhost:3306/restaurantcity_cart'
+# app.config['SQLALCHEMY_DATABASE_URI'] = environ.get("dbURL")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -31,7 +33,7 @@ def get_cart(userid):
 
     return jsonify(carts_json), 200
 
-@app.route("/delete-cart/<string:userid>",methods=['GET'])
+@app.route("/delete-cart/<string:userid>",methods=['DELETE'])
 def delete_cart(userid):
     try:
         Cart.query.filter_by(userid=userid).delete()
@@ -42,12 +44,13 @@ def delete_cart(userid):
     return jsonify({"message":"Cart is deleted successfully"}), 200
 
 
-@app.route("/delete-cart-item/<string:userid>&<string:menuId>",methods=['GET'])
+@app.route("/delete-cart-item/<string:userid>&<string:menuId>",methods=['DELETE'])
 def delete_cart_item(userid,menuId):
     try:
-        Cart.query.filter_by(userid=userid,menuId=menuId).delete()
+        Cart.query.filter(Cart.userid==userid,Cart.menuId==menuId).delete()
         db.session.commit()
-    except:
+    except Exception as e:
+        print(e)
         return jsonify({"message": "An error occurred deleting the item."}), 500
 
     return jsonify({"message":"Item is deleted successfully"}), 200
