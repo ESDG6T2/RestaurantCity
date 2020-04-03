@@ -122,8 +122,8 @@
     });
 
     async function finishDelivery(orderId) {
-        var serviceURL = "http://127.0.0.1:8010/update-order/";
-        body = { "orderId": orderId, "orderStatus": "delivered" }
+        var serviceURL = "http://127.0.0.1:8010/update-order/" + orderId;
+        body = { "orderStatus": "delivered" }
         console.log(JSON.stringify(body));
         try {
             const response =

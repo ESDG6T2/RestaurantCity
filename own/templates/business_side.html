@@ -11,21 +11,14 @@
 
 <body>
     <div id='option-bar'></div>
-        <!-- <table>
-            <tr><th colspan="2"><h2>Restaurant City Management</h2></th></tr>
-             <tr>
-                <td><input type="button" id='delivering' name='delivering' value="Delivering"/></td>
-                <td><input type="button" id='order' name='order' value="Order List"/></td>
-            </tr> -->
-        <!-- </table>  -->
     <div class="container">
         <p><br><br><br></p>
     </div>
 
     <div id='main-container' class="table-users">
         <div class="header">Restaurant City Management</div>
-            <div class="container">
-            <table id="ordertable" cellspacing="0">
+        <div class="container">
+            <table id="ordertable" cellspacing="0" border="1">
                 <tr>
                     <th>OrderID</th>
                     <th>Food List</th>
@@ -37,26 +30,7 @@
                     <th>Action</th>
                 </tr>
             </table>
-            </div>
-
-        <!-- <table border="1" id='deliveringtable'>
-            <tr>
-                <th>OrderIDss</th>
-                <th>Food List</th>
-                <th>UserID</th>
-                <th>Billing Address</th>
-                <th>Postal Address</th>
-                <th>Contact Number</th>
-                <th>Date/Time</th>
-                <th>Total Amount</th>
-                <th>Delivery man</th>
-                <th>Status</th>
-                <th>Action</th>
-            </tr>
-            <tbody id='deliveringtableBody'>
-
-            </tbody>
-        </table> -->
+        </div>
     </div>
 </body>
 
@@ -108,7 +82,7 @@
                         "<td align='center'>" + orders[i]['datetime'] + "</td>" +
                         "<td align='center'>$" + orders[i]['totalAmount'] + "</td>" +
                         "<td align='center'>" + orders[i]['orderStatus'] + "</td>" +
-                        "<td align='center'><input type='button' id='preparing' name='preparing" + orders[i]['orderId'] + "' onclick=updateStatusP('" + orders[i]['orderId'] + "') value='Preparing'/><input type='button' id='delivering' name='delivering" + orders[i]['orderId'] + "' onclick=updateStatusD('" + orders[i]['orderId'] + "') value='Delivering'/></td>";
+                        "<td align='center'><input type='button' id='preparing' name='preparing" + orders[i]['orderId'] + "' onclick=updateStatusPreparing('" + orders[i]['orderId'] + "') value='Preparing'/><input type='button' id='delivering' name='delivering" + orders[i]['orderId'] + "' onclick=updateStatusDelivering('" + orders[i]['orderId'] + "') value='Delivering'/></td>";
                     eachRow += "</tr>";
                     $('#ordertable').append(eachRow);
                 }
@@ -122,17 +96,15 @@
         } // error
     })
 
-    async function updateStatusP(selectedId) {
-        var serviceURL = "http://127.0.0.1:8010/update-order/";
-
-        console.log(JSON.stringify({ "orderId": selectedId, "orderStatus": "preparing" }))
+    async function updateStatusPreparing(selectedId) {
+        var serviceURL = "http://127.0.0.1:8010/update-order/" + selectedId;
         try {
             const response =
                 await fetch(
                     serviceURL, {
                     method: 'PUT', headers: {
                         'Content-Type': 'application/json'
-                    }, body: JSON.stringify({ "orderId": selectedId, "orderStatus": "preparing" })
+                    }, body: JSON.stringify({ "orderStatus": "preparing" })
                 });
 
             const data = await response.json();
@@ -143,12 +115,12 @@
             }
         } catch (error) {
             showError
-                ('There is a problem retrieving books data, please try again later.<br />' + error);
+                ('There is a problem updating order status, please try again later.<br />' + error);
         } // error
     }
 
-    async function updateStatusD(selectedId) {
-        var serviceURL = "http://127.0.0.1:8010/update-order/";
+    async function updateStatusDelivering(selectedId) {
+        var serviceURL = "http://127.0.0.1:8010/update-order/" + selectedId;
 
         try {
             const response =
@@ -156,7 +128,7 @@
                     serviceURL, {
                     method: 'PUT', headers: {
                         'Content-Type': 'application/json'
-                    }, body: JSON.stringify({ "orderId": selectedId, "orderStatus": 'delivering' })
+                    }, body: JSON.stringify({ "orderStatus": 'delivering' })
                 });
             const data = await response.json();
             if (response.status != 201) {
