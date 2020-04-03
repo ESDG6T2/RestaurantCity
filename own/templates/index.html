@@ -30,7 +30,7 @@
         // console.log(result.status);
         if (result.status == 200) {
             alert('Payment Successful');
-            window.location = url;
+            setTimeout(() => {  window.location = url; }, 3500);
         }
     } catch (error) {
         // Errors when calling the service; such as network error, 

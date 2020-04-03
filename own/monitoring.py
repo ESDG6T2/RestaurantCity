@@ -28,7 +28,7 @@ def callback(channel, method, properties, body): # required signature for the ca
         print("Receive an order:")
         orderItems = 'Order Items: \n'
         for item in data['orderItems']:
-            orderItems += "\t"+item['name'] + ": " + item['quantity'] + "\n" 
+            orderItems += "\t"+item['foodName'] + ": " + str(item['quantity']) + "\n" 
     elif data['type'] == 'order_update':
         print("Order updated:")
     elif data['type'] == 'feedback_receive':
