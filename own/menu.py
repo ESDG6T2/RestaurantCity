@@ -27,11 +27,11 @@ class Menu(db.Model):
         return {"menuId": self.menuId, "foodName": self.foodName, "price": self.price}
 
 
-@app.route("/menu")
+@app.route("/menu/")
 def getAllMenu():
     return jsonify({"menu": [menu.json() for menu in Menu.query.all()]})
 
-@app.route("/menu/<string:menuId>")
+@app.route("/menu-item/<string:menuId>")
 def get_item(menuId):
     item = Menu.query.filter_by(menuId=menuId).first()
 
