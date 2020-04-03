@@ -10,8 +10,8 @@ class DBHelper:
     def end(self):
         self.conexion.close()
 #         self.cursor.close() # The code works if i remove this line;
-    def get_user_orders(self,userid):
-        sql = 'SELECT * FROM `order` WHERE `userid` = "{}"'.format(userid)
+    def get_user_ongoing_orders(self,userid):
+        sql = 'SELECT * FROM `order` WHERE `userid` = "{}" and `orderStatus` != "delivered"'.format(userid)
         self.cursor.execute(sql)
         columns = self.cursor.column_names
         result = [{columns[i]:v for i, v in enumerate(element)} for element in self.cursor.fetchall()]

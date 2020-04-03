@@ -53,7 +53,7 @@ def handle_updates(updates):
             reply_msg = 'Dear {}, thank you for choosing Restaurant City. Your order information:\n'.format(text[1:])
 
             userid = text[1:]
-            all_orders = db.get_user_orders(userid)
+            all_orders = db.get_user_ongoing_orders(userid)
 
             if len(all_orders) > 1:
                 for i, order in enumerate(all_orders):
