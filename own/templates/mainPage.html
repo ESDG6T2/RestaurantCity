@@ -48,8 +48,6 @@
     
 
     <div id='top-section' style='text-align:center'></div>
-        
-    <!-- <h1>Welcome to Restaurant City</h1> -->
         <hr>
     </div>
     <div id='main-section' height='100%'; width='100%'>
@@ -154,7 +152,7 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between">
                           <span>Total (SGD)</span>
-                          <strong id='TotalAmt'>$0.00</strong><input type='hidden' id='totalAmount' value='0.0'>
+                          <strong id='TotalAmt'>$0.00</strong><input type='hidden' id='totalAmount' value='0'>
                         </li>
                       </ul>
                       <form class="card p-2">
@@ -366,48 +364,6 @@
 
        
 
-    <!-- End of Contact -->
-
-    <!-- <div id='hidden-section' width='100%'>
-        <div id='cart-info' style='width:40%;display:inline-table'>
-            <h2>Your ordered food items</h2>
-            <table border='1' id='added-cart-table'>
-                <thead>
-                    <tr align="center">
-                        <th style='display:None'>Item id</th>
-                        <th>Item name</th>
-                        <th>Item image</th>
-                        <th>Unit price</th>
-                        <th>Quantity ordered</th>
-                        <th>Subtotal</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
-        <div id='customer-info' style='margin:0 0 0 100px;width:50%;display:inline-table'>
-            <h2>Please key in your information</h2>
-            <form onsubmit="return false" method="POST">
-                <table style='padding:10px 0 0 0'>
-                    <tr>
-                        <td>Delivery Address</td>
-                        <td><input type="text" id='address'></td>
-                    </tr>
-                    <tr>
-                        <td>Contact Person</td>
-                        <td><input type="text" id='contact_person'></td>
-                    </tr>
-                    <tr>
-                        <td>Contact Number</td>
-                        <td><input type="text" id='contact_number'></td>
-                    </tr>
-                    <tr></tr>
-                    <tr>
-                        <td colspan="2"><input type="submit" value='Proceed to Payment' id='payment'></td>
-                    </tr>
-                </table>
-            </form>
-        </div>
-    </div> -->
 </body>
 
 
@@ -447,8 +403,6 @@
             $('#Cart').hide();
             $('#Feedback').hide();
             $('#Contact').hide();
-            $('#main-section').show();
-            $('#hidden-section').hide();
             if(this.text=='Home'){
                 $('#Home').show();
             }else if(this.text=='Cart'){
@@ -498,7 +452,6 @@
     // load menu
     $(async () => {
 
-        $('#hidden-section').hide();
         var serviceURL = "http://127.0.0.1:5001/menu";
 
         try {
@@ -521,7 +474,7 @@
             // Errors when calling the service; such as network error, 
             // service offline, etc
             alert
-                ('There is a problem retrieving books data, please try again later.<br />' + error);
+                ('There is a problem retrieving menu data, please try again later.<br />' + error);
 
         } // error
 
@@ -624,38 +577,7 @@
                 // ('There is a problem deleting item, please try again later.<br />' + error);
         }
     }
-    // load current orders
-    // async function load_orders() {
-    //     var serviceURL = "http://127.0.0.1:6666/order/".format(userid);
 
-    //     try {
-    //         const response =
-    //             await fetch(
-    //                 serviceURL, {
-    //                 method: 'GET'
-    //             }
-    //             );
-    //         const data = await response.json();
-    //         var idx = 1;
-    //         for (var order of data) {
-    //             each
-    //             eachRow = "<tbody><tr align='center'>" +
-    //                 "<td style='display:none'><input type='hidden' name='menuId' value='{}'>{}</td>".format(item.menuId, item.menuId) +
-    //                 "<td>{}<input type='hidden' name='foodName' value='{}'></td>".format(item_name, item_name) +
-    //                 "<td>${}<input type='hidden' name='price' value='{}'></td>".format(item_price, item_price) +
-    //                 "<td>{}<input type='hidden' name='quantity' value='{}'></td>".format(item.quantity, item.quantity) +
-    //                 "</tr></tbody>";
-    //             $('#ongoing-order-table').append(eachRow);
-
-    //         }
-    //     } catch (error) {
-    //         // Errors when calling the service; such as network error, 
-    //         // service offline, etc
-    //         alert
-    //             ('There is a problem retrieving cart data, please try again later.<br />' + error);
-    //     } // error
-
-    // };
 
     async function delete_cart_data() {
         if (confirm("Confirm delete saved cart?")) {
@@ -800,167 +722,89 @@
         
 
     })
-    // $("#submit_cart").click(function (e) {
-    //     e.preventDefault();
-    //     $('#main-section').hide();
-    //     $('#hidden-section').show();
-    //     var total = 0,
-    //         idx = 0,
-    //         data = $('form').serializeArray().reduce(function (obj, item) {
-    //             if (item.name == 'menuId') {
-    //                 obj[idx] = {};
-    //             }
-    //             obj[idx][item.name] = item.value;
-    //             switch (item.name) {
-    //                 case 'menuId':
-    //                     subtotal = 1;
-    //                     break;
-    //                 case 'price':
-    //                     subtotal *= item.value;
-    //                     break;
-    //                 case 'quantity':
-    //                     subtotal *= item.value;
-    //                     obj[idx]['subtotal'] = subtotal;
-    //                     idx++;
-    //                     break;
-    //             }
-    //             return obj;
-    //         }, {});
-    //     // console.log(data);
-
-    //     var total = 0;
-    //     $("#added-cart-table tbody").empty()
-    //     for (const [key, value] of Object.entries(data)) {
-    //         if (value['quantity'] > 0) {
-    //             console.log(value);
-    //             row = '<tbody><tr align="center">' +
-    //                 '<td style="display:none">{}</td>'.format(value['menuId']) +
-    //                 '<td>{}</td>'.format(value['foodName']) +
-    //                 '<td><img src="../img/{}.jpg" height=100 width=100></td>'.format(value['menuId']) +
-    //                 '<td>{}</td>'.format(value['price']) +
-    //                 '<td>{}</td>'.format(value['quantity']) +
-    //                 '<td>${}</td>'.format(value['subtotal']) +
-    //                 '</tr></tbody>';
-    //             total += value['subtotal'];
-    //             $("#added-cart-table").append(row);
-    //         }
-    //     }
-    //     row = '<tbody><tr><td align="right" colspan=4><b>Total Amount</b></td><td align="center"><b>${}</b></td></tr></tbody>'.format(total);
-    //     $("#added-cart-table").append(row);
-    // });
 
     $("#payment").click(async function (event) {
         event.preventDefault();
-        var address = $('#address').val(),
-            contact_number = $('#contact_number').val(),
-            contact_person = $('#contact_person').val(),
-            totalAmount=$('#totalAmount').val();
+        if ($("#address").val()=='' || $("#contact_number").val()=='' || $("#contact_person").val()==''){
+            alert('Please fill in all the field');
+        }else if($('#totalAmount').val()==0){
+            alert('There is no order in the cart.');
+        }else{
+            var address = $('#address').val(),
+                contact_number = $('#contact_number').val(),
+                contact_person = $('#contact_person').val(),
+                totalAmount=$('#totalAmount').val();
 
-        order_items = $('#savedCartForm').serializeArray().reduce(function (obj, item) {
-            // console.log(item);
-            if (item.name == 'menuId') {
-                sub_obj = {};
-                sub_obj['sku'] = item.value;
-            }else if(item.name == 'quantity') {
-                sub_obj[item.name] = parseInt(item.value);
-                // console.log(item.name);
-                obj.push(sub_obj);
+            order_items = $('#savedCartForm').serializeArray().reduce(function (obj, item) {
+                // console.log(item);
+                if (item.name == 'menuId') {
+                    sub_obj = {};
+                    sub_obj['sku'] = item.value;
+                }else if(item.name == 'quantity') {
+                    sub_obj[item.name] = parseInt(item.value);
+                    // console.log(item.name);
+                    obj.push(sub_obj);
 
-            }else{
-                sub_obj[item.name] = item.value;
-            }
-            return obj;
-        }, []);
+                }else{
+                    sub_obj[item.name] = item.value;
+                }
+                return obj;
+            }, []);
 
-        var order = {
-            'userId': userid,
-            'deliveryAddress': address,
-            'contactNumber': contact_number,
-            'customerName': contact_person,
-            'orderItems': order_items,
-            'totalAmount': totalAmount
-        };
-        // console.log(order);
-        var url = String(window.location.href);
-        // console.log(url);
-        // serviceURL = 'http://127.0.0.1:5555/payment';
-        // // try {
-        //     $.ajax({
-        //         type: 'POST',
-        //         contentType: 'application/json',
-        //         data: JSON.stringify(order),
-        //         dataType: 'json',
-        //         url: serviceURL,
-        //         success: function (e){
-        //             console.log(e);
-                    order['url'] = url;
-                    window.location = 'http://127.0.0.1:7000/checkout' + '?' + JSON.stringify(order)
-            //     },
-            //     error: function(error) {
-            //     console.log(error);
-            // }
-            // });
-            // const response =
-            //     await fetch(
-            //         serviceURL, {
-            //         method: 'POST',
-            //         headers: {
-            //             "Content-Type": "application/json"
-            //         },
-            //         body: JSON.stringify(order)
-            //     }
-            //     );
-            // const result = await response;
-            // if (result.status == 400) {
-            //     alert('Payment Failed');
-            // } else {
-            //     alert('Payment succeed');
-            //     // window.location.href = "http://www.w3schools.com"; // for redirect 
-            //     return;
-            // }
-        // } catch (error) {
-        //     // Errors when calling the service; such as network error, 
-        //     // service offline, etc
-        //     alert
-        //         ('There is a problem with payment, please try again later.<br />' + error);
-
-        // } // error
+            var order = {
+                'userId': userid,
+                'deliveryAddress': address,
+                'contactNumber': contact_number,
+                'customerName': contact_person,
+                'orderItems': order_items,
+                'totalAmount': totalAmount
+            };
+            // console.log(order);
+            var url = String(window.location.href);
+            order['url'] = url;
+            window.location = 'http://127.0.0.1:7000/checkout' + '?' + JSON.stringify(order)
+        }
 
     })
 
     $("#submit-feedback").click(async function (event) {
         event.preventDefault();
-        var content = $('#feedback-content').val(),
-            rating = $('#feedback-rating-score').val(),
-            feedback = {
-                'feedback': content,
-                'star': rating
-            };
+        if ($("#feedback-content").val()=='' || $("#feedback-rating-score").val()==''){
+            alert('Please fill in all the field');
+        }else{
+            var content = $('#feedback-content').val(),
+                rating = $('#feedback-rating-score').val(),
+                feedback = {
+                    'feedback': content,
+                    'star': rating
+                };
 
-        var serviceURL = 'http://127.0.0.1:5556/feedback';
-        try {
-            const response =
-                await fetch(
-                    serviceURL, {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(feedback)
+            var serviceURL = 'http://127.0.0.1:5556/feedback';
+            try {
+                const response =
+                    await fetch(
+                        serviceURL, {
+                        method: 'POST',
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(feedback)
+                    }
+                    );
+                const result = await response;
+
+                if (result.status == 201) {
+                    alert('Feedback Submitted');
+                    $("#feedback-form")[0].reset();
                 }
-                );
-            const result = await response;
+            } catch (error) {
+                // Errors when calling the service; such as network error, 
+                // service offline, etc
+                alert
+                    ('There is a problem with feedback submission, please try again later.<br />' + error);
 
-            if (result.status == 201) {
-                alert('Feedback Submitted');
-            }
-        } catch (error) {
-            // Errors when calling the service; such as network error, 
-            // service offline, etc
-            alert
-                ('There is a problem with feedback submission, please try again later.<br />' + error);
-
-        } // error
+            } // error
+        }
 
     })
     
@@ -969,54 +813,12 @@
         if ($("#cf-name").val()=='' || $("#cf-subject").val()=='' || $("#cf-message").val()==''|| $("#cf-email").val()==''){
             alert('Please fill in all the field');
         }else{
-            alert('Feedback Submitted. Your Response is valuable to us.');
-            location.reload(true);
+            alert('Feedback Submitted. Your Response is valuable to us.');  
+            $("#contact-form")[0].reset();
         }
 
     })
-    // async function successOrder(data){
-    //     var serviceURL = 'http://127.0.0.1:5555/successpayment';
-    //     // $.ajax({
-    //     //         type: 'POST',
-    //     //         contentType: 'application/json',
-    //     //         data: JSON.stringify(data),
-    //     //         dataType: 'json',
-    //     //         url: serviceURL,
-    //     //         success: function (e){
-    //     //             console.log(e);
-    //     //             alert('Payment Successful');
-    //     //         },
-    //     //         error: function(error) {
-    //     //             console.log(error);
-    //     //             alert('There is a problem with payment submission, please try again later.<br />' + error);
 
-    //     //     }
-    //     //     });
-    //     try {
-    //         const response =
-    //             await fetch(
-    //                 serviceURL, {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     "Content-Type": "application/json"
-    //                 },
-    //                 body: JSON.stringify(data)
-    //             }
-    //             );
-    //         const result = await response;
-    //         // console.log(result.status);
-    //         if (result.status == 200) {
-    //             alert('Payment Successful');
-    //         }
-    //     } catch (error) {
-    //         // Errors when calling the service; such as network error, 
-    //         // service offline, etc
-    //         alert(result.status);
-    //         alert('There is a problem with payment submission, please try again later.<br />' + error);
-
-    //     }
-
-    // };
 </script>
 
 
