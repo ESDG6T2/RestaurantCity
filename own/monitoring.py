@@ -32,7 +32,8 @@ def callback(channel, method, properties, body): # required signature for the ca
     elif data['type'] == 'order_update':
         print("Order updated:")
     elif data['type'] == 'feedback_receive':
-        print("Receive a piece of feedback:")
+        print("Receive a piece of feedback with rating {}/5".format(data['star']))
+        return 
     else:
         print("Order sent for delivery:")
 
