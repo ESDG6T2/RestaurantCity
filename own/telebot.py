@@ -3,10 +3,6 @@ import requests
 import time
 import urllib
 
-from dbhelper import DBHelper
-
-db = DBHelper('restaurantcity_order')
-
 TOKEN = '1146167386:AAFuj5hc4FV_YXn1c5Unwtfq-EvqUMC7EEU'
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 
@@ -53,12 +49,10 @@ def handle_updates(updates):
             reply_msg = 'Dear {}, thank you for choosing Restaurant City. Your order information:\n'.format(text[1:])
 
             userid = text[1:]
-            all_orders = db.get_user_ongoing_orders(userid)
+            all_orders = json.loads(requests.get("http://127.0.0.1:8010/order/{}".format(userid)).content)
 
             if len(all_orders) > 1:
                 for i, order in enumerate(all_orders):
-                    orderItems = db.get_order_items(order['orderId'])
-                    order['orderItem'] = orderItems
                     order_info = format_order_info(i+1, order) 
                     reply_msg += order_info  
             else:
