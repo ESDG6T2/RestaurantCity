@@ -83,7 +83,7 @@ def allocate_order(orderId):
         send_delivery_allocation({"orderId":orderId,"deliveryMan":to_delivery})
     except Exception as e:
         print(e)
-        return jsonify({"message": "Error occurred allocating order with id: {}.".format(orderId)}), 400
+        return jsonify({"message": "Error occurred allocating order with id: {}.".format(orderId)}), 500
         
     return jsonify({"orderId":orderId,"driverId":to_delivery}),200
 

@@ -104,7 +104,7 @@ def add_order(orderId):
 def update_order(orderId):
     data = request.get_json()
     if not Order.query.filter_by(orderId=orderId).first():
-        return jsonify({"message": "No order with id: {}.".format(orderId)}), 400
+        return jsonify({"message": "No order with id: {}.".format(orderId)}), 500
 
     output = {"orderId":orderId,"orderStatus":data['orderStatus']}
     try:
