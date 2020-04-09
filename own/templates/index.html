@@ -87,8 +87,9 @@
                     successPost(all_data);
                     // window.location = url + '?' + JSON.stringify(all_data)
                 }else{
-                    var error_message = {"error": "unsuccessful"};
-                    // window.location = url + '?' + JSON.stringify(error_message)
+                    // var error_message = {"error": "unsuccessful"};
+                    alert("Payment unsuccessful!");
+                    setTimeout(() => {  window.location = url; }, 3500);
                 }
                 // The payment is complete!
                 // You can now show a confirmation message to the customer
