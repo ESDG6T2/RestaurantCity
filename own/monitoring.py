@@ -40,7 +40,7 @@ def callback(channel, method, properties, body): # required signature for the ca
     if 'orderStatus' in data:
         monitoring_msg += "Order Status: {}\n".format(data['orderStatus'])
     else:
-        monitoring_msg += "Driver ID: {}\n".format(data['deliveryMan'])
+        monitoring_msg += "Driver ID: {}\n".format(data['driverId'])
     monitoring_msg+=orderItems
     print(monitoring_msg)
     print()

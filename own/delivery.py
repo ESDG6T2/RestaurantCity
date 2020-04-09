@@ -80,7 +80,7 @@ def allocate_order(orderId):
     try:
         OrderAllocation.query.filter_by(orderId=orderId).update(dict(driverId=to_delivery)) # to update a order status
         db.session.commit()
-        send_delivery_allocation({"orderId":orderId,"deliveryMan":to_delivery})
+        send_delivery_allocation({"orderId":orderId,"driverId":to_delivery})
     except Exception as e:
         print(e)
         return jsonify({"message": "Error occurred allocating order with id: {}.".format(orderId)}), 500
