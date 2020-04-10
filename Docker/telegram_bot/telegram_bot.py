@@ -71,7 +71,7 @@ def handle_updates(updates):
                     reply_msg = 'Dear {}, you have no orders placed'.format(text[1:])
                 send_message(reply_msg, chat)
             else:
-                send_message("Please send valid messags to the Bot, not others such as Emoji", chat)                   
+                send_message("Please send valid messages to the Bot, not others such as Emoji", chat)                   
 
 def get_last_chat_id_and_text(updates):
     num_updates = len(updates["result"])
