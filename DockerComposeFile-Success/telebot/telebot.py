@@ -9,7 +9,7 @@ ip_add=socket.gethostbyname(socket.getfqdn())
 TOKEN = '1146167386:AAFuj5hc4FV_YXn1c5Unwtfq-EvqUMC7EEU'
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 
-menuItems = json.loads(requests.get("http://publicip:5001/menu").content)['menu']
+menuItems = json.loads(requests.get("http://host.docker.internal:5001/menu").content)['menu']
 menuDict = {x['menuId']: x['foodName'] for x in menuItems}
 
 def get_url(url):
@@ -52,7 +52,7 @@ def handle_updates(updates):
             reply_msg = 'Dear {}, thank you for choosing Restaurant City. Your order information:\n'.format(text[1:])
 
             userid = text[1:]
-            all_orders = json.loads(requests.get("http://publicip:8010/order/{}".format(userid)).content)
+            all_orders = json.loads(requests.get("http://host.docker.internal:8010/order/{}".format(userid)).content)
             all_orders = [order for order in all_orders if order['orderStatus'] != 'delivered' ]
             if len(all_orders) > 1:
                 for i, order in enumerate(all_orders):
