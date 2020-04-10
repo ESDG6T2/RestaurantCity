@@ -149,11 +149,8 @@
                     eachRow += "<td><table border='1'>";
 
                     for (var l = 0; l < orders[i]['orderItems'].length; l++) {
-                        // for (const food in orders[i]['menuItem'][l]) {
                         eachRow += '<tr><td>' + window.menuDict[orders[i]['orderItems'][l]['menuId']] + "</td>";
                         eachRow += '<td>' + orders[i]['orderItems'][l]['quantity'] + "</td></tr>";
-
-                        // eachRow += window.menuDict[orders[i]['menuItem'][l]['menuId']] + " *" + orders[i]['menuItem'][l]['quantity'] + '<br>';
                     }
                     eachRow += "</table></td>";
 
@@ -166,9 +163,16 @@
                         "<td align='center'>" + orders[i]['contactNumber'] + "</td>" +
                         "<td align='center'>" + orders[i]['datetime'] + "</td>" +
                         "<td align='center'>" + orders[i]['orderStatus'] + "</td>" +
-                        "<td align='center'>" + driverId + "</td>" +
-                        "<td align='center'><input type='button' id='preparing' name='preparing" + orders[i]['orderId'] + "' onclick=updateStatusPreparing('" + orders[i]['orderId'] + "') value='Preparing'/><input type='button' id='delivering' name='delivering" + orders[i]['orderId'] + "' onclick=updateStatusDelivering('" + orders[i]['orderId'] + "') value='Delivering'/></td>";
-                    eachRow += "</tr>";
+                        "<td align='center'>" + driverId + "</td>";
+                    eachRow += "<td align='center'>"
+                    if (orders[i]['orderStatus'] == 'paid') {
+                        eachRow += "<input type='button' id='preparing' name='preparing" + orders[i]['orderId'] + "' onclick=updateStatusPreparing('" + orders[i]['orderId'] + "') value='Preparing'/>"
+                    } else if (orders[i]['orderStatus'] == 'preparing') {
+                        eachRow += "<input type='button' id='delivering' name='delivering" + orders[i]['orderId'] + "' onclick=updateStatusDelivering('" + orders[i]['orderId'] + "') value='Delivering'/>"
+                    } else {
+                        eachRow += 'Waiting for the order to be delivered'
+                    }
+                    eachRow += "</td></tr>";
                     $('#ordertable').append(eachRow);
                 }
             }
@@ -249,6 +253,9 @@
             if (response.status != 200) {
                 alert(data.message);
                 var to_continue = false;
+            } else {
+                alert("Order status updated successfully")
+                location.reload(true);
             }
         } catch (error) {
             showError
