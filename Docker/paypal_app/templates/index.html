@@ -44,18 +44,10 @@
             }
         };
 
-    </script>
-
-    <p>
-        {{ data.url }}
-    </p>
-
-    <script>
-        console.log("{{ data.url }}");
         var url = "{{data.url}}";
         var orderitems = "{{data.orderItems}}";
-        // var orderitems = JSON.parse(orderitems.replace(/&#39;/g, '"'));
-        orderitems = JSON.parse(orderitems);
+        var orderitems = JSON.parse(orderitems.replace(/&#39;/g, '"'));
+        //orderitems = JSON.parse(orderitems);
         var price = JSON.parse("{{data.totalAmount}}");
         // console.log(orderitems)
         // console.log(JSON.parse(orderitems.replace(/&#39/g,'"')))
