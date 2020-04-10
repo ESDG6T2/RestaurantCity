@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Restaurant City Delivery</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+</head>
+<style>
+    body {
+        background-color: #000;
+    }
+
+    html,
+    body {
+        height: 100%;
+    }
+
+    .imagebg {
+        background-image: url('img/driver.jpg');
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-size: cover;
+        background-attachment: fixed;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        -webkit-filter: blur(3px);
+        filter: blur(3px);
+        opacity: 0.6;
+        filter: alpha(opacity=60);
+    }
+
+    .element-container {
+        background-color: #fff;
+        box-shadow: 0 16px 24px 2px rgba(0, 0, 0, 0.14), 0 20px 30px 5px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.3);
+        border-radius: 8px;
+
+    }
+
+    table,
+    th {
+        text-align: center;
+    }
+</style>
+
+<body>
+
+    <div id="main-container" class="container">
+        <div class="imagebg"></div>
+        <br><br>
+        <div class="col-md-6 col-md-offset-3 element-container" align='center'>
+            <h2>Find Your Allocated Orders</h2>
+            <p> Please provide your ID below:</p>
+            <form id="driverForm" method="GET">
+                <div class="row">
+                    <div class="col-sm-12 form-group">
+                        <input class="form-control" type="text" name="driver" id="driver" placeholder="Example: 123X"
+                            maxlength="20" rows="7" required>
+                    </div>
+                </div>
+                <div class="row" class="submit">
+                    <div class="col-sm-12 form-group">
+                        <button type="submit" class="btn btn-lg btn-warning btn-block">Submit</button>
+                    </div>
+                </div>
+            </form>
+
+            <div style="padding-top:20px;margin-top: 20px;display: none;padding-bottom: 50px;" id='allocatedOrders'>
+                <h3>Your allocated order</h3>
+                <table id='allocated-order-table' border="2">
+                    <thead>
+                        <tr style="font-size: 12px;">
+                            <th>Order ID</th>
+                            <th>Customer Name</th>
+                            <th>Contact Number </th>
+                            <th>Delivery Address</th>
+                            <th>Update Status</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script>
+    $("#driverForm").submit(async (event) => {
+        $('#allocated-order-table tbody').empty();
+        event.preventDefault();
+        var driverId = $('#driver').val();
+        var serviceURL = "http://127.0.0.1:8000/order/" + driverId;
+
+        try {
+            const response =
+                await fetch(
+                    serviceURL, { method: 'GET' }
+                );
+            const data = await response.json();
+
+            if (response.status == 200) {
+                $("#allocatedOrders").show()
+                var row = "<tbody><tr align='center'>" +
+                    "<td>" + data.orderId + "</td>" +
+                    "<td>" + data.customerName + "</td>" +
+                    "<td>" + data.contactNumber + "</td>" +
+                    "<td>" + data.deliveryAddress + "</td>" +
+                    '<td><button style="background-color:gray;color:white;" onclick=finishDelivery("' + data.orderId + '")>Finish Delivery</button ></td ></tr ></tbody >';
+                $('#allocated-order-table').append(row);
+                console.log(row);
+            } else {
+                alert(data['message'])
+            }
+        } catch (error) {
+            alert('There is a problem retrieving driver data, please try again later.<br />' + error);
+        }
+    });
+
+    async function finishDelivery(orderId) {
+        var serviceURL = "http://127.0.0.1:8010/update-order/" + orderId;
+        body = { "orderStatus": "delivered" }
+        console.log(JSON.stringify(body));
+        try {
+            const response =
+                await fetch(
+                    serviceURL, {
+                    method: 'PUT', headers: {
+                        'Content-Type': 'application/json'
+                    }, body: JSON.stringify(body)
+                });
+            const data = await response.json();
+            if (response.status != 200) {
+                alert(data.message);
+            }
+            alert("Update order status successfully.")
+            location.reload(true);
+        } catch (error) {
+            alert('There is a problem update order status, please try again later.<br />' + error);
+        } // error
+    };
+
+    $("#return").click(function () {
+        location.reload(true);
+    });
+
+
+
+</script>

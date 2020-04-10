@@ -1,0 +1,52 @@
+body {
+  background-color: lightpink;
+  background-image: url("../img/rainbow.jpg");
+}
+
+.header {
+  color: whitesmoke;
+  font-size: 2.0em;
+  padding: 1rem;
+  text-align: center;
+  font-weight: bold;
+  text-shadow: 2px 2px black;
+
+}
+
+#ordertable {
+  width: 100%;
+  background-color:rgb(255, 199, 208);
+  border: 1px;
+  border-radius: 15px;
+  text-align: center;
+}
+  
+#ordertable td, th { 
+    color: darken(lightpink);
+    padding: 20px; 
+    text-align: center;
+}
+
+td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.navbar {
+  background-color: rgb(236, 4, 120);
+  line-height: 20px;
+}
+
+#feedbacktable {
+  background-image: linear-gradient(to bottom, white, lightpink);
+  border-radius: 15px;
+  padding: 20px;
+}
+
+#feedbacktable, tr, th {
+  padding: 5px;
+  text-align: left;
+  border-bottom: 1px solid black;
+  border-collapse:separate; 
+  border-spacing: 20px; 
+}
