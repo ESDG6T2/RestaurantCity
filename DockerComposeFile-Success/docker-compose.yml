@@ -98,9 +98,9 @@ services:
         links:
             - menu
             - order_flask
-        depends_on:
-            - menu
-            - order_flask
+        # depends_on:
+        #     - menu
+        #     - order_flask
                 # condition: service_healthy
     # -----------------------images needed--------------------------------
     #rabbitMQ
