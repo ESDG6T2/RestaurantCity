@@ -37,9 +37,8 @@ td {
 
 .container-feedback{
   overflow-y: auto;
-  height: 500px;
+  height: 800px;
 }
-
 #feedbacktable {
   background-image: linear-gradient(to bottom, white, lightpink);
   border-radius: 15px;

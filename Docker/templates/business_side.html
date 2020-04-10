@@ -40,15 +40,12 @@
             </div>
         </div>
     </nav>
-    <div class="container">
-        <p><br></p>
-    </div>
 
     <div id='main-container'>
         <div class="header">Restaurant City Management</div>
         <div class="container">
             <table id="ordertable" cellspacing="10">
-                <tr>
+                <tr align="center">
                     <th>Order ID</th>
                     <th>Food Name - Quantity</th>
                     <th>Customer Name</th>
@@ -230,6 +227,7 @@
             if (response.status != 200) {
                 showError(data.message);
             } else {
+                alert("Order Status updated successfully");
                 location.reload(true);
             }
         } catch (error) {
@@ -273,6 +271,7 @@
                 if (response.status != 200) {
                     showError(data.message);
                 } else {
+                    alert("Order Status updated successfully");
                     location.reload(true);
                 }
             } catch (error) {

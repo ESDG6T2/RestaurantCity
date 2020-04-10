@@ -574,8 +574,8 @@
             // Errors when calling the service; such as network error, 
             // service offline, etc
             // alert(response.status);
-            // alert
-            // ('There is a problem deleting item, please try again later.<br />' + error);
+            alert
+                ('There is a problem deleting item, please try again later.<br />' + error);
         }
     }
 
@@ -719,9 +719,6 @@
         }
         $('#Home').hide();
         $('#Cart').show();
-
-
-
     })
 
     $("#payment").click(async function (event) {
@@ -760,10 +757,11 @@
                 'orderItems': order_items,
                 'totalAmount': totalAmount
             };
-            // console.log(order);
+
             var url = String(window.location.href);
             order['url'] = url;
-            window.location = 'http://127.0.0.1:7000/checkout' + '?' + JSON.stringify(order)
+            destination = 'http://127.0.0.1:7000/checkout' + '?' + JSON.stringify(order);
+            window.location = destination;
         }
 
     })

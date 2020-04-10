@@ -39,30 +39,39 @@ def get_last_update_id(updates):
 def handle_updates(updates):
     for update in updates["result"]:
         try:
-            text = update["message"]["text"]
+            message = update["message"]
             chat = update["message"]["chat"]["id"]
         except:
-            text = update["edited_message"]["text"]
+            message = update["edited_message"]
             chat = update["edited_message"]["chat"]["id"]
-            
-        if text == "/check_status":
-            send_message("Please enter your userid starting with @ (e.g. @userid)", chat)
-        elif text == "/start":
-            send_message("Welcome to Restaurant City", chat)
-        elif text[0] == '@':
-            reply_msg = 'Dear {}, thank you for choosing Restaurant City. Your order information:\n'.format(text[1:])
 
-            userid = text[1:]
-            all_orders = json.loads(requests.get("http://host.docker.internal:8010/order/{}".format(userid)).content)
-            all_orders = [order for order in all_orders if order['orderStatus'] != 'delivered' ]
-            if len(all_orders) > 1:
-                for i, order in enumerate(all_orders):
-                    order_info = format_order_info(i+1, order) 
-                    reply_msg += order_info  
+        if 'text' not in message:
+            send_message("Please do not send stickers to the Bot", chat)
+        else:
+            try:
+                text = update["message"]["text"]
+            except:
+                text = update["edited_message"]["text"]
+                
+            if text == "/check_status":
+                send_message("Please enter your userid starting with @ (e.g. @userid)", chat)
+            elif text == "/start":
+                send_message("Welcome to Restaurant City", chat)
+            elif text[0] == '@':
+                reply_msg = 'Dear {}, thank you for choosing Restaurant City. Your order information:\n'.format(text[1:])
+
+                userid = text[1:]
+                all_orders = json.loads(requests.get("http://host.docker.internal:8010/order/{}".format(userid)).content)
+                all_orders = [order for order in all_orders if order['orderStatus'] != 'delivered' ]
+                if len(all_orders) > 1:
+                    for i, order in enumerate(all_orders):
+                        order_info = format_order_info(i+1, order) 
+                        reply_msg += order_info  
+                else:
+                    reply_msg = 'Dear {}, you have no orders placed'.format(text[1:])
+                send_message(reply_msg, chat)
             else:
-                reply_msg = 'Dear {}, you have no orders placed'.format(text[1:])
-            send_message(reply_msg, chat)
-
+                send_message("Please send valid messags to the Bot, not others such as Emoji", chat)                   
 
 def get_last_chat_id_and_text(updates):
     num_updates = len(updates["result"])
