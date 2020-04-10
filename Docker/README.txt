@@ -1,18 +1,17 @@
-# IMPORTANT #
-- Remember to run all sql files located in sql folder (cart.sql, feedback.sql, menu.sql, order.sql)
-- If your database is not up to date as of 10th April 2020, drop the schema and run the sql file.
-
 # How to deploy docker#
 # Before you begin,
-    1) run docker as administator
-    2) make sure docker is installed
-
+    1) make sure docker is installed
+	2) run docker as administator
+	3) run WampServer as administator
+	4) create an alias on WampServer to this directory. You may follow the guide in the link: https://www.techrepublic.com/blog/smb-technologist/create-aliases-on-your-wamp-server/
+    5) Go to phpmyadmin and import all SQL files in the sql folder.
+	
 # Begin
-- Open cmd and locate to the current directory
-- After you have reach the current directory, enter the cmd "docker-compose up --build" to start docker compose file
+- Open cmd and locate to the directory of this README file
+- Enter the cmd "docker-compose up --build" to start docker compose file
 - It will take sometime during the first time
 - After you see all of the docker logs in the command prompt, this means that your docker network is running.
-eg. 
+e.g. 
 delivery_1      |  * Serving Flask app "delivery" (lazy loading)
 delivery_1      |  * Environment: production
 delivery_1      |    WARNING: This is a development server. Do not use it in a production deployment.
@@ -23,7 +22,7 @@ delivery_1      |  * Restarting with stat
 delivery_1      |  * Debugger is active!
 delivery_1      |  * Debugger PIN: 121-799-828
 
-- turn on your WAMP and open the webpages from the template folder in the current directory (./template)
+- open the webpages from the template folder in the current directory (./template)
 ./template/restaurant_ui.html for customer ordering UI
 ./template/delivery_ui.html for driver UI
 ./template/business_ui.html for restaurant business side UI
@@ -32,14 +31,13 @@ delivery_1      |  * Debugger PIN: 121-799-828
 - For Paypal Account
     - Username: gladwin@test.com
     - Password: gladwinn
-- For telegram bot (NOTE: Only one user can be running telegram_bot.py at a time. If you see and error message in the bot: it means that there is someone else running it)
+- For telegram bot (NOTE: Only one user can be running telegram_bot microservice at a time. If the Telegram Bot is not replying messages, it means that someone else is running the microservice)
     - @restaurant_city_bot
     - Press start
     - type /check_status
     - should see reply : Please enter your userid starting with @ (e.g. @userid)
     - type @a (a is our preset userid for this project as we are not doing account management)
     - should see reply : a list of message on the order items (check against the database to ensure that it is the same)
-
 
 * For Testers *
 * Run through the full process to check for any bugs or error and report it in the group.

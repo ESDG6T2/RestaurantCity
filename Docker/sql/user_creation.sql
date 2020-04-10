@@ -1,0 +1,3 @@
+DROP USER if exists 'is213'@'%';
+CREATE USER 'is213'@'%';
+GRANT SELECT, INSERT, UPDATE, DELETE, FILE ON *.* TO 'is213'@'%';
