@@ -1,0 +1,117 @@
+version: "2.1"
+
+services:
+    #step 1 - ADD IN ALL MICRO-SERVICES
+    cart:
+        build: ./cart
+        environment:
+            - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/restaurantcity_cart
+        ports:
+            - "5002:5002"
+
+    delivery:
+        build: ./delivery
+        environment:
+            - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/restaurantcity_order
+        ports:
+            - "8000:8000"
+        links:
+            - rabbitmq
+            - order_flask
+        tty: true
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+
+    menu:
+        build: ./menu
+        environment:
+            - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/restaurantcity_menu
+        ports:
+            - "5001:5001"
+
+    monitoring:
+        build: ./monitoring
+        tty: true
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+        links:
+            - rabbitmq
+
+    feedback:
+        build: ./feedback
+        environment:
+            - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/restaurantCity_feedback
+        ports:
+            - "5556:5556"
+        links:
+            - rabbitmq
+        tty: true
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+
+    order:
+        build: ./order
+        links:
+            - rabbitmq
+        tty: true
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+
+    order_flask:
+        build: ./order_flask
+        environment:
+            - dbURL=mysql+mysqlconnector://is213@host.docker.internal:3306/restaurantcity_order
+        ports:
+            - "8010:8010"
+        links:
+            - rabbitmq
+        tty: true
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+    payment:
+        build: ./payment
+        ports:
+            - "5555:5555"
+        links:
+            - rabbitmq
+        tty: true
+        depends_on:
+            rabbitmq:
+                condition: service_healthy
+
+    paypal_app:
+        build: ./paypal_app
+        ports:
+            - "7000:7000"
+
+    telebot:
+        build: ./telebot
+        links:
+            - menu
+            - order_flask
+        depends_on:
+            - menu
+            - order_flask
+    # -----------------------images needed--------------------------------
+    #rabbitMQ
+    rabbitmq:
+        build: rabbitmq/.
+        ports:
+            - "15672:15672"
+            - "5672:5672"
+        healthcheck:
+            test: ["CMD", "curl", "-f", "http://localhost:15672"]
+            interval: 30s
+            timeout: 10s
+            retries: 5
+    #-------------------------end------------------------------------------
+    # links:
+    # - rabbitmq-server
+#end of all services
+
+#to end - ctrl C and typo docker-compose down

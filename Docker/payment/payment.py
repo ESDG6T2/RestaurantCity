@@ -1,0 +1,55 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import requests
+
+import pika, json, requests, uuid, pytz
+
+from datetime import datetime
+# import paypalrestsdk
+tz = pytz.timezone('Asia/Singapore')
+app = Flask(__name__)
+CORS(app)
+def generate_order_id():
+    return uuid.uuid4().hex
+
+# Note: port must be 5672 for pika
+def send_order(order): # only when paypal payment succeed
+    hostname = 'rabbitmq'
+    port = 5672
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
+    # connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
+    channel = connection.channel()
+    
+    message = json.dumps(order,default=str)
+
+    exchange_name = 'order_direct'
+    channel.exchange_declare(exchange=exchange_name, exchange_type='direct')
+    channel.queue_declare(queue='order',durable=True)
+    channel.basic_publish(exchange=exchange_name, routing_key='order.receive', body=message,properties=pika.BasicProperties(delivery_mode=2))
+
+    print('Payment succeeded, order is sent')
+
+@app.route('/successpayment',methods=['POST'])
+def success_order():
+    if request.is_json:
+        order = request.get_json()
+        for i in range(len(order['orderItems'])):
+            order['orderItems'][i]['menuId'] = order['orderItems'][i].pop('sku')
+            print(order['orderItems'][i])
+        order['orderStatus']='paid'
+        order['orderId'] = generate_order_id()
+        order['orderDatetime'] = datetime.now(tz).strftime(format='%Y-%m-%d %H:%M:%S')
+    else:
+        order = request.get_data()
+        print("Received an invalid order:")
+        print(order)
+        replymessage = json.dumps({"message": "Order should be in JSON", "data": order}, default=str)
+        return replymessage, 400 # Bad Request
+    print("Received an order log by " + __file__)
+    send_order(order)
+    return jsonify('Successfully paid'), 200
+    
+if __name__ == "__main__":
+    app.run(host='0.0.0.0',port=5555,debug=True)
+
+
