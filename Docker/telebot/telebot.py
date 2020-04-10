@@ -6,6 +6,9 @@ import urllib
 TOKEN = '1146167386:AAFuj5hc4FV_YXn1c5Unwtfq-EvqUMC7EEU'
 URL = "https://api.telegram.org/bot{}/".format(TOKEN)
 
+menuItems = json.loads(requests.get("http://host.docker.internal:5001/menu/").content)['menu']
+menuDict = {x['menuId']: x['foodName'] for x in menuItems}
+
 def get_url(url):
     response = requests.get(url)
     content = response.content.decode("utf8")
@@ -35,9 +38,13 @@ def get_last_update_id(updates):
 
 def handle_updates(updates):
     for update in updates["result"]:
-        text = update["message"]["text"]
-        chat = update["message"]["chat"]["id"]
-        
+        try:
+            text = update["message"]["text"]
+            chat = update["message"]["chat"]["id"]
+        except:
+            text = update["edited_message"]["text"]
+            chat = update["edited_message"]["chat"]["id"]
+            
         if text == "/check_status":
             send_message("Please enter your userid starting with @ (e.g. @userid)", chat)
         elif text == "/start":
@@ -46,7 +53,7 @@ def handle_updates(updates):
             reply_msg = 'Dear {}, thank you for choosing Restaurant City. Your order information:\n'.format(text[1:])
 
             userid = text[1:]
-            all_orders = json.loads(requests.get("http://localhost:8010/order/{}".format(userid)).content)
+            all_orders = json.loads(requests.get("http://host.docker.internal:8010/order/{}".format(userid)).content)
             all_orders = [order for order in all_orders if order['orderStatus'] != 'delivered' ]
             if len(all_orders) > 1:
                 for i, order in enumerate(all_orders):
@@ -81,19 +88,17 @@ def format_order_info(idx, order):
 
 def main():
     last_update_id = None
-    print("before loop")
+    print('Telegram Bot is online')
     while True:
         updates = get_updates(last_update_id)
-        if len(updates["result"]) > 0:
-            last_update_id = get_last_update_id(updates) + 1
-            handle_updates(updates)        
-        time.sleep(0.5)
+        try:
+            if len(updates["result"]) > 0:
+                last_update_id = get_last_update_id(updates) + 1
+                handle_updates(updates)        
+            time.sleep(0.5)
+        except:
+            print("Multiple instances running. Please make sure only one instance is running....")
 
 if __name__ == '__main__':
-    try:
-        menuItems = json.loads(requests.get("http://localhost:5001/menu/").content)['menu']
-        menuDict = {x['menuId']: x['foodName'] for x in menuItems}
-        # main()
-    except:
-        print('Error: Exit')
+    main()
     

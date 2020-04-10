@@ -54,13 +54,13 @@ def payment():
         "redirect_urls": {
             "return_url": "http://localhost:3000/payment/execute",
             "cancel_url": "http://localhost:3000/"},
-        "transactions": [{ # TODO: need to input item list: get from BODY
+        "transactions": [{ 
             "item_list": {
                 "items": orderItemsList},
-            "amount": { # TODO: need to input Total Amount
+            "amount": { 
                 "total": str(price),
                 "currency": "SGD"},
-            "description": "This is the payment transaction description."}]}) # TODO: need to input decription
+            "description": "This is the payment transaction description."}]})
 
     if payment.create():
         print('Payment success!')

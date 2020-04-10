@@ -574,8 +574,8 @@
             // Errors when calling the service; such as network error, 
             // service offline, etc
             // alert(response.status);
-            // alert
-            // ('There is a problem deleting item, please try again later.<br />' + error);
+            alert
+                ('There is a problem deleting item, please try again later.<br />' + error);
         }
     }
 
@@ -719,9 +719,6 @@
         }
         $('#Home').hide();
         $('#Cart').show();
-
-
-
     })
 
     $("#payment").click(async function (event) {
