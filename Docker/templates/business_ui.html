@@ -166,11 +166,11 @@
                         "<td align='center'>" + driverId + "</td>";
                     eachRow += "<td align='center'>"
                     if (orders[i]['orderStatus'] == 'paid') {
-                        eachRow += "<input type='button' id='preparing' name='preparing" + orders[i]['orderId'] + "' onclick=updateStatusPreparing('" + orders[i]['orderId'] + "') value='Preparing'/>"
+                        eachRow += "<input type='button' id='preparing' name='preparing" + orders[i]['orderId'] + "' onclick=updateStatusPreparing('" + orders[i]['orderId'] + "') value='Start Preparing'/>"
                     } else if (orders[i]['orderStatus'] == 'preparing') {
-                        eachRow += "<input type='button' id='delivering' name='delivering" + orders[i]['orderId'] + "' onclick=updateStatusDelivering('" + orders[i]['orderId'] + "') value='Delivering'/>"
+                        eachRow += "<input type='button' id='delivering' name='delivering" + orders[i]['orderId'] + "' onclick=updateStatusDelivering('" + orders[i]['orderId'] + "') value='Send for delivery'/>"
                     } else {
-                        eachRow += 'Waiting for the order to be delivered'
+                        eachRow += 'Order in delivery'
                     }
                     eachRow += "</td></tr>";
                     $('#ordertable').append(eachRow);
