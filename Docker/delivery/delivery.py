@@ -12,6 +12,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 CORS(app)
 
+driver_list = ['1', '2', '3', '4','5']
+
 def send_delivery_allocation(update_info):
     hostname = 'rabbitmq'
     port = 5672
@@ -50,7 +52,7 @@ class OrderAllocation(db.Model):
 @app.route("/order/<string:driverId>")
 #take out the order information and address using driverID.
 def find_by_driverID(driverId):
-    if driverId in ['1', '2', '3', '4', '5']:
+    if driverId in driver_list:
         driver_order_details = OrderAllocation.query.filter(OrderAllocation.driverId==driverId, OrderAllocation.orderStatus!='delivered').first()
         if driver_order_details:
             return jsonify(driver_order_details.json()), 200
@@ -69,7 +71,7 @@ def allocate_order(orderId):
         if driverId:
             return jsonify({"message": "Order {} has been assigned to driver {} for delivery.".format(orderId,driverId)}), 400
 
-    driver_list = ['1', '2', '3', '4',' 5']  # Assuming 5 drivers
+      # Assuming 5 drivers
     delivering_orders = [x.json() for x in OrderAllocation.query.filter_by(orderStatus='delivering').all()]
     
     delivering_man = [x['driverId'] for x in delivering_orders]
