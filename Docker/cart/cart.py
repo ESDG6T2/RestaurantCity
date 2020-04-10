@@ -39,9 +39,9 @@ def delete_cart(userid):
         Cart.query.filter_by(userid=userid).delete()
         db.session.commit()
     except:
-        return jsonify({"message": "An error occurred deleting the cart."}), 500
+        return jsonify({"message": "An error occurred clearing the cart."}), 500
 
-    return jsonify({"message":"Cart is deleted successfully"}), 200
+    return jsonify({"message":"Cart is cleared successfully"}), 200
 
 
 @app.route("/delete-cart-item/<string:userid>&<string:menuId>",methods=['DELETE'])

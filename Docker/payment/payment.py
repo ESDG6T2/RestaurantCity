@@ -13,21 +13,6 @@ def generate_order_id():
     return uuid.uuid4().hex
 
 # Note: port must be 5672 for pika
-def send_order(order): # only when paypal payment succeed
-    hostname = 'rabbitmq'
-    port = 5672
-    connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
-    # connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
-    channel = connection.channel()
-    
-    message = json.dumps(order,default=str)
-
-    exchange_name = 'order_direct'
-    channel.exchange_declare(exchange=exchange_name, exchange_type='direct')
-    channel.queue_declare(queue='order',durable=True)
-    channel.basic_publish(exchange=exchange_name, routing_key='order.receive', body=message,properties=pika.BasicProperties(delivery_mode=2))
-
-    print('Payment succeeded, order is sent')
 
 @app.route('/successpayment',methods=['POST'])
 def success_order():
@@ -35,7 +20,6 @@ def success_order():
         order = request.get_json()
         for i in range(len(order['orderItems'])):
             order['orderItems'][i]['menuId'] = order['orderItems'][i].pop('sku')
-            print(order['orderItems'][i])
         order['orderStatus']='paid'
         order['orderId'] = generate_order_id()
         order['orderDatetime'] = datetime.now(tz).strftime(format='%Y-%m-%d %H:%M:%S')
@@ -45,9 +29,15 @@ def success_order():
         print(order)
         replymessage = json.dumps({"message": "Order should be in JSON", "data": order}, default=str)
         return replymessage, 400 # Bad Request
-    print("Received an order log by " + __file__)
-    send_order(order)
-    return jsonify('Successfully paid'), 200
+    print("Payment is successful")
+    try:
+        r = requests.post(url='http://host.docker.internal:8010/add-order/{}'.format(order['orderId']), json=order)
+        if r.status_code == 201:
+            return jsonify({'message': 'Successfully submitted the order'}), 200
+        else:
+            return jsonify({'message':'Order submission failed '}), 500
+    except:
+        return jsonify({'message':'Order submission failed '}), 500
     
 if __name__ == "__main__":
     app.run(host='0.0.0.0',port=5555,debug=True)

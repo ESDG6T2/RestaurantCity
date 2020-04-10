@@ -24,6 +24,22 @@ def send_order_status_update(update_info):
     channel.exchange_declare(exchange=exchange_name, exchange_type='topic')
     channel.basic_publish(exchange=exchange_name, routing_key='order.info', body=message)
 
+def send_order(order): # only when paypal payment succeed
+    hostname = 'rabbitmq'
+    port = 5672
+    connection = pika.BlockingConnection(pika.ConnectionParameters(host=hostname, port=port))
+
+    channel = connection.channel()
+    
+    message = json.dumps(order,default=str)
+
+    exchange_name = 'order_direct'
+    channel.exchange_declare(exchange=exchange_name, exchange_type='direct')
+    channel.queue_declare(queue='order',durable=True)
+    channel.basic_publish(exchange=exchange_name, routing_key='order.receive', body=message,properties=pika.BasicProperties(delivery_mode=2))
+
+    print('Payment succeeded, order is sent')
+
 class Order(db.Model):
     __tablename__ = 'order'
 
@@ -97,7 +113,8 @@ def add_order(orderId):
             db.session.commit() # commit the change to the database 
         except:
             return jsonify({"message": "An error occurred adding the order item."}), 500 # INTERNAL SERVER ERROR 
-
+    
+    send_order(data)
     return jsonify(order.json()), 201  # CREATED
     
 @app.route('/update-order/<string:orderId>', methods=['PUT'])

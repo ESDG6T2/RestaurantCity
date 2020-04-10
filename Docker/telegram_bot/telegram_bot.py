@@ -63,7 +63,7 @@ def handle_updates(updates):
                 userid = text[1:]
                 all_orders = json.loads(requests.get("http://host.docker.internal:8010/order/{}".format(userid)).content)
                 all_orders = [order for order in all_orders if order['orderStatus'] != 'delivered' ]
-                if len(all_orders) > 1:
+                if len(all_orders) > 0  :
                     for i, order in enumerate(all_orders):
                         order_info = format_order_info(i+1, order) 
                         reply_msg += order_info  

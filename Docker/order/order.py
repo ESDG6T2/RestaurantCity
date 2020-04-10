@@ -27,15 +27,6 @@ def callback(channel, method, properties, body):  # required signature for the c
     print(order)
     print()
     
-    # send request to order_flask service to update database
-    orderId = order['orderId']
-    try:
-        r = requests.post(url='http://host.docker.internal:8010/add-order/{}'.format(orderId),json=order)
-    except Exception as e:
-        print(e)
-        return 
-    # send to monitoring and notification
-
     order['type'] = 'order_receive'
     message = json.dumps(order, default=str)
 
