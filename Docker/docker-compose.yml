@@ -89,8 +89,8 @@ services:
         ports:
             - "7000:7000"
 
-    telebot:
-        build: ./telebot
+    telegram_bot:
+        build: ./telegram_bot
         links:
             - menu
             - order_flask
