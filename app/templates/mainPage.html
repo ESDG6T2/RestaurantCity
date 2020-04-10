@@ -124,8 +124,8 @@
                                         <thead style='text-align:center'>
                                             <tr>
                                                 <th>Item name</th>
-                                                <th>Item price</th>
-                                                <th>Item number</th>
+                                                <th>Price</th>
+                                                <th>Quantity</th>
                                                 <th></th>
                                             </tr>
                                         </thead>
@@ -369,11 +369,11 @@
 
 
 <script>
-    var url = String(window.location.href);
-    // // console.log(url);
-    if (url.includes('#')) {
-        window.location = window.location.pathname;
-    }
+    // var url = String(window.location.href);
+    // // // console.log(url);
+    // if (url.includes('#')) {
+    //     window.location = window.location.pathname;
+    // }
 
     const userid = 'a';
     // helper function 
@@ -519,8 +519,8 @@
                         "<td>{}<input type='hidden' name='foodName' value='{}'></td>".format(item_name, item_name) +
                         "<td>${}<input type='hidden' name='price' value='{}'></td>".format(item_price, item_price) +
                         "<td>{}<input type='hidden' name='quantity' value='{}'></td>".format(item.quantity, item.quantity) +
-                        // delete button
-                        "<td><button class='button' onclick=deleteitem('{}')>Remove</td>".format(item.menuId) +
+
+                        "<td><button class='button' onclick=delete_cart_item('{}')>Remove</td>".format(item.menuId) +
                         "</tr></tbody>";
 
                     $('#saved-cart-table').append(eachRow);
@@ -554,7 +554,7 @@
 
 
     // delete item from saved cart 
-    async function deleteitem(menuId) {
+    async function delete_cart_item(menuId) {
         var serviceURL = "http://127.0.0.1:5002/delete-cart-item/{}&{}".format(userid, menuId);
         try {
             const response =
@@ -563,19 +563,16 @@
                     method: 'DELETE'
                 }
                 );
+
             if (response.status == 200) {
-                $('#saved-cart-table tbody').empty();
-                $('#subTotal').empty();
-                window.location = window.location.pathname;
-                // location.reload(true);
+                location.reload(true);
 
             };
         } catch (error) {
             // Errors when calling the service; such as network error, 
             // service offline, etc
-            // alert(response.status);
-            alert
-                ('There is a problem deleting item, please try again later.<br />' + error);
+            alert(response.status);
+            // alert('There is a problem deleting item, please try again later.<br />' + error);
         }
     }
 

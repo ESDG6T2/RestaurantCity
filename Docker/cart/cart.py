@@ -50,7 +50,6 @@ def delete_cart_item(userid,menuId):
         Cart.query.filter(Cart.userid==userid,Cart.menuId==menuId).delete()
         db.session.commit()
     except Exception as e:
-        print(e)
         return jsonify({"message": "An error occurred deleting the item."}), 500
 
     return jsonify({"message":"Item is deleted successfully"}), 200
@@ -68,7 +67,6 @@ def create_cart(userid):
             db.session.add(item) # create_cartdb.session object is the current connection of the database 
             db.session.commit() # commit the change to the database 
         except Exception as e:
-            print(e)
             return jsonify({"message": "An error occurred saving the cart."}), 500 # INTERNAL SERVER ERROR 
         
     return data, 201
